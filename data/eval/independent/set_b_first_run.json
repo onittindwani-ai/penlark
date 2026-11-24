@@ -1,0 +1,3258 @@
+{
+ "set": "b",
+ "folder": "set_b",
+ "settings": {
+  "min_voice_match": 60,
+  "max_reading_grade": 9.0,
+  "no_dashes": true,
+  "require_sources": true
+ },
+ "voice": {
+  "threshold": 60,
+  "author_texts": 40,
+  "top1_correct": 37,
+  "top1_accuracy": 0.925,
+  "mean_auc_vs_authors": 0.968,
+  "mean_auc_vs_all": 0.975,
+  "own_texts_passing_threshold": 40,
+  "own_texts_passing_full_gate": 20,
+  "per_author": {
+   "B1": {
+    "n": 10,
+    "top1_correct": 10,
+    "mean_own": 88.0,
+    "mean_other_authors": 67.3,
+    "auc_vs_authors": 1.0,
+    "auc_vs_all": 1.0,
+    "own_pass_threshold": 10,
+    "own_pass_full_gate": 1
+   },
+   "B2": {
+    "n": 10,
+    "top1_correct": 10,
+    "mean_own": 85.8,
+    "mean_other_authors": 58.8,
+    "auc_vs_authors": 1.0,
+    "auc_vs_all": 1.0,
+    "own_pass_threshold": 10,
+    "own_pass_full_gate": 3
+   },
+   "B3": {
+    "n": 10,
+    "top1_correct": 8,
+    "mean_own": 76.6,
+    "mean_other_authors": 62.0,
+    "auc_vs_authors": 0.87,
+    "auc_vs_all": 0.906,
+    "own_pass_threshold": 10,
+    "own_pass_full_gate": 6
+   },
+   "B4": {
+    "n": 10,
+    "top1_correct": 9,
+    "mean_own": 80.7,
+    "mean_other_authors": 60.7,
+    "auc_vs_authors": 1.0,
+    "auc_vs_all": 0.994,
+    "own_pass_threshold": 10,
+    "own_pass_full_gate": 10
+   }
+  },
+  "confusion": {
+   "B1->B1": 10,
+   "B2->B2": 10,
+   "B3->B3": 8,
+   "B3->B1": 2,
+   "B4->B4": 9,
+   "B4->B1": 1
+  },
+  "lookalike_pairs": [
+   {
+    "pair": [
+     "B1",
+     "B2"
+    ],
+    "B1": {
+     "n": 10,
+     "higher_on_own_than_partner": 10,
+     "top1_assigned_to_partner": 0
+    },
+    "B2": {
+     "n": 10,
+     "higher_on_own_than_partner": 10,
+     "top1_assigned_to_partner": 0
+    }
+   },
+   {
+    "pair": [
+     "B3",
+     "B4"
+    ],
+    "B3": {
+     "n": 10,
+     "higher_on_own_than_partner": 10,
+     "top1_assigned_to_partner": 0
+    },
+    "B4": {
+     "n": 10,
+     "higher_on_own_than_partner": 10,
+     "top1_assigned_to_partner": 0
+    }
+   }
+  ],
+  "outsider": {
+   "n": 10,
+   "full_gate_pass": 10,
+   "full_gate_pass_ids": [
+    "B-h11",
+    "B-h14",
+    "B-h15",
+    "B-h25",
+    "B-h29",
+    "B-h36",
+    "B-h40",
+    "B-h50",
+    "B-h52",
+    "B-h58"
+   ],
+   "rules_flagged": 0,
+   "rules_flagged_by_kind": {},
+   "mean_best_exact": 74.7,
+   "mean_best_integer": 74.8,
+   "best_below_threshold": 0,
+   "best_at_or_above_threshold": 10,
+   "closest_profile_counts": {
+    "B1": 9,
+    "B2": 0,
+    "B3": 0,
+    "B4": 1
+   },
+   "best_scores": [
+    69.9,
+    71.2,
+    72.6,
+    72.9,
+    74.6,
+    74.7,
+    76.5,
+    77.3,
+    77.7,
+    79.2
+   ]
+  },
+  "generic": {
+   "n": 10,
+   "full_gate_pass": 0,
+   "full_gate_pass_ids": [],
+   "rules_flagged": 10,
+   "rules_flagged_by_kind": {
+    "banned_phrase": 9,
+    "reading_level": 9
+   },
+   "mean_best_exact": 60.8,
+   "mean_best_integer": 60.8,
+   "best_below_threshold": 6,
+   "best_at_or_above_threshold": 4,
+   "closest_profile_counts": {
+    "B1": 0,
+    "B2": 5,
+    "B3": 0,
+    "B4": 5
+   },
+   "best_scores": [
+    55.9,
+    56.4,
+    56.8,
+    57.7,
+    58.4,
+    58.7,
+    62.9,
+    63.0,
+    68.7,
+    69.1
+   ]
+  },
+  "threshold_sweep": [
+   {
+    "threshold": 40,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 10,
+    "generic_total": 10
+   },
+   {
+    "threshold": 45,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 10,
+    "generic_total": 10
+   },
+   {
+    "threshold": 50,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 10,
+    "generic_total": 10
+   },
+   {
+    "threshold": 55,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 10,
+    "generic_total": 10
+   },
+   {
+    "threshold": 60,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 4,
+    "generic_total": 10
+   },
+   {
+    "threshold": 65,
+    "own_pass": 38,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 2,
+    "generic_total": 10
+   },
+   {
+    "threshold": 70,
+    "own_pass": 38,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   },
+   {
+    "threshold": 75,
+    "own_pass": 36,
+    "own_total": 40,
+    "outsider_pass_any": 6,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   },
+   {
+    "threshold": 80,
+    "own_pass": 29,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   },
+   {
+    "threshold": 85,
+    "own_pass": 16,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   },
+   {
+    "threshold": 90,
+    "own_pass": 7,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   }
+  ],
+  "wrong_texts": {
+   "B-h21": {
+    "author": "B4",
+    "assigned": "B1",
+    "exact": {
+     "B1": 77.5,
+     "B2": 63.52,
+     "B3": 62.17,
+     "B4": 72.75
+    }
+   },
+   "B-h49": {
+    "author": "B3",
+    "assigned": "B1",
+    "exact": {
+     "B1": 66.58,
+     "B2": 52.59,
+     "B3": 63.91,
+     "B4": 55.36
+    }
+   },
+   "B-h54": {
+    "author": "B3",
+    "assigned": "B1",
+    "exact": {
+     "B1": 64.47,
+     "B2": 49.14,
+     "B3": 61.91,
+     "B4": 51.56
+    }
+   }
+  },
+  "rows": [
+   {
+    "text_id": "B-h01",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 56.29,
+     "B2": 82.83,
+     "B3": 49.47,
+     "B4": 60.7
+    },
+    "integer": {
+     "B1": 56,
+     "B2": 83,
+     "B3": 49,
+     "B4": 61
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h02",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 61.86,
+     "B2": 57.89,
+     "B3": 59.14,
+     "B4": 68.65
+    },
+    "integer": {
+     "B1": 62,
+     "B2": 58,
+     "B3": 59,
+     "B4": 69
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h03",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 87.26,
+     "B2": 58.05,
+     "B3": 67.44,
+     "B4": 62.41
+    },
+    "integer": {
+     "B1": 87,
+     "B2": 58,
+     "B3": 67,
+     "B4": 62
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h04",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 59.07,
+     "B2": 95.75,
+     "B3": 51.94,
+     "B4": 61.79
+    },
+    "integer": {
+     "B1": 59,
+     "B2": 96,
+     "B3": 52,
+     "B4": 62
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h05",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 54.89,
+     "B2": 82.43,
+     "B3": 45.06,
+     "B4": 59.58
+    },
+    "integer": {
+     "B1": 55,
+     "B2": 82,
+     "B3": 45,
+     "B4": 60
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h06",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 56.12,
+     "B2": 78.45,
+     "B3": 49.47,
+     "B4": 60.21
+    },
+    "integer": {
+     "B1": 56,
+     "B2": 78,
+     "B3": 49,
+     "B4": 60
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h07",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 69.97,
+     "B2": 58.33,
+     "B3": 63.26,
+     "B4": 73.86
+    },
+    "integer": {
+     "B1": 70,
+     "B2": 58,
+     "B3": 63,
+     "B4": 74
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h08",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 74.85,
+     "B2": 49.51,
+     "B3": 80.58,
+     "B4": 57.06
+    },
+    "integer": {
+     "B1": 75,
+     "B2": 50,
+     "B3": 81,
+     "B4": 57
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h09",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 50.78,
+     "B2": 62.92,
+     "B3": 50.5,
+     "B4": 54.92
+    },
+    "integer": {
+     "B1": 51,
+     "B2": 63,
+     "B3": 50,
+     "B4": 55
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h10",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 80.67,
+     "B2": 59.12,
+     "B3": 66.06,
+     "B4": 62.64
+    },
+    "integer": {
+     "B1": 81,
+     "B2": 59,
+     "B3": 66,
+     "B4": 63
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h11",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 69.94,
+     "B2": 51.05,
+     "B3": 63.92,
+     "B4": 58.41
+    },
+    "integer": {
+     "B1": 70,
+     "B2": 51,
+     "B3": 64,
+     "B4": 58
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h12",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 76.59,
+     "B2": 48.13,
+     "B3": 76.87,
+     "B4": 53.27
+    },
+    "integer": {
+     "B1": 77,
+     "B2": 48,
+     "B3": 77,
+     "B4": 53
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h13",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 51.43,
+     "B2": 56.35,
+     "B3": 51.07,
+     "B4": 53.16
+    },
+    "integer": {
+     "B1": 51,
+     "B2": 56,
+     "B3": 51,
+     "B4": 53
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h14",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 77.34,
+     "B2": 55.71,
+     "B3": 59.73,
+     "B4": 66.38
+    },
+    "integer": {
+     "B1": 77,
+     "B2": 56,
+     "B3": 60,
+     "B4": 66
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h15",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 77.71,
+     "B2": 58.4,
+     "B3": 63.17,
+     "B4": 69.16
+    },
+    "integer": {
+     "B1": 78,
+     "B2": 58,
+     "B3": 63,
+     "B4": 69
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h16",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 76.75,
+     "B2": 48.83,
+     "B3": 87.12,
+     "B4": 57.94
+    },
+    "integer": {
+     "B1": 77,
+     "B2": 49,
+     "B3": 87,
+     "B4": 58
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h17",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 78.56,
+     "B2": 71.39,
+     "B3": 65.24,
+     "B4": 82.22
+    },
+    "integer": {
+     "B1": 79,
+     "B2": 71,
+     "B3": 65,
+     "B4": 82
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h18",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 90.81,
+     "B2": 62.47,
+     "B3": 67.54,
+     "B4": 70.52
+    },
+    "integer": {
+     "B1": 91,
+     "B2": 62,
+     "B3": 68,
+     "B4": 71
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h19",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 57.25,
+     "B2": 54.59,
+     "B3": 58.4,
+     "B4": 63.03
+    },
+    "integer": {
+     "B1": 57,
+     "B2": 55,
+     "B3": 58,
+     "B4": 63
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h20",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 55.2,
+     "B2": 89.12,
+     "B3": 48.46,
+     "B4": 57.99
+    },
+    "integer": {
+     "B1": 55,
+     "B2": 89,
+     "B3": 48,
+     "B4": 58
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h21",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 77.5,
+     "B2": 63.52,
+     "B3": 62.17,
+     "B4": 72.75
+    },
+    "integer": {
+     "B1": 77,
+     "B2": 64,
+     "B3": 62,
+     "B4": 73
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h22",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 73.91,
+     "B2": 71.38,
+     "B3": 66.71,
+     "B4": 85.95
+    },
+    "integer": {
+     "B1": 74,
+     "B2": 71,
+     "B3": 67,
+     "B4": 86
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h23",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 70.11,
+     "B2": 66.31,
+     "B3": 67.09,
+     "B4": 82.04
+    },
+    "integer": {
+     "B1": 70,
+     "B2": 66,
+     "B3": 67,
+     "B4": 82
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h24",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 79.82,
+     "B2": 63.57,
+     "B3": 73.94,
+     "B4": 55.91
+    },
+    "integer": {
+     "B1": 80,
+     "B2": 64,
+     "B3": 74,
+     "B4": 56
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h25",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 72.94,
+     "B2": 55.82,
+     "B3": 62.75,
+     "B4": 62.66
+    },
+    "integer": {
+     "B1": 73,
+     "B2": 56,
+     "B3": 63,
+     "B4": 63
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h26",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 90.87,
+     "B2": 58.33,
+     "B3": 72.75,
+     "B4": 61.57
+    },
+    "integer": {
+     "B1": 91,
+     "B2": 58,
+     "B3": 73,
+     "B4": 62
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h27",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 55.65,
+     "B2": 82.06,
+     "B3": 48.1,
+     "B4": 59.39
+    },
+    "integer": {
+     "B1": 56,
+     "B2": 82,
+     "B3": 48,
+     "B4": 59
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h28",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 60.05,
+     "B2": 85.94,
+     "B3": 51.87,
+     "B4": 64.02
+    },
+    "integer": {
+     "B1": 60,
+     "B2": 86,
+     "B3": 52,
+     "B4": 64
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h29",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 79.19,
+     "B2": 55.07,
+     "B3": 64.95,
+     "B4": 57.55
+    },
+    "integer": {
+     "B1": 79,
+     "B2": 55,
+     "B3": 65,
+     "B4": 58
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h30",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 54.73,
+     "B2": 53.42,
+     "B3": 48.8,
+     "B4": 56.84
+    },
+    "integer": {
+     "B1": 55,
+     "B2": 53,
+     "B3": 49,
+     "B4": 57
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h31",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 74.48,
+     "B2": 53.43,
+     "B3": 79.3,
+     "B4": 65.25
+    },
+    "integer": {
+     "B1": 74,
+     "B2": 53,
+     "B3": 79,
+     "B4": 65
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h32",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 57.19,
+     "B2": 90.02,
+     "B3": 51.74,
+     "B4": 63.25
+    },
+    "integer": {
+     "B1": 57,
+     "B2": 90,
+     "B3": 52,
+     "B4": 63
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h33",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 67.89,
+     "B2": 61.68,
+     "B3": 57.54,
+     "B4": 78.87
+    },
+    "integer": {
+     "B1": 68,
+     "B2": 62,
+     "B3": 58,
+     "B4": 79
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h34",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 68.24,
+     "B2": 65.32,
+     "B3": 67.78,
+     "B4": 75.66
+    },
+    "integer": {
+     "B1": 68,
+     "B2": 65,
+     "B3": 68,
+     "B4": 76
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h35",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 59.41,
+     "B2": 56.64,
+     "B3": 59.93,
+     "B4": 69.11
+    },
+    "integer": {
+     "B1": 59,
+     "B2": 57,
+     "B3": 60,
+     "B4": 69
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h36",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 74.62,
+     "B2": 58.83,
+     "B3": 59.39,
+     "B4": 74.63
+    },
+    "integer": {
+     "B1": 75,
+     "B2": 59,
+     "B3": 59,
+     "B4": 75
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h37",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 44.74,
+     "B2": 58.39,
+     "B3": 42.38,
+     "B4": 52.3
+    },
+    "integer": {
+     "B1": 45,
+     "B2": 58,
+     "B3": 42,
+     "B4": 52
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h38",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 73.16,
+     "B2": 50.7,
+     "B3": 76.29,
+     "B4": 57.85
+    },
+    "integer": {
+     "B1": 73,
+     "B2": 51,
+     "B3": 76,
+     "B4": 58
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h39",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 75.07,
+     "B2": 48.57,
+     "B3": 82.84,
+     "B4": 60.24
+    },
+    "integer": {
+     "B1": 75,
+     "B2": 49,
+     "B3": 83,
+     "B4": 60
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h40",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 72.59,
+     "B2": 49.57,
+     "B3": 60.66,
+     "B4": 59.08
+    },
+    "integer": {
+     "B1": 73,
+     "B2": 50,
+     "B3": 61,
+     "B4": 59
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h41",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 90.76,
+     "B2": 70.21,
+     "B3": 70.97,
+     "B4": 69.32
+    },
+    "integer": {
+     "B1": 91,
+     "B2": 70,
+     "B3": 71,
+     "B4": 69
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h42",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 69.05,
+     "B2": 66.3,
+     "B3": 56.61,
+     "B4": 84.27
+    },
+    "integer": {
+     "B1": 69,
+     "B2": 66,
+     "B3": 57,
+     "B4": 84
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h43",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 45.54,
+     "B2": 58.74,
+     "B3": 43.27,
+     "B4": 55.3
+    },
+    "integer": {
+     "B1": 46,
+     "B2": 59,
+     "B3": 43,
+     "B4": 55
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h44",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 73.9,
+     "B2": 64.08,
+     "B3": 67.97,
+     "B4": 87.99
+    },
+    "integer": {
+     "B1": 74,
+     "B2": 64,
+     "B3": 68,
+     "B4": 88
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h45",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 95.03,
+     "B2": 56.66,
+     "B3": 76.85,
+     "B4": 64.58
+    },
+    "integer": {
+     "B1": 95,
+     "B2": 57,
+     "B3": 77,
+     "B4": 65
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h46",
+    "label": "author",
+    "author_id": "B4",
+    "exact": {
+     "B1": 73.85,
+     "B2": 67.66,
+     "B3": 64.72,
+     "B4": 83.45
+    },
+    "integer": {
+     "B1": 74,
+     "B2": 68,
+     "B3": 65,
+     "B4": 83
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h47",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 92.25,
+     "B2": 64.05,
+     "B3": 73.34,
+     "B4": 67.54
+    },
+    "integer": {
+     "B1": 92,
+     "B2": 64,
+     "B3": 73,
+     "B4": 68
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h48",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 53.6,
+     "B2": 57.68,
+     "B3": 48.85,
+     "B4": 56.95
+    },
+    "integer": {
+     "B1": 54,
+     "B2": 58,
+     "B3": 49,
+     "B4": 57
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h49",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 66.58,
+     "B2": 52.59,
+     "B3": 63.91,
+     "B4": 55.36
+    },
+    "integer": {
+     "B1": 67,
+     "B2": 53,
+     "B3": 64,
+     "B4": 55
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h50",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 71.25,
+     "B2": 61.56,
+     "B3": 60.57,
+     "B4": 62.64
+    },
+    "integer": {
+     "B1": 71,
+     "B2": 62,
+     "B3": 61,
+     "B4": 63
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h51",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 85.58,
+     "B2": 54.11,
+     "B3": 72.79,
+     "B4": 60.78
+    },
+    "integer": {
+     "B1": 86,
+     "B2": 54,
+     "B3": 73,
+     "B4": 61
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h52",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 76.53,
+     "B2": 48.74,
+     "B3": 65.63,
+     "B4": 63.15
+    },
+    "integer": {
+     "B1": 77,
+     "B2": 49,
+     "B3": 66,
+     "B4": 63
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h53",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 75.85,
+     "B2": 48.15,
+     "B3": 82.48,
+     "B4": 55.19
+    },
+    "integer": {
+     "B1": 76,
+     "B2": 48,
+     "B3": 82,
+     "B4": 55
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h54",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 64.47,
+     "B2": 49.14,
+     "B3": 61.91,
+     "B4": 51.56
+    },
+    "integer": {
+     "B1": 64,
+     "B2": 49,
+     "B3": 62,
+     "B4": 52
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h55",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 59.24,
+     "B2": 87.58,
+     "B3": 53.33,
+     "B4": 62.74
+    },
+    "integer": {
+     "B1": 59,
+     "B2": 88,
+     "B3": 53,
+     "B4": 63
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h56",
+    "label": "author",
+    "author_id": "B2",
+    "exact": {
+     "B1": 56.25,
+     "B2": 84.01,
+     "B3": 49.61,
+     "B4": 59.44
+    },
+    "integer": {
+     "B1": 56,
+     "B2": 84,
+     "B3": 50,
+     "B4": 59
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h57",
+    "label": "author",
+    "author_id": "B3",
+    "exact": {
+     "B1": 69.46,
+     "B2": 51.68,
+     "B3": 74.59,
+     "B4": 59.05
+    },
+    "integer": {
+     "B1": 69,
+     "B2": 52,
+     "B3": 75,
+     "B4": 59
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h58",
+    "label": "outsider",
+    "author_id": "B5",
+    "exact": {
+     "B1": 74.73,
+     "B2": 69.66,
+     "B3": 59.91,
+     "B4": 72.92
+    },
+    "integer": {
+     "B1": 75,
+     "B2": 70,
+     "B3": 60,
+     "B4": 73
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h59",
+    "label": "author",
+    "author_id": "B1",
+    "exact": {
+     "B1": 87.1,
+     "B2": 62.18,
+     "B3": 79.25,
+     "B4": 64.78
+    },
+    "integer": {
+     "B1": 87,
+     "B2": 62,
+     "B3": 79,
+     "B4": 65
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "B-h60",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "B1": 49.31,
+     "B2": 50.31,
+     "B3": 49.42,
+     "B4": 55.92
+    },
+    "integer": {
+     "B1": 49,
+     "B2": 50,
+     "B3": 49,
+     "B4": 56
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   }
+  ]
+ },
+ "flags": {
+  "drafts": 51,
+  "categories": {
+   "clean": 8,
+   "tricky_clean_hyphen_compounds": 3,
+   "tricky_clean_near_miss_words": 2,
+   "tricky_clean_sourced_claim": 4,
+   "ambiguous_quoted_banned_phrase": 1,
+   "ambiguous_number_non_claim": 1,
+   "ambiguous_spaced_hyphen_as_dash": 1,
+   "banned_phrase": 8,
+   "dash": 4,
+   "reading_level": 5,
+   "borderline_reading_level": 2,
+   "unsourced_claim": 6,
+   "combo_banned_dash_unsourced": 4,
+   "source_mismatch": 2
+  },
+  "per_kind": {
+   "banned_phrase": {
+    "scored": 50,
+    "tp": 12,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "missed": [],
+    "false": [],
+    "recall_on_high_likelihood": {
+     "planted": 5,
+     "found": 5,
+     "missed": []
+    }
+   },
+   "dash": {
+    "scored": 50,
+    "tp": 8,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "missed": [],
+    "false": []
+   },
+   "reading_level": {
+    "scored": 49,
+    "tp": 5,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.714,
+    "recall": 1.0,
+    "missed": [],
+    "false": [
+     "B-d02",
+     "B-d45"
+    ]
+   },
+   "unsourced_claim": {
+    "scored": 48,
+    "tp": 4,
+    "fp": 0,
+    "fn": 6,
+    "precision": 1.0,
+    "recall": 0.4,
+    "missed": [
+     "B-d41",
+     "B-d44",
+     "B-d45",
+     "B-d46",
+     "B-d47",
+     "B-d49"
+    ],
+    "false": []
+   }
+  },
+  "clean_drafts": 17,
+  "clean_falsely_flagged_strict": 1,
+  "clean_falsely_flagged_key_respecting": 1,
+  "clean_by_category": {
+   "clean": {
+    "n": 8,
+    "falsely_flagged_strict": 1,
+    "falsely_flagged_key_respecting": 1,
+    "which": [
+     {
+      "draft_id": "B-d02",
+      "kinds": [
+       "reading_level"
+      ],
+      "kinds_the_key_says_false": [
+       "reading_level"
+      ]
+     }
+    ]
+   },
+   "tricky_clean_hyphen_compounds": {
+    "n": 3,
+    "falsely_flagged_strict": 0,
+    "falsely_flagged_key_respecting": 0,
+    "which": []
+   },
+   "tricky_clean_near_miss_words": {
+    "n": 2,
+    "falsely_flagged_strict": 0,
+    "falsely_flagged_key_respecting": 0,
+    "which": []
+   },
+   "tricky_clean_sourced_claim": {
+    "n": 4,
+    "falsely_flagged_strict": 0,
+    "falsely_flagged_key_respecting": 0,
+    "which": []
+   }
+  },
+  "ambiguous_singles": [
+   {
+    "draft_id": "B-d18",
+    "category": "ambiguous_quoted_banned_phrase",
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "expected": {
+     "banned_phrase": null,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    }
+   },
+   {
+    "draft_id": "B-d19",
+    "category": "ambiguous_number_non_claim",
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": null
+    }
+   },
+   {
+    "draft_id": "B-d20",
+    "category": "ambiguous_spaced_hyphen_as_dash",
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "expected": {
+     "banned_phrase": false,
+     "dash": null,
+     "reading_level": false,
+     "unsourced_claim": false
+    }
+   }
+  ],
+  "source_mismatch": [
+   {
+    "draft_id": "B-d50",
+    "unsourced_flagged": true,
+    "unsupported": [
+     "Lab incident reports dropped from 9 to 0 over the year after we added the goggles checklist."
+    ]
+   },
+   {
+    "draft_id": "B-d51",
+    "unsourced_flagged": true,
+    "unsupported": [
+     "Average matter cycle time fell from 94 days to 50 days after the intake checklist."
+    ]
+   }
+  ],
+  "voice_in_voice_drafts": {
+   "n": 44,
+   "mean_score": 63.6,
+   "passing_threshold": 30
+  },
+  "rows": [
+   {
+    "draft_id": "B-d01",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 52,
+    "likelihoods": [],
+    "grade": 8.7,
+    "words": 57,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d02",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 73,
+    "likelihoods": [],
+    "grade": 9.4,
+    "words": 57,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d03",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 52,
+    "likelihoods": [],
+    "grade": 5.0,
+    "words": 52,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d04",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 62,
+    "likelihoods": [],
+    "grade": 2.6,
+    "words": 53,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d05",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 53,
+    "likelihoods": [],
+    "grade": 8.9,
+    "words": 46,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d06",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 69,
+    "likelihoods": [],
+    "grade": 7.2,
+    "words": 54,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d07",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 50,
+    "likelihoods": [],
+    "grade": 4.6,
+    "words": 52,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d08",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 71,
+    "likelihoods": [],
+    "grade": 5.4,
+    "words": 54,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d09",
+    "category": "tricky_clean_hyphen_compounds",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 59,
+    "likelihoods": [],
+    "grade": 6.7,
+    "words": 58,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d10",
+    "category": "tricky_clean_hyphen_compounds",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 74,
+    "likelihoods": [],
+    "grade": 7.1,
+    "words": 63,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d11",
+    "category": "tricky_clean_hyphen_compounds",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 54,
+    "likelihoods": [],
+    "grade": 3.5,
+    "words": 55,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d12",
+    "category": "tricky_clean_near_miss_words",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 58,
+    "likelihoods": [],
+    "grade": 4.2,
+    "words": 59,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d13",
+    "category": "tricky_clean_near_miss_words",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 68,
+    "likelihoods": [],
+    "grade": 6.4,
+    "words": 53,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d14",
+    "category": "tricky_clean_sourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 62,
+    "likelihoods": [],
+    "grade": 7.0,
+    "words": 69,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d15",
+    "category": "tricky_clean_sourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 71,
+    "likelihoods": [],
+    "grade": 8.6,
+    "words": 61,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d16",
+    "category": "tricky_clean_sourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 62,
+    "likelihoods": [],
+    "grade": 5.9,
+    "words": 66,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d17",
+    "category": "tricky_clean_sourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 63,
+    "likelihoods": [],
+    "grade": 2.8,
+    "words": 60,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d18",
+    "category": "ambiguous_quoted_banned_phrase",
+    "expected": {
+     "banned_phrase": null,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 74,
+    "likelihoods": [],
+    "grade": 8.0,
+    "words": 69,
+    "style": [
+     [
+      "banned_phrase",
+      "thought leader"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d19",
+    "category": "ambiguous_number_non_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": null
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 63,
+    "likelihoods": [],
+    "grade": 3.8,
+    "words": 57,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d20",
+    "category": "ambiguous_spaced_hyphen_as_dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": null,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 64,
+    "likelihoods": [],
+    "grade": 3.2,
+    "words": 54,
+    "style": [
+     [
+      "dash",
+      " - "
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d21",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 62,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 7.8,
+    "words": 51,
+    "style": [
+     [
+      "banned_phrase",
+      "Unleash your"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d22",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 74,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 8.0,
+    "words": 59,
+    "style": [
+     [
+      "banned_phrase",
+      "dive deep"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d23",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 58,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 5.0,
+    "words": 54,
+    "style": [
+     [
+      "banned_phrase",
+      "revolutionize"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d24",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 71,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 3.7,
+    "words": 62,
+    "style": [
+     [
+      "banned_phrase",
+      "GAME CHANGER"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d25",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 62,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 8.4,
+    "words": 53,
+    "style": [
+     [
+      "banned_phrase",
+      "move the needle"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d26",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 75,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 8.1,
+    "words": 58,
+    "style": [
+     [
+      "banned_phrase",
+      "low-hanging fruit"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d27",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 47,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 3.0,
+    "words": 52,
+    "style": [
+     [
+      "banned_phrase",
+      "circle back"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d28",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 64,
+    "likelihoods": [
+     "medium",
+     "high",
+     "high"
+    ],
+    "grade": 4.8,
+    "words": 70,
+    "style": [
+     [
+      "banned_phrase",
+      "thought leader"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d29",
+    "category": "dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 59,
+    "likelihoods": [],
+    "grade": 7.8,
+    "words": 55,
+    "style": [
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d30",
+    "category": "dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 62,
+    "likelihoods": [],
+    "grade": 8.4,
+    "words": 52,
+    "style": [
+     [
+      "dash",
+      "\u2013"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d31",
+    "category": "dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 53,
+    "likelihoods": [],
+    "grade": 3.5,
+    "words": 57,
+    "style": [
+     [
+      "dash",
+      "\u2014"
+     ],
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d32",
+    "category": "dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 60,
+    "likelihoods": [],
+    "grade": 2.6,
+    "words": 53,
+    "style": [
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d33",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 31.5,
+    "words": 47,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d34",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 36.2,
+    "words": 41,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d35",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 26.5,
+    "words": 48,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d36",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 31.3,
+    "words": 41,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d37",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 29.5,
+    "words": 44,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d38",
+    "category": "borderline_reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": null,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 11.4,
+    "words": 47,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d39",
+    "category": "borderline_reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": null,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 13.5,
+    "words": 44,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d40",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 68,
+    "likelihoods": [],
+    "grade": 7.4,
+    "words": 61,
+    "style": [],
+    "unsupported": [
+     "Pass rates in my class rose by 22 points after the prediction exercise."
+    ]
+   },
+   {
+    "draft_id": "B-d41",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 75,
+    "likelihoods": [],
+    "grade": 8.6,
+    "words": 64,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d42",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 68,
+    "likelihoods": [],
+    "grade": 3.1,
+    "words": 64,
+    "style": [],
+    "unsupported": [
+     "I have been roasting since 2014 and have burnt more batches than I can count."
+    ]
+   },
+   {
+    "draft_id": "B-d43",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 58,
+    "likelihoods": [],
+    "grade": 3.8,
+    "words": 61,
+    "style": [],
+    "unsupported": [
+     "Our CSA grew from 60 to 140 boxes in two seasons."
+    ]
+   },
+   {
+    "draft_id": "B-d44",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 65,
+    "likelihoods": [],
+    "grade": 6.7,
+    "words": 55,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d45",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 83,
+    "likelihoods": [],
+    "grade": 9.5,
+    "words": 60,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d46",
+    "category": "combo_banned_dash_unsourced",
+    "expected": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 49,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 5.6,
+    "words": 75,
+    "style": [
+     [
+      "banned_phrase",
+      "revolutionize"
+     ],
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d47",
+    "category": "combo_banned_dash_unsourced",
+    "expected": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 72,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 7.6,
+    "words": 76,
+    "style": [
+     [
+      "dash",
+      "\u2013"
+     ],
+     [
+      "banned_phrase",
+      "GAME CHANGER"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d48",
+    "category": "combo_banned_dash_unsourced",
+    "expected": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 58,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 4.8,
+    "words": 72,
+    "style": [
+     [
+      "dash",
+      "\u2014"
+     ],
+     [
+      "dash",
+      "\u2014"
+     ],
+     [
+      "banned_phrase",
+      "move the needle"
+     ]
+    ],
+    "unsupported": [
+     "We roasted 3,400 pounds of coffee last quarter."
+    ]
+   },
+   {
+    "draft_id": "B-d49",
+    "category": "combo_banned_dash_unsourced",
+    "expected": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 68,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 3.2,
+    "words": 74,
+    "style": [
+     [
+      "banned_phrase",
+      "low-hanging fruit"
+     ],
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "B-d50",
+    "category": "source_mismatch",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": null
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 61,
+    "likelihoods": [],
+    "grade": 8.1,
+    "words": 70,
+    "style": [],
+    "unsupported": [
+     "Lab incident reports dropped from 9 to 0 over the year after we added the goggles checklist."
+    ]
+   },
+   {
+    "draft_id": "B-d51",
+    "category": "source_mismatch",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": null
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 73,
+    "likelihoods": [],
+    "grade": 9.0,
+    "words": 65,
+    "style": [],
+    "unsupported": [
+     "Average matter cycle time fell from 94 days to 50 days after the intake checklist."
+    ]
+   }
+  ]
+ },
+ "ideas": {
+  "ideas_returned": 3,
+  "ideas_with_verified_quote": 3,
+  "themes_total": 5,
+  "themes_found": 2,
+  "per_theme": {
+   "B-T1": {
+    "found": true,
+    "note_recall": 0.75,
+    "idea_title": "Only later did a friend say it was a roast date",
+    "rank": 1,
+    "purity": 1.0,
+    "score": 52.7,
+    "idea_notes": [
+     "B-n01",
+     "B-n05",
+     "B-n10"
+    ]
+   },
+   "B-T2": {
+    "found": false,
+    "note_recall": 0.0,
+    "idea_title": null,
+    "rank": null,
+    "purity": null,
+    "score": null,
+    "idea_notes": []
+   },
+   "B-T3": {
+    "found": false,
+    "note_recall": 0.0,
+    "idea_title": null,
+    "rank": null,
+    "purity": null,
+    "score": null,
+    "idea_notes": []
+   },
+   "B-T4": {
+    "found": true,
+    "note_recall": 0.5,
+    "idea_title": "I have tried three kettles and nothing changes",
+    "rank": 2,
+    "purity": 1.0,
+    "score": 36.2,
+    "idea_notes": [
+     "B-n04",
+     "B-n18"
+    ]
+   },
+   "B-T5": {
+    "found": false,
+    "note_recall": 0.0,
+    "idea_title": null,
+    "rank": null,
+    "purity": null,
+    "score": null,
+    "idea_notes": []
+   }
+  },
+  "ideas_matching_no_theme": [
+   {
+    "title": "I love the coffee, but I came home to a pile",
+    "notes": [
+     "B-n02",
+     "B-n19"
+    ],
+    "score": 32.9,
+    "rank": 3
+   }
+  ],
+  "decoys_total": 4,
+  "decoys_avoided": 3,
+  "decoys_outranking_a_found_theme": 0,
+  "decoys": [
+   {
+    "notes": [
+     "B-n11"
+    ],
+    "in_an_idea": 0,
+    "in_a_non_theme_idea": 0,
+    "avoided": true,
+    "outranks_a_found_theme": false
+   },
+   {
+    "notes": [
+     "B-n17"
+    ],
+    "in_an_idea": 0,
+    "in_a_non_theme_idea": 0,
+    "avoided": true,
+    "outranks_a_found_theme": false
+   },
+   {
+    "notes": [
+     "B-n19"
+    ],
+    "in_an_idea": 1,
+    "in_a_non_theme_idea": 1,
+    "avoided": false,
+    "outranks_a_found_theme": false
+   },
+   {
+    "notes": [
+     "B-n20"
+    ],
+    "in_an_idea": 0,
+    "in_a_non_theme_idea": 0,
+    "avoided": true,
+    "outranks_a_found_theme": false
+   }
+  ],
+  "quotes": 7,
+  "quotes_verbatim": 7,
+  "quotes_before_the_verbatim_filter": 7,
+  "quotes_overlapping_a_key_quote": 3,
+  "ranked": [
+   {
+    "rank": 1,
+    "title": "Only later did a friend say it was a roast date",
+    "notes": [
+     "B-n01",
+     "B-n05",
+     "B-n10"
+    ],
+    "score": 52.7
+   },
+   {
+    "rank": 2,
+    "title": "I have tried three kettles and nothing changes",
+    "notes": [
+     "B-n04",
+     "B-n18"
+    ],
+    "score": 36.2
+   },
+   {
+    "rank": 3,
+    "title": "I love the coffee, but I came home to a pile",
+    "notes": [
+     "B-n02",
+     "B-n19"
+    ],
+    "score": 32.9
+   }
+  ]
+ },
+ "note": "Scores come from plain code (profile statistics, rule lists, word counts), not a language model. The texts are fictional and assembled from sentence banks."
+}

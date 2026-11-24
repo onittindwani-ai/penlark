@@ -1,0 +1,2 @@
+Source: https://developers.buffer.com/ (WebFetch, 2026-11-23). The home page does not show the createPost mutation; the guide and example pages tried (/guides/posts-and-scheduling, /examples/create-scheduled-post) returned 404.
+No machine readable schema was found. The mutation in the adapter comes from the earlier read recorded in docs/facts/buffer.md. Nothing to assert against beyond the Bearer header form: UNVERIFIED.

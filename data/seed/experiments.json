@@ -1,0 +1,22 @@
+[
+ {
+  "name": "Question opener against statement opener",
+  "metric": "link clicks",
+  "a_label": "Statement",
+  "a_n": 1800,
+  "a_hits": 54,
+  "b_label": "Question",
+  "b_n": 1750,
+  "b_hits": 89
+ },
+ {
+  "name": "Short post against long post",
+  "metric": "link clicks",
+  "a_label": "Short",
+  "a_n": 60,
+  "a_hits": 2,
+  "b_label": "Long",
+  "b_n": 55,
+  "b_hits": 5
+ }
+]

@@ -1,0 +1,7 @@
+{
+  "text": "{\"variants\": [{\"label\": \"Variant A\", \"text\": \"Is the price per client or per user?\\n\\nGood question. Here is the short answer.\\n\\n[YOUR ANSWER IN ONE LINE]\\n\\n[YOUR REAL EXAMPLE]\\n\\nDo that first. Skip the rest.\"}, {\"label\": \"Variant B\", \"text\": \"Someone asked: Is the price per client or per user?\\n\\n[YOUR ANSWER]\\n\\n[ONE REAL NUMBER FROM YOUR NOTES]\\n\\nSimple. Try it.\"}]}",
+  "input_tokens": 150,
+  "output_tokens": 40,
+  "model": "claude-sonnet-5-5",
+  "prompt_preview": "[task:write_draft]\nWrite 2 variant(s) of a post for the idea in the idea block, in the voice of the profile and guide blocks.\n\nReply with only JSON matching thi"
+}

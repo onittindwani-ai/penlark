@@ -1,0 +1,22 @@
+{
+ "drafts": 26,
+ "style": {
+  "tp": 10,
+  "fp": 0,
+  "fn": 0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "false_positives": [],
+  "misses": []
+ },
+ "claim": {
+  "tp": 9,
+  "fp": 0,
+  "fn": 0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "false_positives": [],
+  "misses": []
+ },
+ "note": "Draft level. The phrase list was written by the same team, so unseen wordings are the honest test: the misses show where a paraphrase gets through."
+}

@@ -1,0 +1,3 @@
+# Export file layouts
+
+LinkedIn: the data archive is expected to hold `Shares.csv` with a `ShareCommentary` column (also Date, ShareLink, SharedUrl, MediaUrl, Visibility). X: the archive is expected to hold `tweets.js` starting `window.YTD.tweets.part0 = ` followed by a JSON list of `{"tweet": {...}}` objects with `full_text` and `created_at`. YouTube: transcript text copied from the video page has timestamps on their own lines. All three layouts are from memory and UNVERIFIED against a fresh export (the LinkedIn help page returned not found on 2026-11-23). The readers fail with a clear message when the layout is not what they expect. Always export your own data: Penlark never logs in to an account.

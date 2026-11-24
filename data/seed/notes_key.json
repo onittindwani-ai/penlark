@@ -1,0 +1,9 @@
+{"_note":"Answer key for the idea finder. Written with the notes, before the idea code. Each planted theme lists the notes that carry it.",
+ "themes":{
+  "when_to_invoice":["n01","n02","n08","n13","n18"],
+  "chasing_late_payments":["n04","n06","n10","n15","n20"],
+  "pricing_per_user":["n03","n09","n14","n19"],
+  "moving_from_spreadsheets":["n07","n12","n22","n17"]},
+ "noise":["n05","n11","n16","n23","n24"],
+ "expected_top_three_themes":["when_to_invoice","chasing_late_payments","pricing_per_user"],
+ "claim_sources":{"n08":"6 days instead of 30","n21":"58 percent open rate","n12":"12 minutes"}}

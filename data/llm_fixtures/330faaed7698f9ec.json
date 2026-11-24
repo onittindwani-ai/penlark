@@ -1,0 +1,7 @@
+{
+  "text": "{\"guide\": \"Voice guide for Gareth Whitlow\\n\\nWritten by the offline stand in (fixed rules over the measured numbers). It is not a language model. Edit it freely.\\n\\nSentences: fairly long, about 17 words, with a clause or two. The rhythm jumps between very short and long lines.\\nParagraphs: two or three sentences.\\nTone: formal and measured. Avoid slang. Rarely uses contractions. Write the full words.\\nTalking to the reader: mostly describes things without addressing the reader. Rarely says I.\\nQuestions and energy: seldom asks questions. Avoids exclamation marks.\\nDetail: uses few numbers.\\nSentences most often start with a plain subject.\\nFavourite words: committee, review, organisations, where, every, dear, executive, yours, sincerely, gareth, whitlow, cost.\\nPhrases that keep coming back: yours sincerely; sincerely gareth; gareth whitlow; the board; during the.\\n\\nNever invent facts, numbers or stories. If a line needs a real example, leave a bracket for the author.\"}",
+  "input_tokens": 150,
+  "output_tokens": 40,
+  "model": "claude-sonnet-5-5",
+  "prompt_preview": "[task:write_guide]\nWrite the voice guide for the author in the profile block, from the measured numbers in it and the excerpts in the samples block.\n\nReply with"
+}

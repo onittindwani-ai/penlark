@@ -1,0 +1,19 @@
+{"_note":"Held out notes for the idea finder. A different fictional business (a small yoga studio, fictional), different wording from the seed notes, written before the idea finder was run on it. themes lists the note ids that carry each planted theme. noise notes carry no idea.",
+ "notes":[
+ {"id":101,"kind":"email","text":"I would love to try a class but I am afraid I am too stiff and everyone will stare at me. Is there a gentle first class?"},
+ {"id":102,"kind":"comment","text":"Total beginner here and honestly nervous about walking in alone. What should I wear and do I need to bring a mat?"},
+ {"id":103,"kind":"call","text":"A new member told me she nearly cancelled her first visit because she felt out of shape. After the first class she booked ten more."},
+ {"id":104,"kind":"email","text":"How do the class packs work? Do the ten class credits expire if I go on holiday for a month?"},
+ {"id":105,"kind":"comment","text":"Is the monthly membership cheaper than a pack if I only come twice a week? I cannot work out which to buy."},
+ {"id":106,"kind":"call","text":"A member asked whether she can freeze her pack while travelling. She said the expiry date makes her anxious about wasting money."},
+ {"id":107,"kind":"email","text":"The timetable on the website says Tuesday evening but the app says Wednesday. Which one is right? I keep turning up on the wrong night."},
+ {"id":108,"kind":"comment","text":"Confused about the new schedule, did the Thursday morning class move or get cancelled? The page does not say."},
+ {"id":109,"kind":"call","text":"Two people this week showed up for a class that had moved rooms. They said nobody told them where to go."},
+ {"id":110,"kind":"note","text":"Remember to order two new cleaning cloths and fix the loose hook on the changing room door."},
+ {"id":111,"kind":"note","text":"The plant in the lobby is doing great. Someone left a lovely thank you card on the desk."},
+ {"id":112,"kind":"email","text":"Thanks so much, the invoice arrived and everything looks fine."},
+ {"id":113,"kind":"comment","text":"What a lovely studio, the light in there is wonderful."},
+ {"id":114,"kind":"email","text":"Can a complete beginner join the Sunday class, or is it only for people who already know the poses? I am nervous about getting it wrong."}
+ ],
+ "themes":{"beginner_nerves":[101,102,103,114],"class_packs_and_pricing":[104,105,106],"timetable_confusion":[107,108,109]},
+ "noise":[110,111,112,113]}

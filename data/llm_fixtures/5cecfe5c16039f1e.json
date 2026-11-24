@@ -1,0 +1,7 @@
+{
+  "text": "{\"guide\": \"Voice guide for Tobias Rennick\\n\\nWritten by the offline stand in (fixed rules over the measured numbers). It is not a language model. Edit it freely.\\n\\nSentences: short and blunt, about 5 words, with fragments allowed. The length stays even.\\nParagraphs: two or three sentences.\\nTone: relaxed but tidy. Rarely uses contractions. Write the full words.\\nTalking to the reader: often says you and we. Speaks from personal experience with I.\\nQuestions and energy: seldom asks questions. Avoids exclamation marks.\\nDetail: uses concrete numbers often.\\nSentences most often start with a plain subject.\\nFavourite words: every, money, late, first, fixed, work, month, minutes, calls, paid, real, answer.\\nPhrases that keep coming back: on tuesday.\\n\\nNever invent facts, numbers or stories. If a line needs a real example, leave a bracket for the author.\"}",
+  "input_tokens": 150,
+  "output_tokens": 40,
+  "model": "claude-sonnet-5-5",
+  "prompt_preview": "[task:write_guide]\nWrite the voice guide for the author in the profile block, from the measured numbers in it and the excerpts in the samples block.\n\nReply with"
+}

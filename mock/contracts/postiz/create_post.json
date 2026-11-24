@@ -1,0 +1,5 @@
+{"method": "POST", "path": "/posts", "header": "Authorization", "header_has_bearer_prefix": false,
+ "body_required": ["type", "date", "shortLink", "tags"], "body_required_unless_draft": ["posts"], "body_optional": ["order", "inter"],
+ "type_values": ["draft", "schedule", "now"],
+ "post_item_required": ["integration", "value"], "post_item_optional": ["settings", "group"], "integration_required": ["id"], "value_item_required": ["content"], "value_item_optional": ["id", "image"], "settings_required": ["__type"],
+ "example_response": [{"postId": "post-123", "integration": "integration-456"}]}

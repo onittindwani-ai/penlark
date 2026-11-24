@@ -1,0 +1,2 @@
+Source: https://app.metricool.com/api/swagger.json (WebFetch, 2026-11-23). An OpenAPI 3.0.1 document "Metricool API" 2.0.0, base URL https://app.metricool.com/api, about 1.6 million characters.
+Read: the first 100000 characters only (info, servers, security scheme: header X-Mc-Auth). NOT read: the scheduler post path, its query parameters and body. So only the base URL and the auth header are confirmed; the post shape stays UNVERIFIED.

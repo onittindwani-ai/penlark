@@ -1,0 +1,647 @@
+{
+ "dated": "2026-11-23",
+ "note": "Judgements from sources and our own adapter work on the date shown, not benchmarks. A tool marked not run was never used against the real vendor.",
+ "weights": {
+  "fit": 35,
+  "setup": 15,
+  "reliability": 15,
+  "cost": 15,
+  "data": 10,
+  "integration": 10
+ },
+ "criteria_names": {
+  "fit": "Fit",
+  "setup": "Setup effort",
+  "reliability": "Reliability and upkeep",
+  "cost": "Cost",
+  "data": "Data control",
+  "integration": "Integration depth"
+ },
+ "groups": [
+  {
+   "id": "scheduler",
+   "job": "Where an approved post goes to be scheduled or published",
+   "reference": "buffer",
+   "recommendation": {
+    "beginner": "Start with the file export: Penlark saves the approved text and you paste it into LinkedIn or X yourself. It needs no account and nothing can be sent by mistake. Add a scheduler later.",
+    "implementer": "Buffer and Postiz were read from their docs and tested only against local stand ins. Metricool is from memory. Pick the one your client already pays for, keep the mode in draft, and test with one real account first.",
+    "cost_sensitive": "The file export costs nothing. Postiz is open source and costs a small server. Buffer and Metricool have price pages: read them yourself, none is quoted here.",
+    "open_source_when": "Postiz is the right call when the client wants posts to stay on their own server and someone can run Docker. It is the wrong call when the client wants someone else to handle each network's app approval and outages."
+   },
+   "tools": [
+    {
+     "id": "buffer",
+     "name": "Buffer",
+     "kind": "paid",
+     "supported_in_penlark": "Adapter written from the developer docs, saves a draft by default",
+     "run": "not run against Buffer",
+     "sources": [
+      {
+       "url": "https://developers.buffer.com/examples/create-draft-post.html",
+       "checked": "2026-11-23"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 75,
+       "evidence": "A familiar queue and calendar that many creators already use, with a GraphQL API for drafts."
+      },
+      "setup": {
+       "score": 80,
+       "evidence": "Create a token in the Buffer settings and paste it in. No server to run."
+      },
+      "reliability": {
+       "score": 80,
+       "evidence": "A hosted service with a clear status page. Network approvals are Buffer's job, not yours."
+      },
+      "cost": {
+       "score": 60,
+       "evidence": "Paid plans for several channels. See the vendor price page, no figure is quoted here."
+      },
+      "data": {
+       "score": 45,
+       "evidence": "Posts and tokens sit with the vendor. You cannot run it on your own server."
+      },
+      "integration": {
+       "score": 70,
+       "evidence": "Penlark calls the createPost mutation and defaults to saveToDraft, so a person still presses publish."
+      }
+     }
+    },
+    {
+     "id": "metricool",
+     "name": "Metricool",
+     "kind": "paid",
+     "supported_in_penlark": "Adapter written from memory, UNVERIFIED",
+     "run": "not run against Metricool",
+     "sources": [
+      {
+       "url": "https://metricool.com/api/",
+       "checked": "page did not describe the API"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 78,
+       "evidence": "Scheduling plus built in analytics and reports in one tool, which suits a performance review loop."
+      },
+      "setup": {
+       "score": 70,
+       "evidence": "Needs a token, a user id and a blog id. The steps could not be read from the docs."
+      },
+      "reliability": {
+       "score": 75,
+       "evidence": "A hosted service with a long track record. API access may depend on the plan."
+      },
+      "cost": {
+       "score": 60,
+       "evidence": "Paid plans. API access may need a higher one. Check the vendor page."
+      },
+      "data": {
+       "score": 45,
+       "evidence": "Data sits with the vendor."
+      },
+      "integration": {
+       "score": 50,
+       "evidence": "The request shape is from memory, so the adapter is the least certain of the three."
+      }
+     }
+    },
+    {
+     "id": "postiz",
+     "name": "Postiz",
+     "kind": "open source",
+     "supported_in_penlark": "Adapter written from the public API docs, tested against a local stand in",
+     "run": "not run against Postiz",
+     "sources": [
+      {
+       "url": "https://docs.postiz.com/public-api/introduction",
+       "checked": "2026-11-23"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 72,
+       "evidence": "Schedules to many networks from one open source tool and has a public API with drafts and scheduling."
+      },
+      "setup": {
+       "score": 50,
+       "evidence": "Self hosting needs Docker, a database and each network's app keys. Cloud is easier."
+      },
+      "reliability": {
+       "score": 60,
+       "evidence": "You carry updates and uptime. The docs list a default limit of 90 create requests an hour."
+      },
+      "cost": {
+       "score": 85,
+       "evidence": "Free to self host. Pay only for a small server. A cloud plan exists with its own price page."
+      },
+      "data": {
+       "score": 90,
+       "evidence": "Posts and keys stay on your server when self hosted."
+      },
+      "integration": {
+       "score": 80,
+       "evidence": "The adapter sends the documented body: type, date, posts with integration id and content, settings type."
+      }
+     }
+    },
+    {
+     "id": "file",
+     "name": "File export",
+     "kind": "built in",
+     "supported_in_penlark": "Built in, the default",
+     "run": "run and tested",
+     "sources": [
+      {
+       "url": "https://github.com/onittindwani-ai/penlark",
+       "checked": "this repo"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 50,
+       "evidence": "No scheduling and no reach: it only saves the text so a person posts it by hand."
+      },
+      "setup": {
+       "score": 100,
+       "evidence": "Nothing to install or set up at all."
+      },
+      "reliability": {
+       "score": 95,
+       "evidence": "A local file cannot go down or be rate limited."
+      },
+      "cost": {
+       "score": 100,
+       "evidence": "It costs nothing to use."
+      },
+      "data": {
+       "score": 100,
+       "evidence": "Nothing leaves your machine."
+      },
+      "integration": {
+       "score": 100,
+       "evidence": "It is the one path that works with no account and cannot publish."
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "links",
+   "job": "Short links that show which post brought a click",
+   "reference": "bitly",
+   "recommendation": {
+    "beginner": "Use the built in tracked links. They add the UTM tags for you and show clicks and leads next to each post. You only need your own website address on the allow list.",
+    "implementer": "Keep the built in links for posts and keep the allow list short. If the client already has Bitly or Dub, keep using it and import the clicks as a CSV later. Point the short domain at the app.",
+    "cost_sensitive": "The built in links cost nothing. Dub can be self hosted. Bitly has a price page: read it yourself, no figure is quoted here.",
+    "open_source_when": "Self hosted Dub is the right call when you need a branded short domain with a full dashboard and can run a database. For one person with one site, the built in links are enough."
+   },
+   "tools": [
+    {
+     "id": "bitly",
+     "name": "Bitly",
+     "kind": "paid",
+     "supported_in_penlark": "Not built, any shortener's address can go in a post by hand",
+     "run": "not run",
+     "sources": [
+      {
+       "url": "https://bitly.com/",
+       "checked": "not fetched"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 70,
+       "evidence": "Very well known short links with a dashboard and a branded domain option."
+      },
+      "setup": {
+       "score": 85,
+       "evidence": "Sign up and paste a link. Nothing to host."
+      },
+      "reliability": {
+       "score": 85,
+       "evidence": "A hosted service with a long record."
+      },
+      "cost": {
+       "score": 55,
+       "evidence": "Paid plans for branded domains and more links. See the vendor page."
+      },
+      "data": {
+       "score": 40,
+       "evidence": "Click data sits with the vendor."
+      },
+      "integration": {
+       "score": 30,
+       "evidence": "Penlark has no Bitly adapter. You would paste links by hand and import clicks later."
+      }
+     }
+    },
+    {
+     "id": "dub",
+     "name": "Dub",
+     "kind": "open source",
+     "supported_in_penlark": "Not built, named as an alternative",
+     "run": "not run",
+     "sources": [
+      {
+       "url": "https://dub.co/",
+       "checked": "not fetched"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 72,
+       "evidence": "Open source link management with analytics and custom domains, from its own site."
+      },
+      "setup": {
+       "score": 50,
+       "evidence": "Self hosting needs a database and several services. A hosted plan exists."
+      },
+      "reliability": {
+       "score": 60,
+       "evidence": "You carry updates when self hosted."
+      },
+      "cost": {
+       "score": 80,
+       "evidence": "Self hosting costs a server. A hosted plan has its own price page."
+      },
+      "data": {
+       "score": 90,
+       "evidence": "Click data stays with you when self hosted."
+      },
+      "integration": {
+       "score": 30,
+       "evidence": "Penlark has no Dub adapter. Links would be pasted by hand and clicks imported as CSV."
+      }
+     }
+    },
+    {
+     "id": "tracked",
+     "name": "Penlark tracked links",
+     "kind": "built in",
+     "supported_in_penlark": "Built in, tested",
+     "run": "run and tested",
+     "sources": [
+      {
+       "url": "https://github.com/onittindwani-ai/penlark",
+       "checked": "this repo"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 60,
+       "evidence": "Short links with UTM tags, a click count, unique visitors and lead conversions next to each post. No branded dashboard."
+      },
+      "setup": {
+       "score": 95,
+       "evidence": "Needs only a public address for the app and an allow list of your own hosts."
+      },
+      "reliability": {
+       "score": 75,
+       "evidence": "One public route, rate limited, with an allow list checked again on every click."
+      },
+      "cost": {
+       "score": 100,
+       "evidence": "It costs nothing to use."
+      },
+      "data": {
+       "score": 95,
+       "evidence": "Clicks are stored with a one day hash, never an address."
+      },
+      "integration": {
+       "score": 100,
+       "evidence": "It is the tracker the funnel page reads, so no import is needed."
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "writer",
+   "job": "What writes the first draft",
+   "reference": "anthropic",
+   "recommendation": {
+    "beginner": "Leave it on the offline templates. They give a skeleton in your style with brackets for every real fact, so nothing is invented. You write the facts.",
+    "implementer": "Wire the live model only after you have read the held out match numbers. The live path was never run with a real key. It must still pass the voice match, house rules and claims check before a person sees an approve button.",
+    "cost_sensitive": "Offline templates cost nothing. A live model is billed per use. See the vendor price page, no figure is quoted here.",
+    "open_source_when": "No open source model is built in. If a client needs text to stay on their own machine, ask Claude Code to write an adapter for a local model, and run the held out voice test on its output first."
+   },
+   "tools": [
+    {
+     "id": "anthropic",
+     "name": "Anthropic model",
+     "kind": "paid",
+     "supported_in_penlark": "Real code through the shared wrapper, fake server only, UNVERIFIED",
+     "run": "never run live",
+     "sources": [
+      {
+       "url": "https://docs.anthropic.com/",
+       "checked": "not fetched"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 90,
+       "evidence": "Writes real sentences in a voice from a guide and evidence, which templates cannot."
+      },
+      "setup": {
+       "score": 70,
+       "evidence": "Needs an API key and a spend limit set by the owner."
+      },
+      "reliability": {
+       "score": 85,
+       "evidence": "A hosted service, with retries in the shared wrapper."
+      },
+      "cost": {
+       "score": 55,
+       "evidence": "Billed per use. See the vendor page."
+      },
+      "data": {
+       "score": 40,
+       "evidence": "Prompts leave your machine. Sample text is passed as untrusted data."
+      },
+      "integration": {
+       "score": 45,
+       "evidence": "The code path exists and is tested against a fake server only. Output goes through every check."
+      }
+     }
+    },
+    {
+     "id": "templates",
+     "name": "Offline templates",
+     "kind": "built in",
+     "supported_in_penlark": "Built in, tested",
+     "run": "run and tested",
+     "sources": [
+      {
+       "url": "https://github.com/onittindwani-ai/penlark",
+       "checked": "this repo"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 40,
+       "evidence": "Fills a template from your evidence and voice numbers. It is not a language model and it leaves brackets where facts are needed."
+      },
+      "setup": {
+       "score": 100,
+       "evidence": "Nothing to install or set up at all."
+      },
+      "reliability": {
+       "score": 95,
+       "evidence": "Deterministic, the same input gives the same output."
+      },
+      "cost": {
+       "score": 100,
+       "evidence": "It costs nothing to use."
+      },
+      "data": {
+       "score": 100,
+       "evidence": "Nothing leaves your machine."
+      },
+      "integration": {
+       "score": 100,
+       "evidence": "It is the default writer and the one the demo uses."
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "hosting",
+   "job": "Where the app runs",
+   "reference": "vercel",
+   "recommendation": {
+    "beginner": "Run it on your own computer first with the demo. For a first real use, Vercel for the web part and Railway for the rest is the easiest path in these guides.",
+    "implementer": "Vercel plus Railway for a quick client start, or everything on one Hetzner server when the client wants one bill and full control. Use a tunnel for webhook testing at home.",
+    "cost_sensitive": "A single small Hetzner server is usually the cheapest way to run the API and database. Vercel has a free tier for hobby use. Read each price page yourself.",
+    "open_source_when": "Not a question of open source here: all three run the same open code. Pick by who does the upkeep."
+   },
+   "tools": [
+    {
+     "id": "vercel",
+     "name": "Vercel",
+     "kind": "paid",
+     "supported_in_penlark": "Guide written, web part only",
+     "run": "not run on Vercel",
+     "sources": [
+      {
+       "url": "https://vercel.com/docs/monorepos",
+       "checked": "2026-11-23"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 80,
+       "evidence": "Built for Next.js: import the repo, set the root directory to apps/web, set two variables."
+      },
+      "setup": {
+       "score": 90,
+       "evidence": "Few steps and preview deployments."
+      },
+      "reliability": {
+       "score": 85,
+       "evidence": "Managed. Cannot run the API or worker, which need a long running process."
+      },
+      "cost": {
+       "score": 65,
+       "evidence": "A free tier exists and paid plans follow. See the vendor page."
+      },
+      "data": {
+       "score": 50,
+       "evidence": "Hosted with the vendor."
+      },
+      "integration": {
+       "score": 60,
+       "evidence": "Only the web app goes here. The API lives elsewhere."
+      }
+     }
+    },
+    {
+     "id": "railway",
+     "name": "Railway",
+     "kind": "paid",
+     "supported_in_penlark": "Config file written, not run",
+     "run": "not run on Railway",
+     "sources": [
+      {
+       "url": "https://docs.railway.com/",
+       "checked": "not fetched"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 80,
+       "evidence": "Runs the API and worker as two services with a Postgres add on from one repo."
+      },
+      "setup": {
+       "score": 75,
+       "evidence": "Connect the repo, set variables, add Postgres."
+      },
+      "reliability": {
+       "score": 75,
+       "evidence": "Managed, with health checks and logs."
+      },
+      "cost": {
+       "score": 60,
+       "evidence": "Usage based. See the vendor page."
+      },
+      "data": {
+       "score": 50,
+       "evidence": "Hosted with the vendor."
+      },
+      "integration": {
+       "score": 70,
+       "evidence": "A railway.json is in the repo. Its format was not re checked against the current docs."
+      }
+     }
+    },
+    {
+     "id": "hetzner",
+     "name": "Hetzner server",
+     "kind": "paid",
+     "supported_in_penlark": "Compose, Caddy, backup and cloud init files written, not run",
+     "run": "not run on Hetzner",
+     "sources": [
+      {
+       "url": "https://docs.hetzner.com/",
+       "checked": "not fetched"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 85,
+       "evidence": "One small server runs everything with Docker Compose and automatic HTTPS."
+      },
+      "setup": {
+       "score": 45,
+       "evidence": "You set up the server, firewall, updates and backups yourself, with the guide."
+      },
+      "reliability": {
+       "score": 60,
+       "evidence": "You carry upkeep and updates."
+      },
+      "cost": {
+       "score": 90,
+       "evidence": "Usually the cheapest of the three. See the vendor page."
+      },
+      "data": {
+       "score": 95,
+       "evidence": "Everything stays on a server you control."
+      },
+      "integration": {
+       "score": 80,
+       "evidence": "A compose file, a Caddyfile, a backup script and a cloud init file are in the repo."
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "database",
+   "job": "Where the data is kept",
+   "reference": "postgres",
+   "recommendation": {
+    "beginner": "Use the built in SQLite file for the demo and for one person on one computer. Nothing to install.",
+    "implementer": "Use Postgres for any real deployment. The migration was run up, down and up on Postgres 17, but the full test and browser suites ran on SQLite only.",
+    "cost_sensitive": "Both are free software. Postgres costs a small server or a managed plan.",
+    "open_source_when": "Both are open source. Choose SQLite for a single user on one machine, Postgres when the web app and worker run as separate services."
+   },
+   "tools": [
+    {
+     "id": "postgres",
+     "name": "PostgreSQL",
+     "kind": "open source",
+     "supported_in_penlark": "Supported through the same models and migration",
+     "run": "migration cycle run on a throwaway Postgres 17",
+     "sources": [
+      {
+       "url": "https://www.postgresql.org/docs/",
+       "checked": "not fetched"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 90,
+       "evidence": "Handles the web app and the worker at the same time and is what the deploy files use."
+      },
+      "setup": {
+       "score": 60,
+       "evidence": "A service to run, or a managed add on."
+      },
+      "reliability": {
+       "score": 90,
+       "evidence": "Very reliable with backups."
+      },
+      "cost": {
+       "score": 80,
+       "evidence": "Free software. Server or plan cost only."
+      },
+      "data": {
+       "score": 95,
+       "evidence": "You control the data."
+      },
+      "integration": {
+       "score": 85,
+       "evidence": "Same models. The full suites were not run on it."
+      }
+     }
+    },
+    {
+     "id": "sqlite",
+     "name": "SQLite",
+     "kind": "open source",
+     "supported_in_penlark": "Supported, the default for the demo",
+     "run": "full suites run on SQLite",
+     "sources": [
+      {
+       "url": "https://www.sqlite.org/docs.html",
+       "checked": "not fetched"
+      }
+     ],
+     "scores": {
+      "fit": {
+       "score": 65,
+       "evidence": "Fine for one person and a demo. One writer at a time, so the worker and web app can briefly wait on each other."
+      },
+      "setup": {
+       "score": 100,
+       "evidence": "A file, nothing to install."
+      },
+      "reliability": {
+       "score": 75,
+       "evidence": "Reliable for small loads. Copy the file to back it up."
+      },
+      "cost": {
+       "score": 100,
+       "evidence": "It costs nothing to use."
+      },
+      "data": {
+       "score": 100,
+       "evidence": "A file on your machine."
+      },
+      "integration": {
+       "score": 95,
+       "evidence": "Same models, WAL mode on."
+      }
+     }
+    }
+   ]
+  }
+ ],
+ "unscored_named": [
+  {
+   "name": "LinkedIn, X, Instagram, Facebook and other network APIs",
+   "why": "Each network requires its own app approval. The scheduler tool you choose holds that approval, so Penlark does not call these networks directly."
+  },
+  {
+   "name": "Cloudflare Tunnel and Cloudflare DNS",
+   "why": "Named in the deploy guides for webhook testing and a custom domain. They are infrastructure, not a choice Penlark depends on."
+  },
+  {
+   "name": "A form or CRM tool that sends lead events",
+   "why": "Any tool that can send a signed webhook works. None is built in, so none is scored."
+  }
+ ]
+}

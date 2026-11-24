@@ -1,0 +1,122 @@
+[
+ {
+  "note_id": "B-n01",
+  "kind": "email",
+  "source_label": "Email from a customer",
+  "text": "Is the date on the bag the roast date or when it goes bad? I could not tell and I almost threw it out."
+ },
+ {
+  "note_id": "B-n02",
+  "kind": "email",
+  "source_label": "Email from a subscriber",
+  "text": "I went on holiday and got three bags I could not drink. I love the coffee, but I came home to a pile."
+ },
+ {
+  "note_id": "B-n03",
+  "kind": "comment",
+  "source_label": "Comment on a decaf post",
+  "text": "I am embarrassed to order decaf, it feels like admitting defeat. I wish the label was a bit prouder about it."
+ },
+ {
+  "note_id": "B-n04",
+  "kind": "comment",
+  "source_label": "Comment on a brewing video",
+  "text": "My pour over tastes sour and I follow the recipe exactly. I have tried three kettles and nothing changes."
+ },
+ {
+  "note_id": "B-n05",
+  "kind": "comment",
+  "source_label": "Comment on a bag photo",
+  "text": "I threw out a bag because the date looked like an expiry. Only later did a friend say it was a roast date."
+ },
+ {
+  "note_id": "B-n06",
+  "kind": "call",
+  "source_label": "Call with a cafe owner",
+  "text": "We need the beans on Tuesday morning, not Wednesday afternoon. Our baristas run short and the weekend rush has no mercy."
+ },
+ {
+  "note_id": "B-n07",
+  "kind": "email",
+  "source_label": "Email from a subscriber",
+  "text": "There is no way to skip a delivery without emailing you. It should be one click, honestly."
+ },
+ {
+  "note_id": "B-n08",
+  "kind": "comment",
+  "source_label": "Comment on a brewing post",
+  "text": "How many grams of coffee per cup, is there a simple rule? Every site says something different."
+ },
+ {
+  "note_id": "B-n09",
+  "kind": "comment",
+  "source_label": "Comment from an office worker",
+  "text": "People at the office judge me for decaf. I have started hiding the bag in my desk drawer."
+ },
+ {
+  "note_id": "B-n10",
+  "kind": "email",
+  "source_label": "Email from a gift buyer",
+  "text": "Please put roasted on in bold next to the date. I bought two bags and still was not sure which was fresher."
+ },
+ {
+  "note_id": "B-n11",
+  "kind": "comment",
+  "source_label": "Comment in the shop",
+  "text": "The playlist in the shop is fantastic, who picks it? I would happily pay for the Sunday mix."
+ },
+ {
+  "note_id": "B-n12",
+  "kind": "email",
+  "source_label": "Email from a subscriber",
+  "text": "Let me pause for a week without cancelling. I do not want to lose my place, I just need a breather."
+ },
+ {
+  "note_id": "B-n13",
+  "kind": "comment",
+  "source_label": "Comment on a grinder post",
+  "text": "The grinder I bought makes either dust or boulders. I do not know if it is me or the machine."
+ },
+ {
+  "note_id": "B-n14",
+  "kind": "call",
+  "source_label": "Call with a restaurant buyer",
+  "text": "Our baristas run out on Mondays so a set delivery day matters. Can you promise the same day every week?"
+ },
+ {
+  "note_id": "B-n15",
+  "kind": "comment",
+  "source_label": "Comment on a roasting post",
+  "text": "My customers keep asking if the best by date means it is stale. I work in a bakery and I am never sure what to tell them."
+ },
+ {
+  "note_id": "B-n16",
+  "kind": "comment",
+  "source_label": "Comment on a decaf post",
+  "text": "Is your decaf actually good or just an afterthought? I have been burnt by weak decaf before."
+ },
+ {
+  "note_id": "B-n17",
+  "kind": "email",
+  "source_label": "Email from a regular",
+  "text": "Could you stock oat milk in the cafe? Half my group will not come in without it."
+ },
+ {
+  "note_id": "B-n18",
+  "kind": "founder",
+  "source_label": "Founder note",
+  "text": "Founder note: three questions this week about sour coffee, all grind related. Worth a short guide."
+ },
+ {
+  "note_id": "B-n19",
+  "kind": "email",
+  "source_label": "Email from a customer",
+  "text": "I would love bags in a gift box for my dad's birthday. Is there a packaging option that is not plastic?"
+ },
+ {
+  "note_id": "B-n20",
+  "kind": "comment",
+  "source_label": "Comment on a cold brew post",
+  "text": "The lid on the cold brew bottle leaks in my bag. Otherwise perfect, but my laptop is sticky."
+ }
+]

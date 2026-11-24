@@ -1,0 +1,2882 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "Penlark API",
+  "version": "1.0.0"
+ },
+ "paths": {
+  "/health": {
+   "get": {
+    "summary": "Health",
+    "operationId": "health_health_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/ready": {
+   "get": {
+    "summary": "Ready",
+    "operationId": "ready_ready_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/events/stream": {
+   "get": {
+    "summary": "Stream",
+    "operationId": "stream_api_events_stream_get",
+    "parameters": [
+     {
+      "name": "after",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "default": 0,
+       "title": "After"
+      }
+     },
+     {
+      "name": "prefix",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Prefix"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/auth/login": {
+   "post": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Sign in with email and password",
+    "operationId": "login_api_auth_login_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/Login"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/auth/logout": {
+   "post": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "End the session (the web app clears the cookie)",
+    "operationId": "logout_api_auth_logout_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/auth/me": {
+   "get": {
+    "tags": [
+     "auth"
+    ],
+    "summary": "Who is signed in",
+    "operationId": "me_api_auth_me_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/overview": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Numbers for the top of every page",
+    "operationId": "overview_api_overview_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/authors": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "The voices in this workspace",
+    "operationId": "authors_api_authors_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/samples": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Writing samples of one voice",
+    "operationId": "samples_api_samples_get",
+    "parameters": [
+     {
+      "name": "author_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Author Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Add a pasted writing sample, transcript or markdown",
+    "operationId": "add_sample_api_samples_post",
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SampleIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/profile": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "The latest voice profile of an author, with its versions",
+    "operationId": "profile_api_profile_get",
+    "parameters": [
+     {
+      "name": "author_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Author Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/profile/compare": {
+   "post": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Overlay a text on the profile radar",
+    "operationId": "compare_api_profile_compare_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CompareIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/notes": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Calls, comments, emails and notes",
+    "operationId": "notes_api_notes_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Add a call, comment, email, note or a founder fact",
+    "operationId": "add_note_api_notes_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/NoteIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/ideas": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Ranked ideas with evidence quotes",
+    "operationId": "ideas_list_api_ideas_get",
+    "parameters": [
+     {
+      "name": "status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Status"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/drafts": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Drafts",
+    "operationId": "drafts_api_drafts_get",
+    "parameters": [
+     {
+      "name": "status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Status"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/drafts/{draft_id}": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "One draft with variants and its live checks",
+    "operationId": "draft_api_drafts__draft_id__get",
+    "parameters": [
+     {
+      "name": "draft_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Draft Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "put": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Edit a draft. Editing an approved draft sends it back to draft.",
+    "operationId": "edit_draft_api_drafts__draft_id__put",
+    "parameters": [
+     {
+      "name": "draft_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Draft Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DraftIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/schedule": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Scheduled and exported drafts, for the calendar",
+    "operationId": "schedule_api_schedule_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/cadence": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Planned posts per week against the posting rhythm",
+    "operationId": "cadence_view_api_cadence_get",
+    "parameters": [
+     {
+      "name": "weeks",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 12,
+       "minimum": 1,
+       "default": 4,
+       "title": "Weeks"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/rules": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "House rules and their settings",
+    "operationId": "rules_api_rules_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Add a banned phrase or pattern",
+    "operationId": "add_rule_api_rules_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RuleIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/performance": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Imported posts with numbers",
+    "operationId": "performance_api_performance_get",
+    "parameters": [
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 20000,
+       "minimum": 1,
+       "default": 5000,
+       "title": "Limit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/learning": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "What the best posts have in common, with sample sizes",
+    "operationId": "learning_view_api_learning_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/links": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Tracked links",
+    "operationId": "links_api_links_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Make a tracked short link. The target host must be on the allow list.",
+    "operationId": "make_link_api_links_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LinkIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/attribution": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "Clicks, leads and customers per tracked link",
+    "operationId": "attribution_view_api_attribution_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/experiments": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "A/B experiments with an honest significance note",
+    "operationId": "experiments_list_api_experiments_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Start an A/B experiment",
+    "operationId": "make_experiment_api_experiments_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ExperimentIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/match": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Live voice match and house rule check of any text. Writes nothing.",
+    "operationId": "live_match_api_match_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/MatchIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/samples/upload": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Upload a file: text, markdown, PDF, transcript, LinkedIn Shares.csv or X tweets.js",
+    "operationId": "upload_sample_api_samples_upload_post",
+    "parameters": [
+     {
+      "name": "author_id",
+      "in": "query",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Author Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/samples/{sample_id}": {
+   "delete": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Remove a sample",
+    "operationId": "delete_sample_api_samples__sample_id__delete",
+    "parameters": [
+     {
+      "name": "sample_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Sample Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/profile/build": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Measure the samples and make a new profile version (not locked)",
+    "operationId": "build_api_profile_build_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/BuildIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/profile/{profile_id}/guide": {
+   "put": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Edit the guide. A locked profile cannot be edited, build a new version instead.",
+    "operationId": "edit_guide_api_profile__profile_id__guide_put",
+    "parameters": [
+     {
+      "name": "profile_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Profile Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/GuideIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/profile/{profile_id}/lock": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Lock a profile so scores use a fixed voice",
+    "operationId": "lock_api_profile__profile_id__lock_post",
+    "parameters": [
+     {
+      "name": "profile_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Profile Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/ideas/refresh": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Find ideas again from all notes",
+    "operationId": "refresh_api_ideas_refresh_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/ideas/{idea_id}/drop": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Drop an idea",
+    "operationId": "drop_api_ideas__idea_id__drop_post",
+    "parameters": [
+     {
+      "name": "idea_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Idea Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/ideas/{idea_id}/draft": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Write a draft from an idea in a chosen voice (offline stand in)",
+    "operationId": "draft_from_idea_api_ideas__idea_id__draft_post",
+    "parameters": [
+     {
+      "name": "idea_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Idea Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DraftFromIdea"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/drafts/{draft_id}/variants/{variant_id}/use": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Replace the draft text with a variant",
+    "operationId": "use_variant_api_drafts__draft_id__variants__variant_id__use_post",
+    "parameters": [
+     {
+      "name": "draft_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Draft Id"
+      }
+     },
+     {
+      "name": "variant_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Variant Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/drafts/{draft_id}/request-approval": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Ask a second person to approve this draft",
+    "operationId": "request_api_drafts__draft_id__request_approval_post",
+    "parameters": [
+     {
+      "name": "draft_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Draft Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/drafts/{draft_id}/schedule": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Put an approved draft on the calendar (a plan, nothing is sent)",
+    "operationId": "schedule_api_drafts__draft_id__schedule_post",
+    "parameters": [
+     {
+      "name": "draft_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Draft Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ScheduleIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/schedule/{schedule_id}": {
+   "put": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Move a planned item to another day (drag on the calendar)",
+    "operationId": "move_api_schedule__schedule_id__put",
+    "parameters": [
+     {
+      "name": "schedule_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Schedule Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/MoveIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Take an item off the calendar",
+    "operationId": "unschedule_api_schedule__schedule_id__delete",
+    "parameters": [
+     {
+      "name": "schedule_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Schedule Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/drafts/{draft_id}/export": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Save an approved draft to a file to copy and post yourself (the default way out)",
+    "operationId": "export_api_drafts__draft_id__export_post",
+    "parameters": [
+     {
+      "name": "draft_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Draft Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ExportIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/drafts/{draft_id}/send": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Send an approved draft to Postiz, Buffer or Metricool. Needs live mode, an approval and confirm.",
+    "operationId": "send_api_drafts__draft_id__send_post",
+    "parameters": [
+     {
+      "name": "draft_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Draft Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SendIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/rules/{rule_id}": {
+   "put": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Turn a rule on or off",
+    "operationId": "toggle_rule_api_rules__rule_id__put",
+    "parameters": [
+     {
+      "name": "rule_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Rule Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RuleToggle"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Delete your own rule (built in rules can only be turned off)",
+    "operationId": "delete_rule_api_rules__rule_id__delete",
+    "parameters": [
+     {
+      "name": "rule_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Rule Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/performance/import": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Import post numbers from CSV. With preview true nothing is saved.",
+    "operationId": "import_csv_api_performance_import_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ImportIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/experiments/{exp_id}": {
+   "put": {
+    "tags": [
+     "write"
+    ],
+    "summary": "Update the counts of an experiment",
+    "operationId": "update_experiment_api_experiments__exp_id__put",
+    "parameters": [
+     {
+      "name": "exp_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Exp Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CountsIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/approvals": {
+   "get": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Pending and recent approvals",
+    "operationId": "approvals_api_approvals_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/approvals/{approval_id}/decide": {
+   "post": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Approve or reject. The person who asked cannot decide.",
+    "operationId": "decide_approval_api_approvals__approval_id__decide_post",
+    "parameters": [
+     {
+      "name": "approval_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Approval Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DecideIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/audit": {
+   "get": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Audit log, newest first",
+    "operationId": "audit_api_audit_get",
+    "parameters": [
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 1000,
+       "minimum": 1,
+       "default": 100,
+       "title": "Limit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/audit/verify": {
+   "get": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Check the audit chain has not been edited",
+    "operationId": "audit_verify_api_audit_verify_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/integrations": {
+   "get": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Every adapter, which one is selected, and what it needs",
+    "operationId": "integrations_api_integrations_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/integrations/{category}/test": {
+   "post": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Test the selected adapter in a category",
+    "operationId": "test_integration_api_integrations__category__test_post",
+    "parameters": [
+     {
+      "name": "category",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Category"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/settings": {
+   "get": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Mode, kill switch and config problems",
+    "operationId": "get_settings_api_settings_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Turn the kill switch or draft mode on or off (owner only). The app can never switch live mode on.",
+    "operationId": "post_settings_api_settings_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SettingsIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/public/r/{code}": {
+   "get": {
+    "tags": [
+     "public"
+    ],
+    "summary": "Record a click and redirect to the stored target (allow list checked again)",
+    "operationId": "follow_api_public_r__code__get",
+    "parameters": [
+     {
+      "name": "code",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Code"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/webhooks/lead": {
+   "post": {
+    "tags": [
+     "public"
+    ],
+    "summary": "A lead or customer event from your form or CRM tool. Signed with LEAD_WEBHOOK_SECRET (header x-penlark-signature, sha256 of the body).",
+    "operationId": "lead_api_webhooks_lead_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/demo/state": {
+   "get": {
+    "tags": [
+     "demo"
+    ],
+    "summary": "The demo clock",
+    "operationId": "state_api_demo_state_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/demo/reset": {
+   "post": {
+    "tags": [
+     "demo"
+    ],
+    "summary": "Reset to the seed data and a fresh clock",
+    "operationId": "reset_api_demo_reset_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/demo/tick": {
+   "post": {
+    "tags": [
+     "demo"
+    ],
+    "summary": "Run the jobs once, now: find ideas again and recompute what was learned",
+    "operationId": "tick_api_demo_tick_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/demo/advance": {
+   "post": {
+    "tags": [
+     "demo"
+    ],
+    "summary": "Move the demo clock forward",
+    "operationId": "advance_api_demo_advance_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/AdvanceIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/demo/stress-posts": {
+   "post": {
+    "tags": [
+     "demo"
+    ],
+    "summary": "Add many fictional posts, to check that long tables stay fast",
+    "operationId": "stress_api_demo_stress_posts_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/StressIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "AdvanceIn": {
+    "properties": {
+     "hours": {
+      "type": "number",
+      "maximum": 720.0,
+      "minimum": 0.0,
+      "title": "Hours"
+     }
+    },
+    "type": "object",
+    "required": [
+     "hours"
+    ],
+    "title": "AdvanceIn"
+   },
+   "BuildIn": {
+    "properties": {
+     "author_id": {
+      "type": "integer",
+      "title": "Author Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "author_id"
+    ],
+    "title": "BuildIn"
+   },
+   "CompareIn": {
+    "properties": {
+     "author_id": {
+      "type": "integer",
+      "title": "Author Id"
+     },
+     "text": {
+      "type": "string",
+      "maxLength": 20000,
+      "title": "Text"
+     }
+    },
+    "type": "object",
+    "required": [
+     "author_id",
+     "text"
+    ],
+    "title": "CompareIn"
+   },
+   "CountsIn": {
+    "properties": {
+     "a_n": {
+      "type": "integer",
+      "maximum": 1000000000.0,
+      "minimum": 0.0,
+      "title": "A N"
+     },
+     "a_hits": {
+      "type": "integer",
+      "maximum": 1000000000.0,
+      "minimum": 0.0,
+      "title": "A Hits"
+     },
+     "b_n": {
+      "type": "integer",
+      "maximum": 1000000000.0,
+      "minimum": 0.0,
+      "title": "B N"
+     },
+     "b_hits": {
+      "type": "integer",
+      "maximum": 1000000000.0,
+      "minimum": 0.0,
+      "title": "B Hits"
+     }
+    },
+    "type": "object",
+    "required": [
+     "a_n",
+     "a_hits",
+     "b_n",
+     "b_hits"
+    ],
+    "title": "CountsIn"
+   },
+   "DecideIn": {
+    "properties": {
+     "approve": {
+      "type": "boolean",
+      "title": "Approve"
+     },
+     "note": {
+      "type": "string",
+      "maxLength": 500,
+      "title": "Note",
+      "default": ""
+     }
+    },
+    "type": "object",
+    "required": [
+     "approve"
+    ],
+    "title": "DecideIn"
+   },
+   "DraftFromIdea": {
+    "properties": {
+     "author_id": {
+      "type": "integer",
+      "title": "Author Id"
+     },
+     "kind": {
+      "type": "string",
+      "pattern": "^(post|script|email|newsletter)$",
+      "title": "Kind",
+      "default": "post"
+     }
+    },
+    "type": "object",
+    "required": [
+     "author_id"
+    ],
+    "title": "DraftFromIdea"
+   },
+   "DraftIn": {
+    "properties": {
+     "text": {
+      "type": "string",
+      "maxLength": 30000,
+      "title": "Text"
+     },
+     "author_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Author Id"
+     },
+     "title": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 200
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Title"
+     },
+     "source_note_ids": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "integer"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Source Note Ids"
+     },
+     "claim_links": {
+      "anyOf": [
+       {
+        "additionalProperties": {
+         "type": "integer"
+        },
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Claim Links"
+     }
+    },
+    "type": "object",
+    "required": [
+     "text"
+    ],
+    "title": "DraftIn"
+   },
+   "ExperimentIn": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 3,
+      "title": "Name"
+     },
+     "metric": {
+      "type": "string",
+      "maxLength": 60,
+      "title": "Metric",
+      "default": "link clicks"
+     },
+     "a_label": {
+      "type": "string",
+      "maxLength": 60,
+      "title": "A Label",
+      "default": "A"
+     },
+     "b_label": {
+      "type": "string",
+      "maxLength": 60,
+      "title": "B Label",
+      "default": "B"
+     }
+    },
+    "type": "object",
+    "required": [
+     "name"
+    ],
+    "title": "ExperimentIn"
+   },
+   "ExportIn": {
+    "properties": {
+     "platform": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^(linkedin|x|instagram|facebook|threads|youtube|newsletter|email)$"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Platform"
+     }
+    },
+    "type": "object",
+    "title": "ExportIn"
+   },
+   "GuideIn": {
+    "properties": {
+     "guide": {
+      "type": "string",
+      "maxLength": 6000,
+      "title": "Guide"
+     }
+    },
+    "type": "object",
+    "required": [
+     "guide"
+    ],
+    "title": "GuideIn"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "ImportIn": {
+    "properties": {
+     "csv": {
+      "type": "string",
+      "maxLength": 5000000,
+      "title": "Csv"
+     },
+     "mapping": {
+      "anyOf": [
+       {
+        "additionalProperties": {
+         "type": "string"
+        },
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Mapping"
+     },
+     "preview": {
+      "type": "boolean",
+      "title": "Preview",
+      "default": true
+     }
+    },
+    "type": "object",
+    "required": [
+     "csv"
+    ],
+    "title": "ImportIn"
+   },
+   "LinkIn": {
+    "properties": {
+     "target": {
+      "type": "string",
+      "maxLength": 800,
+      "title": "Target"
+     },
+     "post_ref": {
+      "type": "string",
+      "maxLength": 200,
+      "title": "Post Ref",
+      "default": ""
+     },
+     "draft_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Draft Id"
+     },
+     "source": {
+      "type": "string",
+      "maxLength": 60,
+      "title": "Source",
+      "default": "linkedin"
+     },
+     "medium": {
+      "type": "string",
+      "maxLength": 60,
+      "title": "Medium",
+      "default": "social"
+     },
+     "campaign": {
+      "type": "string",
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Campaign"
+     }
+    },
+    "type": "object",
+    "required": [
+     "target",
+     "campaign"
+    ],
+    "title": "LinkIn"
+   },
+   "Login": {
+    "properties": {
+     "email": {
+      "type": "string",
+      "title": "Email"
+     },
+     "password": {
+      "type": "string",
+      "title": "Password"
+     }
+    },
+    "type": "object",
+    "required": [
+     "email",
+     "password"
+    ],
+    "title": "Login"
+   },
+   "MatchIn": {
+    "properties": {
+     "author_id": {
+      "type": "integer",
+      "title": "Author Id"
+     },
+     "text": {
+      "type": "string",
+      "maxLength": 30000,
+      "title": "Text"
+     },
+     "source_note_ids": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array",
+      "title": "Source Note Ids",
+      "default": []
+     },
+     "claim_links": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Claim Links",
+      "default": {}
+     }
+    },
+    "type": "object",
+    "required": [
+     "author_id",
+     "text"
+    ],
+    "title": "MatchIn"
+   },
+   "MoveIn": {
+    "properties": {
+     "run_on": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "title": "Run On"
+     }
+    },
+    "type": "object",
+    "required": [
+     "run_on"
+    ],
+    "title": "MoveIn"
+   },
+   "NoteIn": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "pattern": "^(call|comment|email|note|fact)$",
+      "title": "Kind"
+     },
+     "who": {
+      "type": "string",
+      "maxLength": 200,
+      "title": "Who",
+      "default": ""
+     },
+     "text": {
+      "type": "string",
+      "maxLength": 20000,
+      "minLength": 8,
+      "title": "Text"
+     },
+     "occurred_on": {
+      "type": "string",
+      "maxLength": 10,
+      "title": "Occurred On",
+      "default": ""
+     }
+    },
+    "type": "object",
+    "required": [
+     "kind",
+     "text"
+    ],
+    "title": "NoteIn"
+   },
+   "RuleIn": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "pattern": "^(phrase|pattern)$",
+      "title": "Kind"
+     },
+     "value": {
+      "type": "string",
+      "maxLength": 300,
+      "minLength": 2,
+      "title": "Value"
+     },
+     "note": {
+      "type": "string",
+      "maxLength": 300,
+      "title": "Note",
+      "default": ""
+     }
+    },
+    "type": "object",
+    "required": [
+     "kind",
+     "value"
+    ],
+    "title": "RuleIn"
+   },
+   "RuleToggle": {
+    "properties": {
+     "enabled": {
+      "type": "boolean",
+      "title": "Enabled"
+     }
+    },
+    "type": "object",
+    "required": [
+     "enabled"
+    ],
+    "title": "RuleToggle"
+   },
+   "SampleIn": {
+    "properties": {
+     "author_id": {
+      "type": "integer",
+      "title": "Author Id"
+     },
+     "title": {
+      "type": "string",
+      "maxLength": 200,
+      "title": "Title",
+      "default": ""
+     },
+     "text": {
+      "type": "string",
+      "maxLength": 200000,
+      "minLength": 20,
+      "title": "Text"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind",
+      "default": "text"
+     }
+    },
+    "type": "object",
+    "required": [
+     "author_id",
+     "text"
+    ],
+    "title": "SampleIn"
+   },
+   "ScheduleIn": {
+    "properties": {
+     "platform": {
+      "type": "string",
+      "pattern": "^(linkedin|x|instagram|facebook|threads|youtube|newsletter|email)$",
+      "title": "Platform",
+      "default": "linkedin"
+     },
+     "run_on": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "title": "Run On"
+     }
+    },
+    "type": "object",
+    "required": [
+     "run_on"
+    ],
+    "title": "ScheduleIn"
+   },
+   "SendIn": {
+    "properties": {
+     "platform": {
+      "type": "string",
+      "title": "Platform",
+      "default": "linkedin"
+     },
+     "channel_id": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Channel Id"
+     },
+     "confirm": {
+      "type": "boolean",
+      "title": "Confirm",
+      "default": false
+     },
+     "as_draft": {
+      "type": "boolean",
+      "title": "As Draft",
+      "default": true
+     },
+     "run_on": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Run On"
+     }
+    },
+    "type": "object",
+    "required": [
+     "channel_id"
+    ],
+    "title": "SendIn"
+   },
+   "SettingsIn": {
+    "properties": {
+     "kill_switch": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Kill Switch"
+     },
+     "force_draft": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Force Draft"
+     }
+    },
+    "type": "object",
+    "title": "SettingsIn"
+   },
+   "StressIn": {
+    "properties": {
+     "n": {
+      "type": "integer",
+      "maximum": 20000.0,
+      "minimum": 1.0,
+      "title": "N"
+     }
+    },
+    "type": "object",
+    "required": [
+     "n"
+    ],
+    "title": "StressIn"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   }
+  }
+ }
+}

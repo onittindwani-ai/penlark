@@ -1,0 +1,188 @@
+{
+ "notes_for_author": "A1",
+ "themes": [
+  {
+   "theme_id": "A-T1",
+   "title": "Families misunderstand the phrase 'comfort care'",
+   "note_ids": [
+    "A-n01",
+    "A-n05",
+    "A-n09",
+    "A-n14"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "A-n01",
+     "quote": "my brother thought that meant giving up"
+    },
+    {
+     "note_id": "A-n05",
+     "quote": "I assumed it meant no treatment at all"
+    },
+    {
+     "note_id": "A-n09",
+     "quote": "what the phrase comfort care really means"
+    },
+    {
+     "note_id": "A-n14",
+     "quote": "The word comfort sounded soft to us"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  },
+  {
+   "theme_id": "A-T2",
+   "title": "Shift handovers lose personal details",
+   "note_ids": [
+    "A-n02",
+    "A-n06",
+    "A-n11",
+    "A-n17"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "A-n02",
+     "quote": "The night nurse did not know Dad hates the radio on"
+    },
+    {
+     "note_id": "A-n06",
+     "quote": "We repeat the same story to every new nurse at the changeover"
+    },
+    {
+     "note_id": "A-n11",
+     "quote": "A one page handover card would have saved us three bad nights"
+    },
+    {
+     "note_id": "A-n17",
+     "quote": "handover cards keep coming up in every workshop"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  },
+  {
+   "theme_id": "A-T3",
+   "title": "Volunteers are afraid of silence",
+   "note_ids": [
+    "A-n03",
+    "A-n08",
+    "A-n15"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "A-n03",
+     "quote": "I freeze when she goes quiet and I start chattering to fill it"
+    },
+    {
+     "note_id": "A-n08",
+     "quote": "silence is the part they dread most"
+    },
+    {
+     "note_id": "A-n15",
+     "quote": "What do I do with my hands when nobody is speaking"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  },
+  {
+   "theme_id": "A-T4",
+   "title": "People do not know what to say to the bereaved",
+   "note_ids": [
+    "A-n04",
+    "A-n12",
+    "A-n18"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "A-n04",
+     "quote": "I never know what to write on a sympathy card"
+    },
+    {
+     "note_id": "A-n12",
+     "quote": "I avoided her for a week because I had nothing to say"
+    },
+    {
+     "note_id": "A-n18",
+     "quote": "People keep telling me he is in a better place"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  },
+  {
+   "theme_id": "A-T5",
+   "title": "Home carers cannot rest",
+   "note_ids": [
+    "A-n07",
+    "A-n13"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "A-n07",
+     "quote": "I have not slept more than three hours in a row since March"
+    },
+    {
+     "note_id": "A-n13",
+     "quote": "there is nobody to take my shift at the bedside"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  }
+ ],
+ "decoys": [
+  {
+   "decoy_id": "A-D1",
+   "title": "Parking near the east entrance",
+   "note_ids": [
+    "A-n10"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "A-n10",
+     "quote": "There is nowhere to park near the east entrance after four"
+    }
+   ],
+   "expected": "single_note_one_off_should_rank_below_every_theme"
+  },
+  {
+   "decoy_id": "A-D2",
+   "title": "Thanks for the garden volunteers",
+   "note_ids": [
+    "A-n16"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "A-n16",
+     "quote": "The garden volunteers made my father's last afternoon beautiful"
+    }
+   ],
+   "expected": "single_note_one_off_should_rank_below_every_theme"
+  },
+  {
+   "decoy_id": "A-D3",
+   "title": "Continuing education credits and room comfort",
+   "note_ids": [
+    "A-n19"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "A-n19",
+     "quote": "Does the course count toward continuing education credits"
+    }
+   ],
+   "expected": "single_note_one_off_should_rank_below_every_theme"
+  },
+  {
+   "decoy_id": "A-D4",
+   "title": "Podcast guest invitation",
+   "note_ids": [
+    "A-n20"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "A-n20",
+     "quote": "Would you come on our podcast about local small business"
+    }
+   ],
+   "expected": "single_note_one_off_should_rank_below_every_theme"
+  }
+ ]
+}

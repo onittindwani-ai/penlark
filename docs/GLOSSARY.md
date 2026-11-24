@@ -1,0 +1,21 @@
+# Glossary
+
+- **Voice profile**: the measured style of one author, with a guide in plain words. Versioned, lockable.
+- **Dimension**: one measured habit, such as sentence length or contractions.
+- **Voice match**: 0 to 100, how close a text is to the profile, worked out by code.
+- **Fingerprint radar**: a chart of the dimensions.
+- **Guide**: the plain language description of the voice. Edited by a person.
+- **Lock**: freeze a profile version so scores use a fixed voice.
+- **Evidence quote**: words copied exactly from a note, checked by code.
+- **House rules**: banned phrases, patterns, dashes, reading level, and the claims check.
+- **Claim**: a number, result, client or personal experience in a draft.
+- **Source note**: a note a claim is tied to. A numeric claim needs a note that contains the same numbers.
+- **Founder fact**: a note of type fact written by a person for a claim the notes do not cover.
+- **Approval**: a second person's yes. The person who asked cannot give it.
+- **Tracked link**: a short link that counts clicks and adds UTM tags.
+- **Allow list**: the hosts a tracked link may point at.
+- **Learning loop**: a comparison of posts with and without a trait, with sample sizes.
+- **Permutation test**: a way to ask how often chance alone would give a gap this big.
+- **Held out set**: test data written first and run once, so it cannot be tuned on.
+- **Draft mode**: nothing leaves the system.
+- **UNVERIFIED**: written from docs or memory and never run against the real thing.

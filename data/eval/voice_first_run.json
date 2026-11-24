@@ -1,0 +1,58 @@
+{
+ "texts": 40,
+ "author_texts": 24,
+ "top1_correct": 24,
+ "top1_accuracy": 1.0,
+ "mean_auc": 0.975,
+ "per_class": {
+  "tobias": {
+   "n": 8,
+   "top1_correct": 8,
+   "top1_accuracy": 1.0,
+   "mean_own": 88.0,
+   "mean_others": 55.3,
+   "auc": 1.0
+  },
+  "imani": {
+   "n": 8,
+   "top1_correct": 8,
+   "top1_accuracy": 1.0,
+   "mean_own": 82.5,
+   "mean_others": 59.8,
+   "auc": 0.969
+  },
+  "gareth": {
+   "n": 8,
+   "top1_correct": 8,
+   "top1_accuracy": 1.0,
+   "mean_own": 86.4,
+   "mean_others": 62.1,
+   "auc": 0.957
+  },
+  "noor": {
+   "n": 8,
+   "assigned_to": {
+    "tobias": 1,
+    "imani": 4,
+    "gareth": 3
+   },
+   "mean_best_score": 56.7
+  },
+  "generic": {
+   "n": 8,
+   "assigned_to": {
+    "tobias": 0,
+    "imani": 1,
+    "gareth": 7
+   },
+   "mean_best_score": 79.0
+  }
+ },
+ "confusion": {
+  "tobias->tobias": 8,
+  "imani->imani": 8,
+  "gareth->gareth": 8
+ },
+ "wrong_texts": {},
+ "note": "Match scores come from code, not a language model. Texts are short (30 to 90 words) and every text is fictional."
+}

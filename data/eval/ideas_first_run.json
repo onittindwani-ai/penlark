@@ -1,0 +1,63 @@
+{
+ "heldout": {
+  "ideas": 4,
+  "themes": {
+   "beginner_nerves": {
+    "found": true,
+    "rank": 2
+   },
+   "class_packs_and_pricing": {
+    "found": true,
+    "rank": 3
+   },
+   "timetable_confusion": {
+    "found": false,
+    "rank": null
+   }
+  },
+  "themes_found": 2,
+  "themes_total": 3,
+  "noise_leaked": [],
+  "quotes": 7,
+  "quotes_valid": 7,
+  "top3_are_themes": 3,
+  "top3_titles": [
+   "Confused about the new schedule, did the Thursday morning class move o",
+   "I am nervous about getting it wrong",
+   "How do the class packs work"
+  ]
+ },
+ "development": {
+  "ideas": 5,
+  "themes": {
+   "when_to_invoice": {
+    "found": false,
+    "rank": null
+   },
+   "chasing_late_payments": {
+    "found": true,
+    "rank": 1
+   },
+   "pricing_per_user": {
+    "found": true,
+    "rank": 3
+   },
+   "moving_from_spreadsheets": {
+    "found": false,
+    "rank": null
+   }
+  },
+  "themes_found": 2,
+  "themes_total": 4,
+  "noise_leaked": [],
+  "quotes": 12,
+  "quotes_valid": 12,
+  "top3_are_themes": 3,
+  "top3_titles": [
+   "My biggest fear is the awkward email when a client is 30 days late",
+   "Do you have wording that actually works without being rude",
+   "Is the price per client or per user"
+  ]
+ },
+ "note": "The development set was used while the finder was built. Only the held out numbers are honest. Quote validity must be 100 percent on both."
+}

@@ -1,0 +1,3301 @@
+{
+ "set": "a",
+ "folder": "set_a",
+ "settings": {
+  "min_voice_match": 60,
+  "max_reading_grade": 9.0,
+  "no_dashes": true,
+  "require_sources": true
+ },
+ "voice": {
+  "threshold": 60,
+  "author_texts": 40,
+  "top1_correct": 38,
+  "top1_accuracy": 0.95,
+  "mean_auc_vs_authors": 0.981,
+  "mean_auc_vs_all": 0.988,
+  "own_texts_passing_threshold": 40,
+  "own_texts_passing_full_gate": 27,
+  "per_author": {
+   "A1": {
+    "n": 10,
+    "top1_correct": 10,
+    "mean_own": 87.7,
+    "mean_other_authors": 59.1,
+    "auc_vs_authors": 1.0,
+    "auc_vs_all": 1.0,
+    "own_pass_threshold": 10,
+    "own_pass_full_gate": 8
+   },
+   "A2": {
+    "n": 10,
+    "top1_correct": 10,
+    "mean_own": 87.2,
+    "mean_other_authors": 58.3,
+    "auc_vs_authors": 0.923,
+    "auc_vs_all": 0.95,
+    "own_pass_threshold": 10,
+    "own_pass_full_gate": 7
+   },
+   "A3": {
+    "n": 10,
+    "top1_correct": 10,
+    "mean_own": 84.2,
+    "mean_other_authors": 51.1,
+    "auc_vs_authors": 1.0,
+    "auc_vs_all": 1.0,
+    "own_pass_threshold": 10,
+    "own_pass_full_gate": 10
+   },
+   "A4": {
+    "n": 10,
+    "top1_correct": 8,
+    "mean_own": 86.4,
+    "mean_other_authors": 59.8,
+    "auc_vs_authors": 1.0,
+    "auc_vs_all": 1.0,
+    "own_pass_threshold": 10,
+    "own_pass_full_gate": 2
+   }
+  },
+  "confusion": {
+   "A1->A1": 10,
+   "A2->A2": 10,
+   "A3->A3": 10,
+   "A4->A4": 8,
+   "A4->A2": 2
+  },
+  "lookalike_pairs": [
+   {
+    "pair": [
+     "A1",
+     "A3"
+    ],
+    "A1": {
+     "n": 10,
+     "higher_on_own_than_partner": 10,
+     "top1_assigned_to_partner": 0
+    },
+    "A3": {
+     "n": 10,
+     "higher_on_own_than_partner": 10,
+     "top1_assigned_to_partner": 0
+    }
+   },
+   {
+    "pair": [
+     "A2",
+     "A4"
+    ],
+    "A2": {
+     "n": 10,
+     "higher_on_own_than_partner": 10,
+     "top1_assigned_to_partner": 0
+    },
+    "A4": {
+     "n": 10,
+     "higher_on_own_than_partner": 8,
+     "top1_assigned_to_partner": 2
+    }
+   }
+  ],
+  "outsider": {
+   "n": 10,
+   "full_gate_pass": 0,
+   "full_gate_pass_ids": [],
+   "rules_flagged": 10,
+   "rules_flagged_by_kind": {
+    "reading_level": 10
+   },
+   "mean_best_exact": 56.0,
+   "mean_best_integer": 56.0,
+   "best_below_threshold": 10,
+   "best_at_or_above_threshold": 0,
+   "closest_profile_counts": {
+    "A1": 0,
+    "A2": 10,
+    "A3": 0,
+    "A4": 0
+   },
+   "best_scores": [
+    54.4,
+    54.6,
+    54.6,
+    54.9,
+    54.9,
+    55.7,
+    56.4,
+    57.1,
+    58.2,
+    58.8
+   ]
+  },
+  "generic": {
+   "n": 10,
+   "full_gate_pass": 0,
+   "full_gate_pass_ids": [],
+   "rules_flagged": 10,
+   "rules_flagged_by_kind": {
+    "banned_pattern": 2,
+    "banned_phrase": 10,
+    "reading_level": 7
+   },
+   "mean_best_exact": 61.0,
+   "mean_best_integer": 60.9,
+   "best_below_threshold": 5,
+   "best_at_or_above_threshold": 5,
+   "closest_profile_counts": {
+    "A1": 0,
+    "A2": 9,
+    "A3": 0,
+    "A4": 1
+   },
+   "best_scores": [
+    56.2,
+    57.1,
+    57.5,
+    58.1,
+    59.1,
+    61.0,
+    61.2,
+    61.6,
+    68.8,
+    69.3
+   ]
+  },
+  "threshold_sweep": [
+   {
+    "threshold": 40,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 10,
+    "generic_total": 10
+   },
+   {
+    "threshold": 45,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 10,
+    "generic_total": 10
+   },
+   {
+    "threshold": 50,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 10,
+    "outsider_total": 10,
+    "generic_pass_any": 10,
+    "generic_total": 10
+   },
+   {
+    "threshold": 55,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 9,
+    "outsider_total": 10,
+    "generic_pass_any": 10,
+    "generic_total": 10
+   },
+   {
+    "threshold": 60,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 5,
+    "generic_total": 10
+   },
+   {
+    "threshold": 65,
+    "own_pass": 40,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 2,
+    "generic_total": 10
+   },
+   {
+    "threshold": 70,
+    "own_pass": 39,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   },
+   {
+    "threshold": 75,
+    "own_pass": 37,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   },
+   {
+    "threshold": 80,
+    "own_pass": 31,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   },
+   {
+    "threshold": 85,
+    "own_pass": 27,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   },
+   {
+    "threshold": 90,
+    "own_pass": 17,
+    "own_total": 40,
+    "outsider_pass_any": 0,
+    "outsider_total": 10,
+    "generic_pass_any": 0,
+    "generic_total": 10
+   }
+  ],
+  "wrong_texts": {
+   "A-h46": {
+    "author": "A4",
+    "assigned": "A2",
+    "exact": {
+     "A1": 54.56,
+     "A2": 84.24,
+     "A3": 60.4,
+     "A4": 80.57
+    }
+   },
+   "A-h55": {
+    "author": "A4",
+    "assigned": "A2",
+    "exact": {
+     "A1": 63.64,
+     "A2": 89.58,
+     "A3": 60.44,
+     "A4": 88.25
+    }
+   }
+  },
+  "rows": [
+   {
+    "text_id": "A-h01",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 50.26,
+     "A2": 58.2,
+     "A3": 38.69,
+     "A4": 46.36
+    },
+    "integer": {
+     "A1": 50,
+     "A2": 58,
+     "A3": 39,
+     "A4": 46
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h02",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 93.84,
+     "A2": 57.24,
+     "A3": 54.07,
+     "A4": 63.59
+    },
+    "integer": {
+     "A1": 94,
+     "A2": 57,
+     "A3": 54,
+     "A4": 64
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h03",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 60.46,
+     "A2": 92.93,
+     "A3": 43.76,
+     "A4": 74.39
+    },
+    "integer": {
+     "A1": 60,
+     "A2": 93,
+     "A3": 44,
+     "A4": 74
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h04",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 47.53,
+     "A2": 55.64,
+     "A3": 52.68,
+     "A4": 57.47
+    },
+    "integer": {
+     "A1": 48,
+     "A2": 56,
+     "A3": 53,
+     "A4": 57
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h05",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 62.85,
+     "A2": 40.75,
+     "A3": 93.18,
+     "A4": 53.52
+    },
+    "integer": {
+     "A1": 63,
+     "A2": 41,
+     "A3": 93,
+     "A4": 54
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h06",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 60.79,
+     "A2": 35.67,
+     "A3": 94.25,
+     "A4": 47.95
+    },
+    "integer": {
+     "A1": 61,
+     "A2": 36,
+     "A3": 94,
+     "A4": 48
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h07",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 49.69,
+     "A2": 58.76,
+     "A3": 39.21,
+     "A4": 46.36
+    },
+    "integer": {
+     "A1": 50,
+     "A2": 59,
+     "A3": 39,
+     "A4": 46
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h08",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 50.4,
+     "A2": 54.61,
+     "A3": 39.14,
+     "A4": 45.44
+    },
+    "integer": {
+     "A1": 50,
+     "A2": 55,
+     "A3": 39,
+     "A4": 45
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h09",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 57.01,
+     "A2": 61.01,
+     "A3": 39.36,
+     "A4": 56.08
+    },
+    "integer": {
+     "A1": 57,
+     "A2": 61,
+     "A3": 39,
+     "A4": 56
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h10",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 63.7,
+     "A2": 81.89,
+     "A3": 57.73,
+     "A4": 88.85
+    },
+    "integer": {
+     "A1": 64,
+     "A2": 82,
+     "A3": 58,
+     "A4": 89
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h11",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 61.3,
+     "A2": 48.37,
+     "A3": 76.25,
+     "A4": 50.85
+    },
+    "integer": {
+     "A1": 61,
+     "A2": 48,
+     "A3": 76,
+     "A4": 51
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h12",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 95.96,
+     "A2": 56.47,
+     "A3": 52.66,
+     "A4": 59.15
+    },
+    "integer": {
+     "A1": 96,
+     "A2": 56,
+     "A3": 53,
+     "A4": 59
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h13",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 59.64,
+     "A2": 73.48,
+     "A3": 56.78,
+     "A4": 80.14
+    },
+    "integer": {
+     "A1": 60,
+     "A2": 73,
+     "A3": 57,
+     "A4": 80
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h14",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 87.27,
+     "A2": 52.73,
+     "A3": 44.76,
+     "A4": 57.93
+    },
+    "integer": {
+     "A1": 87,
+     "A2": 53,
+     "A3": 45,
+     "A4": 58
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h15",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 57.83,
+     "A2": 85.81,
+     "A3": 43.66,
+     "A4": 75.13
+    },
+    "integer": {
+     "A1": 58,
+     "A2": 86,
+     "A3": 44,
+     "A4": 75
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h16",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 55.3,
+     "A2": 58.09,
+     "A3": 46.72,
+     "A4": 57.48
+    },
+    "integer": {
+     "A1": 55,
+     "A2": 58,
+     "A3": 47,
+     "A4": 57
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_pattern",
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h17",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 61.39,
+     "A2": 96.33,
+     "A3": 45.01,
+     "A4": 77.85
+    },
+    "integer": {
+     "A1": 61,
+     "A2": 96,
+     "A3": 45,
+     "A4": 78
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h18",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 53.74,
+     "A2": 91.3,
+     "A3": 43.5,
+     "A4": 72.28
+    },
+    "integer": {
+     "A1": 54,
+     "A2": 91,
+     "A3": 43,
+     "A4": 72
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h19",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 72.01,
+     "A2": 48.61,
+     "A3": 39.98,
+     "A4": 41.4
+    },
+    "integer": {
+     "A1": 72,
+     "A2": 49,
+     "A3": 40,
+     "A4": 41
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h20",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 93.78,
+     "A2": 58.71,
+     "A3": 56.99,
+     "A4": 58.29
+    },
+    "integer": {
+     "A1": 94,
+     "A2": 59,
+     "A3": 57,
+     "A4": 58
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h21",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 50.07,
+     "A2": 54.36,
+     "A3": 39.42,
+     "A4": 45.1
+    },
+    "integer": {
+     "A1": 50,
+     "A2": 54,
+     "A3": 39,
+     "A4": 45
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h22",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 54.64,
+     "A2": 59.1,
+     "A3": 45.02,
+     "A4": 54.58
+    },
+    "integer": {
+     "A1": 55,
+     "A2": 59,
+     "A3": 45,
+     "A4": 55
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h23",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 63.76,
+     "A2": 39.13,
+     "A3": 89.52,
+     "A4": 52.36
+    },
+    "integer": {
+     "A1": 64,
+     "A2": 39,
+     "A3": 90,
+     "A4": 52
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h24",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 65.05,
+     "A2": 85.87,
+     "A3": 58.02,
+     "A4": 92.64
+    },
+    "integer": {
+     "A1": 65,
+     "A2": 86,
+     "A3": 58,
+     "A4": 93
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h25",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 61.44,
+     "A2": 83.18,
+     "A3": 61.51,
+     "A4": 86.89
+    },
+    "integer": {
+     "A1": 61,
+     "A2": 83,
+     "A3": 62,
+     "A4": 87
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h26",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 51.02,
+     "A2": 54.9,
+     "A3": 38.52,
+     "A4": 44.36
+    },
+    "integer": {
+     "A1": 51,
+     "A2": 55,
+     "A3": 39,
+     "A4": 44
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h27",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 90.46,
+     "A2": 52.22,
+     "A3": 47.85,
+     "A4": 55.81
+    },
+    "integer": {
+     "A1": 90,
+     "A2": 52,
+     "A3": 48,
+     "A4": 56
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h28",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 57.98,
+     "A2": 36.5,
+     "A3": 91.41,
+     "A4": 48.55
+    },
+    "integer": {
+     "A1": 58,
+     "A2": 36,
+     "A3": 91,
+     "A4": 49
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h29",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 59.88,
+     "A2": 39.77,
+     "A3": 85.53,
+     "A4": 51.7
+    },
+    "integer": {
+     "A1": 60,
+     "A2": 40,
+     "A3": 86,
+     "A4": 52
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h30",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 57.08,
+     "A2": 61.21,
+     "A3": 36.11,
+     "A4": 56.65
+    },
+    "integer": {
+     "A1": 57,
+     "A2": 61,
+     "A3": 36,
+     "A4": 57
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h31",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 53.48,
+     "A2": 85.29,
+     "A3": 50.13,
+     "A4": 76.3
+    },
+    "integer": {
+     "A1": 53,
+     "A2": 85,
+     "A3": 50,
+     "A4": 76
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h32",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 64.28,
+     "A2": 37.55,
+     "A3": 83.99,
+     "A4": 50.83
+    },
+    "integer": {
+     "A1": 64,
+     "A2": 38,
+     "A3": 84,
+     "A4": 51
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h33",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 90.21,
+     "A2": 53.39,
+     "A3": 45.06,
+     "A4": 52.76
+    },
+    "integer": {
+     "A1": 90,
+     "A2": 53,
+     "A3": 45,
+     "A4": 53
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h34",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 49.29,
+     "A2": 34.56,
+     "A3": 78.78,
+     "A4": 38.79
+    },
+    "integer": {
+     "A1": 49,
+     "A2": 35,
+     "A3": 79,
+     "A4": 39
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h35",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 60.94,
+     "A2": 80.85,
+     "A3": 54.95,
+     "A4": 91.31
+    },
+    "integer": {
+     "A1": 61,
+     "A2": 81,
+     "A3": 55,
+     "A4": 91
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h36",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 50.57,
+     "A2": 54.89,
+     "A3": 38.51,
+     "A4": 44.44
+    },
+    "integer": {
+     "A1": 51,
+     "A2": 55,
+     "A3": 39,
+     "A4": 44
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h37",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 84.36,
+     "A2": 54.47,
+     "A3": 54.83,
+     "A4": 58.12
+    },
+    "integer": {
+     "A1": 84,
+     "A2": 54,
+     "A3": 55,
+     "A4": 58
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h38",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 50.92,
+     "A2": 54.59,
+     "A3": 39.12,
+     "A4": 45.87
+    },
+    "integer": {
+     "A1": 51,
+     "A2": 55,
+     "A3": 39,
+     "A4": 46
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h39",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 46.49,
+     "A2": 56.22,
+     "A3": 48.9,
+     "A4": 54.42
+    },
+    "integer": {
+     "A1": 46,
+     "A2": 56,
+     "A3": 49,
+     "A4": 54
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h40",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 59.75,
+     "A2": 92.48,
+     "A3": 50.38,
+     "A4": 77.48
+    },
+    "integer": {
+     "A1": 60,
+     "A2": 92,
+     "A3": 50,
+     "A4": 77
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h41",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 77.96,
+     "A2": 54.17,
+     "A3": 47.68,
+     "A4": 58.36
+    },
+    "integer": {
+     "A1": 78,
+     "A2": 54,
+     "A3": 48,
+     "A4": 58
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h42",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 61.01,
+     "A2": 89.2,
+     "A3": 49.38,
+     "A4": 74.81
+    },
+    "integer": {
+     "A1": 61,
+     "A2": 89,
+     "A3": 49,
+     "A4": 75
+    },
+    "rules_ok": false,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h43",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 60.39,
+     "A2": 82.86,
+     "A3": 55.08,
+     "A4": 88.02
+    },
+    "integer": {
+     "A1": 60,
+     "A2": 83,
+     "A3": 55,
+     "A4": 88
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h44",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 49.61,
+     "A2": 68.76,
+     "A3": 43.99,
+     "A4": 59.83
+    },
+    "integer": {
+     "A1": 50,
+     "A2": 69,
+     "A3": 44,
+     "A4": 60
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h45",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 56.04,
+     "A2": 39.32,
+     "A3": 75.79,
+     "A4": 46.87
+    },
+    "integer": {
+     "A1": 56,
+     "A2": 39,
+     "A3": 76,
+     "A4": 47
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h46",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 54.56,
+     "A2": 84.24,
+     "A3": 60.4,
+     "A4": 80.57
+    },
+    "integer": {
+     "A1": 55,
+     "A2": 84,
+     "A3": 60,
+     "A4": 81
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h47",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 58.34,
+     "A2": 92.57,
+     "A3": 46.21,
+     "A4": 75.92
+    },
+    "integer": {
+     "A1": 58,
+     "A2": 93,
+     "A3": 46,
+     "A4": 76
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h48",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 56.36,
+     "A2": 78.9,
+     "A3": 44.68,
+     "A4": 73.43
+    },
+    "integer": {
+     "A1": 56,
+     "A2": 79,
+     "A3": 45,
+     "A4": 73
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h49",
+    "label": "author",
+    "author_id": "A3",
+    "exact": {
+     "A1": 56.23,
+     "A2": 33.24,
+     "A3": 72.87,
+     "A4": 43.0
+    },
+    "integer": {
+     "A1": 56,
+     "A2": 33,
+     "A3": 73,
+     "A4": 43
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h50",
+    "label": "author",
+    "author_id": "A2",
+    "exact": {
+     "A1": 52.24,
+     "A2": 67.24,
+     "A3": 47.29,
+     "A4": 65.56
+    },
+    "integer": {
+     "A1": 52,
+     "A2": 67,
+     "A3": 47,
+     "A4": 66
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h51",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 55.8,
+     "A2": 61.6,
+     "A3": 46.78,
+     "A4": 58.87
+    },
+    "integer": {
+     "A1": 56,
+     "A2": 62,
+     "A3": 47,
+     "A4": 59
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_pattern",
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h52",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 61.12,
+     "A2": 83.9,
+     "A3": 59.5,
+     "A4": 88.79
+    },
+    "integer": {
+     "A1": 61,
+     "A2": 84,
+     "A3": 60,
+     "A4": 89
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h53",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 49.65,
+     "A2": 56.43,
+     "A3": 38.98,
+     "A4": 45.84
+    },
+    "integer": {
+     "A1": 50,
+     "A2": 56,
+     "A3": 39,
+     "A4": 46
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h54",
+    "label": "author",
+    "author_id": "A1",
+    "exact": {
+     "A1": 90.94,
+     "A2": 55.75,
+     "A3": 50.11,
+     "A4": 60.31
+    },
+    "integer": {
+     "A1": 91,
+     "A2": 56,
+     "A3": 50,
+     "A4": 60
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h55",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 63.64,
+     "A2": 89.58,
+     "A3": 60.44,
+     "A4": 88.25
+    },
+    "integer": {
+     "A1": 64,
+     "A2": 90,
+     "A3": 60,
+     "A4": 88
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h56",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 52.8,
+     "A2": 69.32,
+     "A3": 49.17,
+     "A4": 62.18
+    },
+    "integer": {
+     "A1": 53,
+     "A2": 69,
+     "A3": 49,
+     "A4": 62
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase",
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h57",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 49.92,
+     "A2": 55.71,
+     "A3": 38.99,
+     "A4": 45.41
+    },
+    "integer": {
+     "A1": 50,
+     "A2": 56,
+     "A3": 39,
+     "A4": 45
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h58",
+    "label": "author",
+    "author_id": "A4",
+    "exact": {
+     "A1": 57.0,
+     "A2": 74.96,
+     "A3": 50.35,
+     "A4": 78.99
+    },
+    "integer": {
+     "A1": 57,
+     "A2": 75,
+     "A3": 50,
+     "A4": 79
+    },
+    "rules_ok": true,
+    "style_flags": [],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h59",
+    "label": "generic_marketing",
+    "author_id": null,
+    "exact": {
+     "A1": 48.27,
+     "A2": 57.09,
+     "A3": 52.73,
+     "A4": 56.97
+    },
+    "integer": {
+     "A1": 48,
+     "A2": 57,
+     "A3": 53,
+     "A4": 57
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "banned_phrase"
+    ],
+    "brackets": false
+   },
+   {
+    "text_id": "A-h60",
+    "label": "outsider",
+    "author_id": "A5",
+    "exact": {
+     "A1": 50.52,
+     "A2": 57.08,
+     "A3": 38.72,
+     "A4": 45.31
+    },
+    "integer": {
+     "A1": 51,
+     "A2": 57,
+     "A3": 39,
+     "A4": 45
+    },
+    "rules_ok": false,
+    "style_flags": [
+     "reading_level"
+    ],
+    "brackets": false
+   }
+  ]
+ },
+ "flags": {
+  "drafts": 51,
+  "categories": {
+   "clean": 8,
+   "tricky_clean_hyphen_compounds": 3,
+   "tricky_clean_near_miss_words": 2,
+   "tricky_clean_sourced_claim": 4,
+   "ambiguous_quoted_banned_phrase": 1,
+   "ambiguous_number_non_claim": 1,
+   "ambiguous_spaced_hyphen_as_dash": 1,
+   "banned_phrase": 8,
+   "dash": 4,
+   "reading_level": 5,
+   "borderline_reading_level": 2,
+   "unsourced_claim": 6,
+   "combo_banned_dash_unsourced": 4,
+   "source_mismatch": 2
+  },
+  "per_kind": {
+   "banned_phrase": {
+    "scored": 50,
+    "tp": 8,
+    "fp": 0,
+    "fn": 4,
+    "precision": 1.0,
+    "recall": 0.667,
+    "missed": [
+     "A-d22",
+     "A-d26",
+     "A-d28",
+     "A-d49"
+    ],
+    "false": [],
+    "recall_on_high_likelihood": {
+     "planted": 6,
+     "found": 4,
+     "missed": [
+      "A-d26",
+      "A-d49"
+     ]
+    }
+   },
+   "dash": {
+    "scored": 50,
+    "tp": 8,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "missed": [],
+    "false": []
+   },
+   "reading_level": {
+    "scored": 49,
+    "tp": 5,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "missed": [],
+    "false": []
+   },
+   "unsourced_claim": {
+    "scored": 48,
+    "tp": 6,
+    "fp": 3,
+    "fn": 4,
+    "precision": 0.667,
+    "recall": 0.6,
+    "missed": [
+     "A-d41",
+     "A-d44",
+     "A-d46",
+     "A-d49"
+    ],
+    "false": [
+     "A-d06",
+     "A-d16",
+     "A-d18"
+    ]
+   }
+  },
+  "clean_drafts": 17,
+  "clean_falsely_flagged_strict": 2,
+  "clean_falsely_flagged_key_respecting": 2,
+  "clean_by_category": {
+   "clean": {
+    "n": 8,
+    "falsely_flagged_strict": 1,
+    "falsely_flagged_key_respecting": 1,
+    "which": [
+     {
+      "draft_id": "A-d06",
+      "kinds": [
+       "unsourced_claim"
+      ],
+      "kinds_the_key_says_false": [
+       "unsourced_claim"
+      ]
+     }
+    ]
+   },
+   "tricky_clean_hyphen_compounds": {
+    "n": 3,
+    "falsely_flagged_strict": 0,
+    "falsely_flagged_key_respecting": 0,
+    "which": []
+   },
+   "tricky_clean_near_miss_words": {
+    "n": 2,
+    "falsely_flagged_strict": 0,
+    "falsely_flagged_key_respecting": 0,
+    "which": []
+   },
+   "tricky_clean_sourced_claim": {
+    "n": 4,
+    "falsely_flagged_strict": 1,
+    "falsely_flagged_key_respecting": 1,
+    "which": [
+     {
+      "draft_id": "A-d16",
+      "kinds": [
+       "unsourced_claim"
+      ],
+      "kinds_the_key_says_false": [
+       "unsourced_claim"
+      ]
+     }
+    ]
+   }
+  },
+  "ambiguous_singles": [
+   {
+    "draft_id": "A-d18",
+    "category": "ambiguous_quoted_banned_phrase",
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "expected": {
+     "banned_phrase": null,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    }
+   },
+   {
+    "draft_id": "A-d19",
+    "category": "ambiguous_number_non_claim",
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": null
+    }
+   },
+   {
+    "draft_id": "A-d20",
+    "category": "ambiguous_spaced_hyphen_as_dash",
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "expected": {
+     "banned_phrase": false,
+     "dash": null,
+     "reading_level": false,
+     "unsourced_claim": false
+    }
+   }
+  ],
+  "source_mismatch": [
+   {
+    "draft_id": "A-d50",
+    "unsourced_flagged": true,
+    "unsupported": [
+     "Ferncliffe Hospice went from 31 complaint calls a month to 9 after adding a handover card."
+    ]
+   },
+   {
+    "draft_id": "A-d51",
+    "unsourced_flagged": true,
+    "unsupported": [
+     "Dock wait at the Corliss warehouse fell from 140 minutes to 20 after the appointment rule."
+    ]
+   }
+  ],
+  "voice_in_voice_drafts": {
+   "n": 44,
+   "mean_score": 64.4,
+   "passing_threshold": 25
+  },
+  "rows": [
+   {
+    "draft_id": "A-d01",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 73,
+    "likelihoods": [],
+    "grade": 7.5,
+    "words": 51,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d02",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 84,
+    "likelihoods": [],
+    "grade": 1.5,
+    "words": 48,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d03",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 51,
+    "likelihoods": [],
+    "grade": 5.4,
+    "words": 55,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d04",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 59,
+    "likelihoods": [],
+    "grade": 1.2,
+    "words": 51,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d05",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 68,
+    "likelihoods": [],
+    "grade": 8.1,
+    "words": 46,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d06",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 86,
+    "likelihoods": [],
+    "grade": 2.3,
+    "words": 46,
+    "style": [],
+    "unsupported": [
+     "A LTL load needs a patient receiver."
+    ]
+   },
+   {
+    "draft_id": "A-d07",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 59,
+    "likelihoods": [],
+    "grade": 4.6,
+    "words": 56,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d08",
+    "category": "clean",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 52,
+    "likelihoods": [],
+    "grade": 1.0,
+    "words": 45,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d09",
+    "category": "tricky_clean_hyphen_compounds",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 71,
+    "likelihoods": [],
+    "grade": 7.4,
+    "words": 68,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d10",
+    "category": "tricky_clean_hyphen_compounds",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 85,
+    "likelihoods": [],
+    "grade": 2.5,
+    "words": 59,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d11",
+    "category": "tricky_clean_hyphen_compounds",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 60,
+    "likelihoods": [],
+    "grade": 4.5,
+    "words": 65,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d12",
+    "category": "tricky_clean_near_miss_words",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 65,
+    "likelihoods": [],
+    "grade": 3.2,
+    "words": 64,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d13",
+    "category": "tricky_clean_near_miss_words",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 56,
+    "likelihoods": [],
+    "grade": 6.7,
+    "words": 58,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d14",
+    "category": "tricky_clean_sourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 48,
+    "likelihoods": [],
+    "grade": 6.2,
+    "words": 61,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d15",
+    "category": "tricky_clean_sourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 75,
+    "likelihoods": [],
+    "grade": 4.3,
+    "words": 65,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d16",
+    "category": "tricky_clean_sourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 59,
+    "likelihoods": [],
+    "grade": 5.9,
+    "words": 70,
+    "style": [],
+    "unsupported": [
+     "Let's be real: the pacifier phase is tricky, but a patient parent makes it easier."
+    ]
+   },
+   {
+    "draft_id": "A-d17",
+    "category": "tricky_clean_sourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 50,
+    "likelihoods": [],
+    "grade": 2.1,
+    "words": 67,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d18",
+    "category": "ambiguous_quoted_banned_phrase",
+    "expected": {
+     "banned_phrase": null,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 83,
+    "likelihoods": [],
+    "grade": 2.4,
+    "words": 63,
+    "style": [
+     [
+      "banned_phrase",
+      "game changer"
+     ]
+    ],
+    "unsupported": [
+     "A oversize load needs a patient receiver."
+    ]
+   },
+   {
+    "draft_id": "A-d19",
+    "category": "ambiguous_number_non_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": null
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 52,
+    "likelihoods": [],
+    "grade": 4.0,
+    "words": 60,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d20",
+    "category": "ambiguous_spaced_hyphen_as_dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": null,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 53,
+    "likelihoods": [],
+    "grade": 2.5,
+    "words": 52,
+    "style": [
+     [
+      "dash",
+      " - "
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d21",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 50,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 6.7,
+    "words": 51,
+    "style": [
+     [
+      "banned_phrase",
+      "Let's delve"
+     ],
+     [
+      "banned_phrase",
+      "delve into"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d22",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 84,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 3.3,
+    "words": 52,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d23",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 48,
+    "likelihoods": [
+     "high",
+     "high"
+    ],
+    "grade": 4.6,
+    "words": 61,
+    "style": [
+     [
+      "banned_phrase",
+      "cutting-edge"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d24",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 61,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 2.7,
+    "words": 55,
+    "style": [
+     [
+      "banned_phrase",
+      "rich tapestry"
+     ],
+     [
+      "banned_phrase",
+      "tapestry of"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d25",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 63,
+    "likelihoods": [
+     "medium",
+     "medium"
+    ],
+    "grade": 5.9,
+    "words": 57,
+    "style": [
+     [
+      "banned_phrase",
+      "to the next level"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d26",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 81,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 2.8,
+    "words": 53,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d27",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 52,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 5.2,
+    "words": 63,
+    "style": [
+     [
+      "banned_pattern",
+      "In today\u2019s fast-paced world"
+     ],
+     [
+      "banned_phrase",
+      "In today\u2019s fast-paced world"
+     ],
+     [
+      "banned_phrase",
+      "fast-paced"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d28",
+    "category": "banned_phrase",
+    "expected": {
+     "banned_phrase": true,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 56,
+    "likelihoods": [
+     "medium",
+     "medium"
+    ],
+    "grade": 2.1,
+    "words": 59,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d29",
+    "category": "dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 65,
+    "likelihoods": [],
+    "grade": 5.6,
+    "words": 59,
+    "style": [
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d30",
+    "category": "dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 76,
+    "likelihoods": [],
+    "grade": 2.6,
+    "words": 51,
+    "style": [
+     [
+      "dash",
+      "\u2013"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d31",
+    "category": "dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 60,
+    "likelihoods": [],
+    "grade": 4.3,
+    "words": 61,
+    "style": [
+     [
+      "dash",
+      "\u2014"
+     ],
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d32",
+    "category": "dash",
+    "expected": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 68,
+    "likelihoods": [],
+    "grade": 2.3,
+    "words": 53,
+    "style": [
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d33",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 35.7,
+    "words": 59,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d34",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 32.8,
+    "words": 57,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d35",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 35.3,
+    "words": 48,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d36",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 32.0,
+    "words": 47,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d37",
+    "category": "reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 32.6,
+    "words": 46,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d38",
+    "category": "borderline_reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": null,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 10.2,
+    "words": 41,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d39",
+    "category": "borderline_reading_level",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": null,
+     "unsourced_claim": false
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": true,
+     "unsourced_claim": false
+    },
+    "voice_expected": null,
+    "voice_score": null,
+    "likelihoods": [],
+    "grade": 11.4,
+    "words": 40,
+    "style": [
+     [
+      "reading_level",
+      ""
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d40",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 63,
+    "likelihoods": [],
+    "grade": 7.8,
+    "words": 73,
+    "style": [],
+    "unsupported": [
+     "Last winter our unit cut family complaints by 47 percent."
+    ]
+   },
+   {
+    "draft_id": "A-d41",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 82,
+    "likelihoods": [],
+    "grade": 2.0,
+    "words": 57,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d42",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 58,
+    "likelihoods": [],
+    "grade": 6.1,
+    "words": 56,
+    "style": [],
+    "unsupported": [
+     "I have treated over four thousand kids since opening my clinic."
+    ]
+   },
+   {
+    "draft_id": "A-d43",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 58,
+    "likelihoods": [],
+    "grade": 2.6,
+    "words": 59,
+    "style": [],
+    "unsupported": [
+     "My apprentices passed the state exam at a 92 percent rate this year."
+    ]
+   },
+   {
+    "draft_id": "A-d44",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 73,
+    "likelihoods": [],
+    "grade": 7.6,
+    "words": 64,
+    "style": [],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d45",
+    "category": "unsourced_claim",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 65,
+    "likelihoods": [],
+    "grade": 4.3,
+    "words": 61,
+    "style": [],
+    "unsupported": [
+     "I ran a dispatch desk for nine years before I started teaching others."
+    ]
+   },
+   {
+    "draft_id": "A-d46",
+    "category": "combo_banned_dash_unsourced",
+    "expected": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 59,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 5.2,
+    "words": 75,
+    "style": [
+     [
+      "dash",
+      "\u2014"
+     ],
+     [
+      "banned_phrase",
+      "cutting-edge"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d47",
+    "category": "combo_banned_dash_unsourced",
+    "expected": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 75,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 2.3,
+    "words": 84,
+    "style": [
+     [
+      "dash",
+      "\u2013"
+     ],
+     [
+      "banned_phrase",
+      "rich tapestry"
+     ],
+     [
+      "banned_phrase",
+      "tapestry of"
+     ]
+    ],
+    "unsupported": [
+     "I ran a dispatch desk for nine years before I started teaching others."
+    ]
+   },
+   {
+    "draft_id": "A-d48",
+    "category": "combo_banned_dash_unsourced",
+    "expected": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 55,
+    "likelihoods": [
+     "medium"
+    ],
+    "grade": 4.5,
+    "words": 79,
+    "style": [
+     [
+      "banned_phrase",
+      "to the next level"
+     ],
+     [
+      "dash",
+      "\u2014"
+     ],
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": [
+     "Cavities in our practice dropped 35 percent after the sticker chart."
+    ]
+   },
+   {
+    "draft_id": "A-d49",
+    "category": "combo_banned_dash_unsourced",
+    "expected": {
+     "banned_phrase": true,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": true,
+     "reading_level": false,
+     "unsourced_claim": false
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 59,
+    "likelihoods": [
+     "high"
+    ],
+    "grade": 3.3,
+    "words": 71,
+    "style": [
+     [
+      "dash",
+      "\u2014"
+     ]
+    ],
+    "unsupported": []
+   },
+   {
+    "draft_id": "A-d50",
+    "category": "source_mismatch",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": null
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 68,
+    "likelihoods": [],
+    "grade": 7.4,
+    "words": 75,
+    "style": [],
+    "unsupported": [
+     "Ferncliffe Hospice went from 31 complaint calls a month to 9 after adding a handover card."
+    ]
+   },
+   {
+    "draft_id": "A-d51",
+    "category": "source_mismatch",
+    "expected": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": null
+    },
+    "flags": {
+     "banned_phrase": false,
+     "dash": false,
+     "reading_level": false,
+     "unsourced_claim": true
+    },
+    "voice_expected": "in_voice",
+    "voice_score": 67,
+    "likelihoods": [],
+    "grade": 2.9,
+    "words": 61,
+    "style": [],
+    "unsupported": [
+     "Dock wait at the Corliss warehouse fell from 140 minutes to 20 after the appointment rule."
+    ]
+   }
+  ]
+ },
+ "ideas": {
+  "ideas_returned": 4,
+  "ideas_with_verified_quote": 4,
+  "themes_total": 5,
+  "themes_found": 2,
+  "per_theme": {
+   "A-T1": {
+    "found": true,
+    "note_recall": 0.75,
+    "idea_title": "Could you write something about what the phrase comfort care really me",
+    "rank": 1,
+    "purity": 1.0,
+    "score": 57.3,
+    "idea_notes": [
+     "A-n01",
+     "A-n05",
+     "A-n09"
+    ]
+   },
+   "A-T2": {
+    "found": true,
+    "note_recall": 0.5,
+    "idea_title": "A one page handover card would have saved us three bad nights",
+    "rank": 4,
+    "purity": 1.0,
+    "score": 36.2,
+    "idea_notes": [
+     "A-n11",
+     "A-n17"
+    ]
+   },
+   "A-T3": {
+    "found": false,
+    "note_recall": 0.0,
+    "idea_title": null,
+    "rank": null,
+    "purity": null,
+    "score": null,
+    "idea_notes": []
+   },
+   "A-T4": {
+    "found": false,
+    "note_recall": 0.0,
+    "idea_title": null,
+    "rank": null,
+    "purity": null,
+    "score": null,
+    "idea_notes": []
+   },
+   "A-T5": {
+    "found": false,
+    "note_recall": 0.0,
+    "idea_title": null,
+    "rank": null,
+    "purity": null,
+    "score": null,
+    "idea_notes": []
+   }
+  },
+  "ideas_matching_no_theme": [
+   {
+    "title": "I never know what to write on a sympathy card without sounding fake",
+    "notes": [
+     "A-n04"
+    ],
+    "score": 57.0,
+    "rank": 2
+   },
+   {
+    "title": "People keep telling me he is in a better place and I want to scream",
+    "notes": [
+     "A-n07",
+     "A-n18"
+    ],
+    "score": 36.2,
+    "rank": 3
+   }
+  ],
+  "decoys_total": 4,
+  "decoys_avoided": 4,
+  "decoys_outranking_a_found_theme": 0,
+  "decoys": [
+   {
+    "notes": [
+     "A-n10"
+    ],
+    "in_an_idea": 0,
+    "in_a_non_theme_idea": 0,
+    "avoided": true,
+    "outranks_a_found_theme": false
+   },
+   {
+    "notes": [
+     "A-n16"
+    ],
+    "in_an_idea": 0,
+    "in_a_non_theme_idea": 0,
+    "avoided": true,
+    "outranks_a_found_theme": false
+   },
+   {
+    "notes": [
+     "A-n19"
+    ],
+    "in_an_idea": 0,
+    "in_a_non_theme_idea": 0,
+    "avoided": true,
+    "outranks_a_found_theme": false
+   },
+   {
+    "notes": [
+     "A-n20"
+    ],
+    "in_an_idea": 0,
+    "in_a_non_theme_idea": 0,
+    "avoided": true,
+    "outranks_a_found_theme": false
+   }
+  ],
+  "quotes": 8,
+  "quotes_verbatim": 8,
+  "quotes_before_the_verbatim_filter": 8,
+  "quotes_overlapping_a_key_quote": 7,
+  "ranked": [
+   {
+    "rank": 1,
+    "title": "Could you write something about what the phrase comfort care really me",
+    "notes": [
+     "A-n01",
+     "A-n05",
+     "A-n09"
+    ],
+    "score": 57.3
+   },
+   {
+    "rank": 2,
+    "title": "I never know what to write on a sympathy card without sounding fake",
+    "notes": [
+     "A-n04"
+    ],
+    "score": 57.0
+   },
+   {
+    "rank": 3,
+    "title": "People keep telling me he is in a better place and I want to scream",
+    "notes": [
+     "A-n07",
+     "A-n18"
+    ],
+    "score": 36.2
+   },
+   {
+    "rank": 4,
+    "title": "A one page handover card would have saved us three bad nights",
+    "notes": [
+     "A-n11",
+     "A-n17"
+    ],
+    "score": 36.2
+   }
+  ]
+ },
+ "note": "Scores come from plain code (profile statistics, rule lists, word counts), not a language model. The texts are fictional and assembled from sentence banks."
+}

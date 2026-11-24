@@ -1,0 +1,7 @@
+{
+  "text": "{\"guide\": \"Voice guide for Imani Castellan\\n\\nWritten by the offline stand in (fixed rules over the measured numbers). It is not a language model. Edit it freely.\\n\\nSentences: plain and medium, about 11 words. The length varies a little.\\nParagraphs: long blocks of four or more sentences.\\nTone: casual and spoken. Uses contractions freely.\\nTalking to the reader: often says you and we. Speaks from personal experience with I.\\nQuestions and energy: asks the reader questions often. Uses exclamation marks.\\nDetail: uses few numbers.\\nSentences most often start with a plain subject.\\nFavourite words: week, minutes, little, love, imani, first, something, every, three, students, write, favourite.\\nPhrases that keep coming back: ten minutes; a little; thank you; this week.\\n\\nNever invent facts, numbers or stories. If a line needs a real example, leave a bracket for the author.\"}",
+  "input_tokens": 150,
+  "output_tokens": 40,
+  "model": "claude-sonnet-5-5",
+  "prompt_preview": "[task:write_guide]\nWrite the voice guide for the author in the profile block, from the measured numbers in it and the excerpts in the samples block.\n\nReply with"
+}

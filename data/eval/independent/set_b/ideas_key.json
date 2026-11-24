@@ -1,0 +1,188 @@
+{
+ "notes_for_author": "B3",
+ "themes": [
+  {
+   "theme_id": "B-T1",
+   "title": "Customers confuse the roast date with an expiry date",
+   "note_ids": [
+    "B-n01",
+    "B-n05",
+    "B-n10",
+    "B-n15"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "B-n01",
+     "quote": "Is the date on the bag the roast date or when it goes bad"
+    },
+    {
+     "note_id": "B-n05",
+     "quote": "I threw out a bag because the date looked like an expiry"
+    },
+    {
+     "note_id": "B-n10",
+     "quote": "Please put roasted on in bold next to the date"
+    },
+    {
+     "note_id": "B-n15",
+     "quote": "keep asking if the best by date means it is stale"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  },
+  {
+   "theme_id": "B-T2",
+   "title": "Subscribers cannot pause or skip easily",
+   "note_ids": [
+    "B-n02",
+    "B-n07",
+    "B-n12"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "B-n02",
+     "quote": "I went on holiday and got three bags I could not drink"
+    },
+    {
+     "note_id": "B-n07",
+     "quote": "There is no way to skip a delivery without emailing you"
+    },
+    {
+     "note_id": "B-n12",
+     "quote": "Let me pause for a week without cancelling"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  },
+  {
+   "theme_id": "B-T3",
+   "title": "Decaf carries a stigma",
+   "note_ids": [
+    "B-n03",
+    "B-n09",
+    "B-n16"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "B-n03",
+     "quote": "I am embarrassed to order decaf"
+    },
+    {
+     "note_id": "B-n09",
+     "quote": "People at the office judge me for decaf"
+    },
+    {
+     "note_id": "B-n16",
+     "quote": "Is your decaf actually good or just an afterthought"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  },
+  {
+   "theme_id": "B-T4",
+   "title": "Home brewers struggle with grind and ratio",
+   "note_ids": [
+    "B-n04",
+    "B-n08",
+    "B-n13",
+    "B-n18"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "B-n04",
+     "quote": "My pour over tastes sour and I follow the recipe exactly"
+    },
+    {
+     "note_id": "B-n08",
+     "quote": "How many grams of coffee per cup, is there a simple rule"
+    },
+    {
+     "note_id": "B-n13",
+     "quote": "The grinder I bought makes either dust or boulders"
+    },
+    {
+     "note_id": "B-n18",
+     "quote": "three questions this week about sour coffee, all grind related"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  },
+  {
+   "theme_id": "B-T5",
+   "title": "Wholesale cafes need a fixed delivery day",
+   "note_ids": [
+    "B-n06",
+    "B-n14"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "B-n06",
+     "quote": "We need the beans on Tuesday morning, not Wednesday afternoon"
+    },
+    {
+     "note_id": "B-n14",
+     "quote": "Our baristas run out on Mondays so a set delivery day matters"
+    }
+   ],
+   "expected": "should_surface_as_a_ranked_idea"
+  }
+ ],
+ "decoys": [
+  {
+   "decoy_id": "B-D1",
+   "title": "Shop playlist",
+   "note_ids": [
+    "B-n11"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "B-n11",
+     "quote": "The playlist in the shop is fantastic, who picks it"
+    }
+   ],
+   "expected": "single_note_one_off_should_rank_below_every_theme"
+  },
+  {
+   "decoy_id": "B-D2",
+   "title": "Oat milk request",
+   "note_ids": [
+    "B-n17"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "B-n17",
+     "quote": "Could you stock oat milk in the cafe"
+    }
+   ],
+   "expected": "single_note_one_off_should_rank_below_every_theme"
+  },
+  {
+   "decoy_id": "B-D3",
+   "title": "Gift box packaging",
+   "note_ids": [
+    "B-n19"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "B-n19",
+     "quote": "I would love bags in a gift box for my dad's birthday"
+    }
+   ],
+   "expected": "single_note_one_off_should_rank_below_every_theme"
+  },
+  {
+   "decoy_id": "B-D4",
+   "title": "Leaking cold brew lid",
+   "note_ids": [
+    "B-n20"
+   ],
+   "supporting_quotes": [
+    {
+     "note_id": "B-n20",
+     "quote": "The lid on the cold brew bottle leaks in my bag"
+    }
+   ],
+   "expected": "single_note_one_off_should_rank_below_every_theme"
+  }
+ ]
+}

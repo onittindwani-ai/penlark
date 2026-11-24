@@ -1,0 +1,134 @@
+{
+ "tables": 15,
+ "api_paths": 55,
+ "api_operations": 64,
+ "pages": 12,
+ "screenshots": 41,
+ "tool_groups": 5,
+ "tools_scored": 14,
+ "dimensions": 14,
+ "seed": {
+  "authors": 3,
+  "samples_total": 48,
+  "samples_per_author": 16,
+  "notes": 24,
+  "posts": 60,
+  "links": 10,
+  "clicks": 272,
+  "conversions": 46,
+  "experiments": 2,
+  "heldout_texts": 40,
+  "heldout_drafts": 26,
+  "heldout_notes": 14,
+  "banned_phrases": 130,
+  "banned_patterns": 5
+ },
+ "eval": {
+  "voice": {
+   "correct": 24,
+   "of": 24,
+   "auc": 0.975,
+   "generic_mean_best": 79.0,
+   "outsider_mean_best": 56.7
+  },
+  "flags": {
+   "style_precision": 1.0,
+   "style_recall": 1.0,
+   "claim_precision": 1.0,
+   "claim_recall": 1.0
+  },
+  "ideas": {
+   "themes_found": 2,
+   "themes_total": 3,
+   "noise_leaked": 0,
+   "quotes_valid": 7,
+   "quotes": 7
+  }
+ },
+ "independent": {
+  "a_first": {
+   "top1": 38,
+   "authors_texts": 40,
+   "auc_authors": 0.981,
+   "auc_all": 0.988,
+   "own_full_gate": 27,
+   "outsider_mean_best": 56.0,
+   "outsider_below": 10,
+   "outsider_full_gate": 0,
+   "generic_mean_best": 61.0,
+   "generic_below": 5,
+   "generic_full_gate": 0,
+   "banned_found": 8,
+   "banned_planted": 12,
+   "claim_found": 6,
+   "claim_planted": 10,
+   "claim_false": 3,
+   "reading_false": 0,
+   "themes_found": 2,
+   "themes_total": 5,
+   "decoys_avoided": 4,
+   "decoys_total": 4
+  },
+  "a_after": {
+   "top1": 38,
+   "authors_texts": 40,
+   "auc_authors": 0.981,
+   "auc_all": 0.988,
+   "own_full_gate": 23,
+   "outsider_mean_best": 56.0,
+   "outsider_below": 10,
+   "outsider_full_gate": 0,
+   "generic_mean_best": 61.0,
+   "generic_below": 5,
+   "generic_full_gate": 0,
+   "banned_found": 12,
+   "banned_planted": 12,
+   "claim_found": 8,
+   "claim_planted": 10,
+   "claim_false": 0,
+   "reading_false": 0,
+   "themes_found": 2,
+   "themes_total": 5,
+   "decoys_avoided": 4,
+   "decoys_total": 4
+  },
+  "b_first": {
+   "top1": 37,
+   "authors_texts": 40,
+   "auc_authors": 0.968,
+   "auc_all": 0.975,
+   "own_full_gate": 20,
+   "outsider_mean_best": 74.7,
+   "outsider_below": 0,
+   "outsider_full_gate": 10,
+   "generic_mean_best": 60.8,
+   "generic_below": 6,
+   "generic_full_gate": 0,
+   "banned_found": 12,
+   "banned_planted": 12,
+   "claim_found": 4,
+   "claim_planted": 10,
+   "claim_false": 0,
+   "reading_false": 2,
+   "themes_found": 2,
+   "themes_total": 5,
+   "decoys_avoided": 3,
+   "decoys_total": 4
+  }
+ },
+ "model": {
+  "tests": 27,
+  "fixtures": 6,
+  "contract_tests": 5
+ },
+ "e2e": {
+  "tests": 45,
+  "files": 6
+ },
+ "tests": {
+  "passed": 149,
+  "skipped": 1,
+  "failed": 0,
+  "coverage_percent": 92.3
+ }
+}

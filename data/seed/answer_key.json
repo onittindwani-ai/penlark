@@ -1,0 +1,22 @@
+{
+ "emoji_posts": [
+  "post-37",
+  "post-23",
+  "post-29"
+ ],
+ "posts": 60,
+ "planted_real_effects": {
+  "opens_with_question": "+40 percent engagement rate",
+  "number_in_first_line": "+30 percent",
+  "long_post_over_150_words": "-35 percent"
+ },
+ "planted_false_lead": "uses_emoji: only 3 posts, rate set 3.2 times the base by luck; the learning loop must report too few, never a pattern",
+ "hot_links": [
+  "seed002",
+  "seed005"
+ ],
+ "experiments": {
+  "Question opener against statement opener": "difference",
+  "Short post against long post": "too_small"
+ }
+}

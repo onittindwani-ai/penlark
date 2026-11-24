@@ -1,0 +1,3 @@
+# Buffer
+
+Read on 2026-11-23 from https://developers.buffer.com/ and its create draft example. A GraphQL endpoint `https://api.buffer.com` takes `POST` with `Authorization: Bearer <key>`. The mutation `createPost(input: {text, channelId, schedulingType, mode, saveToDraft})` returns `PostActionSuccess { post { id text } }` or `MutationError { message }`. A draft has status draft and is not published until it is scheduled. Keys come from the Buffer API settings page. Penlark saves a draft by default. The scheduled post example was not read, and no machine readable schema could be fetched (the guide and example pages tried returned 404 on 2026-11-23, see `mock/contracts/buffer/SOURCE.txt`): UNVERIFIED.

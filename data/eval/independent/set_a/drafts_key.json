@@ -1,0 +1,894 @@
+{
+ "A-d01": {
+  "category": "clean",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 7.5,
+  "word_count": 51,
+  "details": []
+ },
+ "A-d02": {
+  "category": "clean",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 1.5,
+  "word_count": 48,
+  "details": []
+ },
+ "A-d03": {
+  "category": "clean",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 5.4,
+  "word_count": 55,
+  "details": []
+ },
+ "A-d04": {
+  "category": "clean",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 1.2,
+  "word_count": 51,
+  "details": []
+ },
+ "A-d05": {
+  "category": "clean",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 8.1,
+  "word_count": 46,
+  "details": []
+ },
+ "A-d06": {
+  "category": "clean",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.3,
+  "word_count": 46,
+  "details": []
+ },
+ "A-d07": {
+  "category": "clean",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 4.6,
+  "word_count": 56,
+  "details": []
+ },
+ "A-d08": {
+  "category": "clean",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 1.0,
+  "word_count": 45,
+  "details": []
+ },
+ "A-d09": {
+  "category": "tricky_clean_hyphen_compounds",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 7.4,
+  "word_count": 65,
+  "details": [
+   "hyphenated compounds are not dashes"
+  ]
+ },
+ "A-d10": {
+  "category": "tricky_clean_hyphen_compounds",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.5,
+  "word_count": 56,
+  "details": [
+   "hyphenated compounds are not dashes"
+  ]
+ },
+ "A-d11": {
+  "category": "tricky_clean_hyphen_compounds",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 4.5,
+  "word_count": 63,
+  "details": [
+   "hyphenated compounds are not dashes"
+  ]
+ },
+ "A-d12": {
+  "category": "tricky_clean_near_miss_words",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 3.2,
+  "word_count": 64,
+  "details": [
+   "contains a word that shares letters with a banned phrase but is not one"
+  ]
+ },
+ "A-d13": {
+  "category": "tricky_clean_near_miss_words",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 6.7,
+  "word_count": 58,
+  "details": [
+   "contains a word that shares letters with a banned phrase but is not one"
+  ]
+ },
+ "A-d14": {
+  "category": "tricky_clean_sourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 6.2,
+  "word_count": 61,
+  "details": [
+   "number claim is supported by attached note A-src-A1"
+  ]
+ },
+ "A-d15": {
+  "category": "tricky_clean_sourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 4.3,
+  "word_count": 65,
+  "details": [
+   "number claim is supported by attached note A-src-A2"
+  ]
+ },
+ "A-d16": {
+  "category": "tricky_clean_sourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 5.9,
+  "word_count": 70,
+  "details": [
+   "number claim is supported by attached note A-src-A3"
+  ]
+ },
+ "A-d17": {
+  "category": "tricky_clean_sourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.1,
+  "word_count": 67,
+  "details": [
+   "number claim is supported by attached note A-src-A4"
+  ]
+ },
+ "A-d18": {
+  "category": "ambiguous_quoted_banned_phrase",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": null,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.4,
+  "word_count": 63,
+  "details": [
+   "banned phrase appears only inside quotation marks as a label being dismissed; scorer may or may not flag it"
+  ]
+ },
+ "A-d19": {
+  "category": "ambiguous_number_non_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": null
+  },
+  "fk_grade_estimate": 4.0,
+  "word_count": 60,
+  "details": [
+   "'five' is an instruction, not a result or personal fact; implementation may or may not flag numbers"
+  ]
+ },
+ "A-d20": {
+  "category": "ambiguous_spaced_hyphen_as_dash",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": null,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.5,
+  "word_count": 53,
+  "details": [
+   "a spaced ASCII hyphen reads as a dash in print; spec only says 'dashes'"
+  ]
+ },
+ "A-d21": {
+  "category": "banned_phrase",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 6.7,
+  "word_count": 51,
+  "details": [
+   {
+    "surface": "delve",
+    "canonical": "delve",
+    "likelihood_in_default_list": "high"
+   }
+  ]
+ },
+ "A-d22": {
+  "category": "banned_phrase",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 3.3,
+  "word_count": 52,
+  "details": [
+   {
+    "surface": "Supercharge",
+    "canonical": "supercharge",
+    "likelihood_in_default_list": "medium"
+   }
+  ]
+ },
+ "A-d23": {
+  "category": "banned_phrase",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 4.6,
+  "word_count": 58,
+  "details": [
+   {
+    "surface": "cutting-edge",
+    "canonical": "cutting-edge",
+    "likelihood_in_default_list": "high"
+   },
+   {
+    "surface": "best-in-class",
+    "canonical": "best-in-class",
+    "likelihood_in_default_list": "high"
+   }
+  ]
+ },
+ "A-d24": {
+  "category": "banned_phrase",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.7,
+  "word_count": 55,
+  "details": [
+   {
+    "surface": "rich tapestry",
+    "canonical": "rich tapestry",
+    "likelihood_in_default_list": "medium"
+   }
+  ]
+ },
+ "A-d25": {
+  "category": "banned_phrase",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 5.9,
+  "word_count": 57,
+  "details": [
+   {
+    "surface": "seamless",
+    "canonical": "seamless",
+    "likelihood_in_default_list": "medium"
+   },
+   {
+    "surface": "to the next level",
+    "canonical": "take it to the next level",
+    "likelihood_in_default_list": "medium"
+   }
+  ]
+ },
+ "A-d26": {
+  "category": "banned_phrase",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.8,
+  "word_count": 53,
+  "details": [
+   {
+    "surface": "leverage",
+    "canonical": "leverage",
+    "likelihood_in_default_list": "high"
+   }
+  ]
+ },
+ "A-d27": {
+  "category": "banned_phrase",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 5.3,
+  "word_count": 62,
+  "details": [
+   {
+    "surface": "In today\u2019s fast-paced world",
+    "canonical": "in today's fast-paced world",
+    "likelihood_in_default_list": "high"
+   }
+  ]
+ },
+ "A-d28": {
+  "category": "banned_phrase",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.1,
+  "word_count": 58,
+  "details": [
+   {
+    "surface": "game-changing",
+    "canonical": "game changer",
+    "likelihood_in_default_list": "medium"
+   },
+   {
+    "surface": "Delving",
+    "canonical": "delve",
+    "likelihood_in_default_list": "medium"
+   }
+  ]
+ },
+ "A-d29": {
+  "category": "dash",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": true,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 5.6,
+  "word_count": 60,
+  "details": [
+   {
+    "dash_chars_escaped": [
+     "\\u2014"
+    ]
+   }
+  ]
+ },
+ "A-d30": {
+  "category": "dash",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": true,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.6,
+  "word_count": 52,
+  "details": [
+   {
+    "dash_chars_escaped": [
+     "\\u2013"
+    ]
+   }
+  ]
+ },
+ "A-d31": {
+  "category": "dash",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": true,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 4.3,
+  "word_count": 63,
+  "details": [
+   {
+    "dash_chars_escaped": [
+     "\\u2014",
+     "\\u2014"
+    ]
+   }
+  ]
+ },
+ "A-d32": {
+  "category": "dash",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": true,
+   "reading_level": false,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 2.3,
+  "word_count": 54,
+  "details": [
+   {
+    "dash_chars_escaped": [
+     "\\u2014"
+    ]
+   }
+  ]
+ },
+ "A-d33": {
+  "category": "reading_level",
+  "voice_expected": null,
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": true,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 35.7,
+  "word_count": 59,
+  "details": [
+   "fk estimate is far above any plausible limit; off-voice by design"
+  ]
+ },
+ "A-d34": {
+  "category": "reading_level",
+  "voice_expected": null,
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": true,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 32.8,
+  "word_count": 57,
+  "details": [
+   "fk estimate is far above any plausible limit; off-voice by design"
+  ]
+ },
+ "A-d35": {
+  "category": "reading_level",
+  "voice_expected": null,
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": true,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 35.3,
+  "word_count": 48,
+  "details": [
+   "fk estimate is far above any plausible limit; off-voice by design"
+  ]
+ },
+ "A-d36": {
+  "category": "reading_level",
+  "voice_expected": null,
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": true,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 32.0,
+  "word_count": 47,
+  "details": [
+   "fk estimate is far above any plausible limit; off-voice by design"
+  ]
+ },
+ "A-d37": {
+  "category": "reading_level",
+  "voice_expected": null,
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": true,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 32.6,
+  "word_count": 46,
+  "details": [
+   "fk estimate is far above any plausible limit; off-voice by design"
+  ]
+ },
+ "A-d38": {
+  "category": "borderline_reading_level",
+  "voice_expected": null,
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": null,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 10.2,
+  "word_count": 41,
+  "details": [
+   "mid band reading level; limit is not defined in the spec, so excluded from scoring"
+  ]
+ },
+ "A-d39": {
+  "category": "borderline_reading_level",
+  "voice_expected": null,
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": null,
+   "unsourced_claim": false
+  },
+  "fk_grade_estimate": 11.4,
+  "word_count": 40,
+  "details": [
+   "mid band reading level; limit is not defined in the spec, so excluded from scoring"
+  ]
+ },
+ "A-d40": {
+  "category": "unsourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 7.8,
+  "word_count": 73,
+  "details": [
+   {
+    "claim_kind": "number",
+    "sentence": "Last winter our unit cut family complaints by 47 percent."
+   }
+  ]
+ },
+ "A-d41": {
+  "category": "unsourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 2.0,
+  "word_count": 57,
+  "details": [
+   {
+    "claim_kind": "client",
+    "sentence": "Delta Ridge Foods gave us their whole Midwest lane."
+   }
+  ]
+ },
+ "A-d42": {
+  "category": "unsourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 6.1,
+  "word_count": 56,
+  "details": [
+   {
+    "claim_kind": "experience",
+    "sentence": "I have treated over four thousand kids since opening my clinic."
+   }
+  ]
+ },
+ "A-d43": {
+  "category": "unsourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 2.6,
+  "word_count": 59,
+  "details": [
+   {
+    "claim_kind": "number",
+    "sentence": "My apprentices passed the state exam at a 92 percent rate this year."
+   }
+  ]
+ },
+ "A-d44": {
+  "category": "unsourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 7.6,
+  "word_count": 64,
+  "details": [
+   {
+    "claim_kind": "client",
+    "sentence": "Larkfield Hospice rebuilt its entire night handover after one of my workshops."
+   }
+  ]
+ },
+ "A-d45": {
+  "category": "unsourced_claim",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 4.3,
+  "word_count": 61,
+  "details": [
+   {
+    "claim_kind": "experience",
+    "sentence": "I ran a dispatch desk for nine years before I started teaching others."
+   }
+  ]
+ },
+ "A-d46": {
+  "category": "combo_banned_dash_unsourced",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": true,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 5.2,
+  "word_count": 73,
+  "details": [
+   {
+    "banned": [
+     "cutting-edge",
+     "best-in-class"
+    ],
+    "likelihood_in_default_list": "high"
+   },
+   {
+    "dash": [
+     "\\u2014"
+    ]
+   },
+   {
+    "claim_kind": "client",
+    "sentence": "Larkfield Hospice rebuilt its entire night handover after one of my workshops."
+   }
+  ]
+ },
+ "A-d47": {
+  "category": "combo_banned_dash_unsourced",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": true,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 2.3,
+  "word_count": 85,
+  "details": [
+   {
+    "banned": [
+     "rich tapestry"
+    ],
+    "likelihood_in_default_list": "medium"
+   },
+   {
+    "dash": [
+     "\\u2013"
+    ]
+   },
+   {
+    "claim_kind": "experience",
+    "sentence": "I ran a dispatch desk for nine years before I started teaching others."
+   }
+  ]
+ },
+ "A-d48": {
+  "category": "combo_banned_dash_unsourced",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": true,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 4.5,
+  "word_count": 81,
+  "details": [
+   {
+    "banned": [
+     "seamless",
+     "take it to the next level"
+    ],
+    "likelihood_in_default_list": "medium"
+   },
+   {
+    "dash": [
+     "\\u2014",
+     "\\u2014"
+    ]
+   },
+   {
+    "claim_kind": "number",
+    "sentence": "Cavities in our practice dropped 35 percent after the sticker chart."
+   }
+  ]
+ },
+ "A-d49": {
+  "category": "combo_banned_dash_unsourced",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": true,
+   "dash": true,
+   "reading_level": false,
+   "unsourced_claim": true
+  },
+  "fk_grade_estimate": 3.3,
+  "word_count": 72,
+  "details": [
+   {
+    "banned": [
+     "leverage"
+    ],
+    "likelihood_in_default_list": "high"
+   },
+   {
+    "dash": [
+     "\\u2014"
+    ]
+   },
+   {
+    "claim_kind": "client",
+    "sentence": "Hartwell Homes hired three of my graduates last spring."
+   }
+  ]
+ },
+ "A-d50": {
+  "category": "source_mismatch",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": null
+  },
+  "fk_grade_estimate": 7.4,
+  "word_count": 75,
+  "details": [
+   "the attached note supports different numbers than the draft states; a link exists but does not support the claim. Semantically a violation, implementation dependent"
+  ],
+  "semantic_expected_unsourced_claim": true
+ },
+ "A-d51": {
+  "category": "source_mismatch",
+  "voice_expected": "in_voice",
+  "expected": {
+   "banned_phrase": false,
+   "dash": false,
+   "reading_level": false,
+   "unsourced_claim": null
+  },
+  "fk_grade_estimate": 2.9,
+  "word_count": 61,
+  "details": [
+   "the attached note supports different numbers than the draft states; a link exists but does not support the claim. Semantically a violation, implementation dependent"
+  ],
+  "semantic_expected_unsourced_claim": true
+ }
+}
