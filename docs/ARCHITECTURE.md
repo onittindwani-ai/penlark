@@ -3,7 +3,7 @@
 ```
 Browser -> Next.js web app (apps/web) -> proxy adds the session cookie -> FastAPI (apps/api)
                                                                          |-> SQLite or Postgres (<!--n:tables-->15<!--/n--> vp_ tables on the shared base)
-                                                                         |-> worker (learning loop, hourly)
+                                                                         |-> worker (learning loop hourly, Find ideas when asked)
                                                                          |-> scheduler adapter (file export, Postiz, Buffer, Metricool)
 Public: /r/<code> (tracked link) and /api/webhooks/lead (signed)
 ```
@@ -17,7 +17,8 @@ Public: /r/<code> (tracked link) and /api/webhooks/lead (signed)
 | `house_rules.py`, `safe_regex.py` | Banned phrases and patterns, dashes, reading level, the claims check; and the check that refuses a pattern that could take far too long. |
 | `ingest.py` | Readers for markdown, text, PDF, transcripts, LinkedIn CSV, X archive. |
 | `guide.py`, `writers.py` | The offline guide and draft templates (labelled, not a language model), and the model path in `model_tasks.py` (voice guide, draft variants, idea finder; code re scores every draft). |
-| `ideas.py` | Notes to ranked ideas with verified quotes. |
+| `ideas.py` | Notes to ranked ideas with verified quotes. Bounded: the newest 1,000 notes, 1 million characters, 30 rarest words per note. |
+| `dbsetup.py` | The database engine. On SQLite a request that can write takes the write lock first, so the audit chain cannot fork; reads never wait for it. Also the check that a SQLite file is not older than the code. |
 | `learning.py` | CSV import with mapping, trait comparison, permutation test. |
 | `attribution.py`, `experiments.py` | Tracked links, allow list, signature check, funnel, A/B analysis. |
 | `adapters/schedulers.py`, `registry.py` | The scheduler adapters and their tiers. |

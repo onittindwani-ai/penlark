@@ -13,7 +13,7 @@ import { useRole, useSettings } from "@/lib/hooks";
 import { DRAFT_STATUS } from "@/lib/labels";
 import type { Author, Draft, Evaluation, Note } from "@/lib/types";
 
-const STATUS_TONE: Record<string, "neutral" | "success" | "warning" | "accent" | "danger"> = { draft: "neutral", pending_approval: "warning", approved: "success", scheduled: "accent", exported: "accent", sending: "warning", published: "accent", rejected: "danger" };
+const STATUS_TONE: Record<string, "neutral" | "success" | "warning" | "accent" | "danger"> = { draft: "neutral", pending_approval: "warning", approved: "success", scheduled: "accent", exported: "accent", sending: "warning", send_unknown: "danger", published: "accent", rejected: "danger" };
 
 export default function Studio() {
   const qc = useQueryClient();
@@ -57,7 +57,7 @@ export default function Studio() {
   }, [text, authorId, sources, links, draftId]);
 
   const d = detail.data;
-  const editable = canWrite && !!d && !["exported", "published"].includes(d.status);
+  const editable = canWrite && !!d && !["exported", "published", "sending", "send_unknown"].includes(d.status);
   const dirty = !!d && (text !== d.text || authorId !== d.author_id || JSON.stringify(sources) !== JSON.stringify(d.source_note_ids) || JSON.stringify(links) !== JSON.stringify(d.claim_links));
   const body = () => ({ text, author_id: authorId, source_note_ids: sources, claim_links: links });
   const refresh = () => { qc.invalidateQueries({ queryKey: ["drafts"] }); qc.invalidateQueries({ queryKey: ["draft", draftId] }); qc.invalidateQueries({ queryKey: ["overview"] }); qc.invalidateQueries({ queryKey: ["approvals"] }); };
@@ -67,6 +67,7 @@ export default function Studio() {
     onSuccess: () => { notify.success("Sent for approval. A second person has to approve it."); refresh(); }, onError: (e: Error) => notify.error("Not ready for approval", e.message),
   });
   const exp = useMutation({ mutationFn: () => post<{ detail: string }>(`/drafts/${draftId}/export`), onSuccess: (r) => { notify.success(`Exported. ${r.detail}`); refresh(); }, onError: (e: Error) => notify.error("Could not export", e.message) });
+  const outcome = useMutation({ mutationFn: (posted: boolean) => post<{ status: string }>(`/drafts/${draftId}/send-outcome`, { posted }), onSuccess: (r) => { notify.success(r.status === "approved" ? "Noted. The draft is approved again and can be sent." : "Noted. The draft is marked as handed to the scheduling tool."); refresh(); }, onError: (e: Error) => notify.error("Could not save the answer", e.message) });
   const useVar = useMutation({ mutationFn: (id: number) => post<Draft>(`/drafts/${draftId}/variants/${id}/use`), onSuccess: (r) => { setText(r.text); setCompare(null); notify.info("Variant is now the draft."); refresh(); } });
   const diff = useMemo(() => { const v = d?.variants?.find((x) => x.id === compare); return v ? wordDiff(text, v.text) : null; }, [compare, d, text]);
 
@@ -93,11 +94,19 @@ export default function Studio() {
             {dirty && editable ? <Badge tone="warning">unsaved changes</Badge> : null}
             <span className="vp-mini">{author ? `Voice: ${author.name}` : ""}</span>
           </div>
+          {d?.status === "send_unknown" ? (
+            <Card title="Check the scheduling tool">
+              <p className="vp-mini" style={{ marginTop: 0 }}>The last send gave no clear answer, so the post may exist. Open your scheduling tool and look for it, then say which it was. Nothing else can be done with this draft until you do.</p>
+              <div className="vp-toolbar">
+                <Button variant="primary" disabled={!canWrite} disabledReason="Viewers cannot answer this" onClick={async () => { await outcome.mutateAsync(true); }}>It was posted</Button>
+                <Button disabled={!canWrite} disabledReason="Viewers cannot answer this" onClick={async () => { await outcome.mutateAsync(false); }}>It was not posted</Button>
+              </div>
+            </Card>) : null}
           {!drafts.data.length ? <EmptyState title="No drafts yet" body="Turn an idea into a draft from the Ideas page, and it opens here." actionLabel="Go to Ideas" onAction={() => router.push("/ideas")} /> : detail.isError ? <LoadError error={detail.error} onRetry={() => detail.refetch()} what="this draft" /> : (draftId === null || !detail.data) ? <Skeleton height={420} radius={21} /> : ( // no editor until the text is there, or what is typed meanwhile is overwritten by the text that arrives
             <>
               <HighlightEditor readOnly={!editable} value={text} onChange={setText} pull={ev?.match.pull_down ?? []} style={ev?.rules.style ?? []} claims={ev?.rules.claims ?? []} />
               <div className="vp-toolbar">
-                <Button onClick={async () => { await save.mutateAsync(); }} disabled={!editable || !dirty} disabledReason={!canWrite ? "Viewers cannot change drafts" : !d || ["exported", "published"].includes(d.status) ? "This draft was already exported" : "No changes to save"}>Save draft</Button>
+                <Button onClick={async () => { await save.mutateAsync(); }} disabled={!editable || !dirty} disabledReason={!canWrite ? "Viewers cannot change drafts" : !d || ["exported", "published", "sending", "send_unknown"].includes(d.status) ? "This draft was already exported or sent" : "No changes to save"}>Save draft</Button>
                 <Button variant="primary" onClick={async () => { await ask.mutateAsync(); }} disabled={!editable || !text.trim() || d?.status === "pending_approval" || d?.status === "approved"} disabledReason={!canWrite ? "Viewers cannot ask for approval" : d?.status === "pending_approval" ? "Waiting for a second person" : d?.status === "approved" ? "Already approved" : "Write something first"}>Ask for approval</Button>
                 <Button onClick={async () => { await exp.mutateAsync(); }} disabled={!canWrite || !d || !["approved", "scheduled"].includes(d.status)} disabledReason={!canWrite ? "Viewers cannot export" : "Only an approved draft can be exported"}>Export to a file</Button>
                 {d ? <CopyButton value={d.text} label="Copy the text" /> : null}

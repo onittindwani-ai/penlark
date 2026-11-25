@@ -12,7 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from penlark import attribution
-from penlark.api.deps import db, get_ctx
+from penlark.api.deps import db, db_write, get_ctx
 from penlark.context import Ctx
 from penlark.models import Click, Conversion, Link
 from sendora_core.ratelimit import RateLimitExceeded
@@ -36,7 +36,7 @@ async def read_bounded(request: Request, limit: int, message: str = "Too large."
 
 
 @router.get("/api/public/r/{code}", summary="Record a click and redirect to the stored target (allow list checked again)", include_in_schema=True)
-def follow(code: str, request: Request, s: Session = Depends(db), ctx: Ctx = Depends(get_ctx)):
+def follow(code: str, request: Request, s: Session = Depends(db_write, scope="function"), ctx: Ctx = Depends(get_ctx)):
     # request.client.host is already the visitor: uvicorn reads X-Forwarded-For only from the addresses in FORWARDED_ALLOW_IPS. The raw header is typed by the visitor.
     ip = request.client.host if request.client else "x"
     try:
@@ -63,7 +63,7 @@ class LeadIn(BaseModel):
 
 
 @router.post("/api/webhooks/lead", summary="A lead or customer event from your form or CRM tool. Signed with LEAD_WEBHOOK_SECRET (header x-penlark-signature, sha256 of the body).")
-async def lead(request: Request, s: Session = Depends(db), ctx: Ctx = Depends(get_ctx)):
+async def lead(request: Request, s: Session = Depends(db, scope="function"), ctx: Ctx = Depends(get_ctx)):
     raw = await read_bounded(request, MAX_WEBHOOK_BYTES)
     if not attribution.verify_signature(ctx.settings.lead_webhook_secret, raw, request.headers.get("x-penlark-signature")):
         raise HTTPException(401, "The signature is missing or wrong.")

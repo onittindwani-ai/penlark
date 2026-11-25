@@ -8,6 +8,8 @@ COPY apps/api /app/apps/api
 COPY data /app/data
 RUN pip install --no-cache-dir -c /app/constraints.txt /app/packages/core-py "/app/apps/api[postgres]"
 ENV SEED_DIR=/app/data EXPORT_DIR=/data/exports
+# The image is never a demo by default: with no variables set it refuses to start (the example secret is not accepted) instead of coming up as a public demo with a published password. Set DEMO_MODE=true on purpose for a throw away trial.
+ENV DEMO_MODE=false
 RUN useradd --create-home --uid 10001 app && mkdir -p /data/exports && chown -R app /data
 USER app
 WORKDIR /app/apps/api

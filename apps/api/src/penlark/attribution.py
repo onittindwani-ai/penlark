@@ -19,9 +19,15 @@ class LinkError(ValueError):
     pass
 
 
+_HOST = re.compile(r"[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?")
+
+
 def host_matches(host: str, allow: list[str]) -> bool:
-    """True when `host` is on the allow list: a plain entry means exactly that host, `*.example.com` means any subdomain of it (not example.com itself)."""
+    """True when `host` is on the allow list: a plain entry means exactly that host, `*.example.com` means any subdomain of it (not example.com itself).
+    A host with a backslash, a space, a percent sign or any other character a host name cannot hold never matches: a browser can read `evil.com\\.example.com` as `evil.com`."""
     host = host.lower().rstrip(".")
+    if not _HOST.fullmatch(host):
+        return False
     for entry in allow:
         a = entry.strip().lower().rstrip(".")
         if not a:
@@ -35,6 +41,8 @@ def host_matches(host: str, allow: list[str]) -> bool:
 
 
 def host_allowed(url: str, allow: list[str], allow_http_local: bool = False) -> bool:
+    if "\\" in url or any(ord(ch) <= 32 or ord(ch) == 127 for ch in url):  # a backslash or a space or control character: browsers and parsers read such an address differently
+        return False
     u = urlparse(url)
     if u.scheme not in ({"https", "http"} if allow_http_local else {"https"}) or not u.hostname or u.username or u.password:
         return False

@@ -29,9 +29,36 @@ def latest_profile(s: Session, author_id: int, locked_only: bool = False) -> Voi
     return s.scalars(q.order_by(VoiceProfile.version.desc())).first()
 
 
+PROFILE_MAX_SAMPLES = 500  # the newest samples that are measured for one voice
+PROFILE_MAX_CHARS = 1_500_000  # and no more text than this in all, so a huge export cannot hold the API for minutes
+
+
+def samples_for_profile(s: Session, author_id: int) -> list[Sample]:
+    """The newest samples of a voice that fit the bounds, oldest first."""
+    kept: list[Sample] = []
+    total = 0
+    for row in s.scalars(select(Sample).where(Sample.author_id == author_id).order_by(Sample.id.desc()).limit(PROFILE_MAX_SAMPLES)):
+        if kept and total + len(row.text) > PROFILE_MAX_CHARS:
+            break
+        kept.append(row)
+        total += len(row.text)
+    kept.reverse()
+    return kept
+
+
+def sample_digest(text: str) -> str:
+    """The same words with other spacing or capitals are the same sample."""
+    return hashlib.sha256(" ".join(text.split()).lower().encode("utf-8")).hexdigest()
+
+
+def sample_digests(s: Session, author_id: int) -> set[str]:
+    """One set per request, so adding many samples at once compares each against a set, not against every stored text again."""
+    return {sample_digest(t) for t in s.scalars(select(Sample.text).where(Sample.author_id == author_id))}
+
+
 def build_profile(s: Session, author_id: int, actor: str, ctx=None) -> VoiceProfile:
     author = s.get(Author, author_id)
-    samples = list(s.scalars(select(Sample).where(Sample.author_id == author_id)))
+    samples = samples_for_profile(s, author_id)
     if not samples:
         raise RuleError("Add at least one writing sample first.")
     texts = [x.text for x in samples]
@@ -216,13 +243,20 @@ def create_drafts_from_idea(s: Session, ctx, idea_id: int, author_id: int, kind:
     return d
 
 
+def recent_notes(s: Session) -> list[Note]:
+    """The newest notes the idea finder will look at, oldest first. The limit is applied in the query, so a long history is never loaded."""
+    rows = list(s.scalars(select(Note).order_by(Note.id.desc()).limit(ideas.MAX_NOTES)))
+    rows.reverse()
+    return rows
+
+
 def load_ideas(s: Session, notes: list[Note], ctx=None) -> int:
     for i in s.scalars(select(Idea).where(Idea.status == "inbox")):  # ideas already used for a draft, or dropped on purpose, stay
         s.delete(i)
     s.flush()
     kept_titles = {i.title for i in s.scalars(select(Idea))}
     src = {n.id: n.text for n in notes}
-    rows = [{"id": n.id, "kind": n.kind, "text": n.text} for n in notes]
+    rows = ideas.limit_notes([{"id": n.id, "kind": n.kind, "text": n.text} for n in notes])
     out = ideas.find_ideas(rows)
     if ctx is not None and ctx.model_on() and ctx.settings.idea_finder == "model" and rows:
         res = model_tasks.propose_ideas(ctx.llm(s), rows, out)

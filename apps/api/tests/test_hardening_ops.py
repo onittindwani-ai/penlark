@@ -15,12 +15,13 @@ from sqlalchemy import select
 
 from conftest import DATA, login as demo_login
 from hardening_helpers import APPROVER, OWNER, PASSWORD, VIEWER, approve_the_waiting_draft, live_app, login, real_client, real_settings
-from penlark import admin, attribution, clock, house_rules
+from penlark import admin, attribution, clock, house_rules, jobs
 from penlark.api.app import create_app
 from penlark.api.routes_public import read_bounded
 from penlark.config import Settings
 from penlark.models import Author, Click, Conversion, Draft, HouseRule, Schedule
 from sendora_core.audit import verify_audit_chain
+from sendora_core.jobs import Worker
 from sendora_core.settings import BaseAppSettings
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -226,13 +227,24 @@ def test_a_send_that_never_finished_is_released_after_half_an_hour_and_the_audit
     assert any(e["action"] == "draft.send_released" for e in c.get("/api/audit?limit=20", headers=h).json())
 
 
-def test_a_vendor_error_is_said_plainly_nothing_is_recorded_as_sent_and_the_draft_goes_back(tmp_path):
+def test_a_vendor_server_error_leaves_the_draft_held_until_a_person_says_whether_it_was_posted(tmp_path):
+    # Changed in round 2. This test used to expect the draft back at "approved" after a 500, which let a second click post it twice when the first post had gone through.
     c, rec, ctx = live_app(tmp_path, status=500)
     h, did = approve_the_waiting_draft(c)
     r = c.post(f"/api/drafts/{did}/send", headers=h, json=body())
     assert r.status_code == 502 and "check postiz" in r.json()["error"]["message"].lower()
     with ctx.factory() as s:
-        assert s.get(Draft, did).status == "approved" and not list(s.scalars(select(Schedule).where(Schedule.status == "sent")))
+        assert s.get(Draft, did).status == "send_unknown" and not list(s.scalars(select(Schedule).where(Schedule.status == "sent")))
+    assert any(e["action"] == "draft.send_unclear" for e in c.get("/api/audit?limit=5", headers=h).json())
+
+
+def test_a_vendor_refusal_with_a_meaning_puts_the_draft_back_to_approved(tmp_path):
+    c, rec, ctx = live_app(tmp_path, status=422)
+    h, did = approve_the_waiting_draft(c)
+    r = c.post(f"/api/drafts/{did}/send", headers=h, json=body())
+    assert r.status_code == 502 and "nothing was posted" in r.json()["error"]["message"].lower()
+    with ctx.factory() as s:
+        assert s.get(Draft, did).status == "approved"
     assert any(e["action"] == "draft.send_failed" for e in c.get("/api/audit?limit=5", headers=h).json())
 
 
@@ -301,7 +313,10 @@ def test_a_real_install_does_the_core_job_from_an_empty_database(tmp_path):
     notes = json.loads((Path(DATA) / "seed" / "notes.json").read_text())[:6]
     for n in notes:
         assert c.post("/api/notes", headers=owner, json={"kind": n["kind"], "who": "A customer", "text": n["text"]}).status_code == 200
-    assert c.post("/api/ideas/refresh", headers=owner).json()["ideas"] >= 1
+    assert c.post("/api/ideas/refresh", headers=owner).json()["queued"] is True  # a real install hands the work to the worker
+    ctx = c.app.state.ctx
+    assert Worker(ctx.factory, jobs.make_handlers(ctx)).drain() == 1
+    assert c.get("/api/ideas/status", headers=owner).json()["ideas"] >= 1
     idea = c.get("/api/ideas", headers=owner).json()[0]
     did = c.post(f"/api/ideas/{idea['id']}/draft", headers=owner, json={"author_id": aid, "kind": "post"}).json()["id"]
     clean = "Invoices go out on the day the work ends. Short email, due date first, a thank you at the end."

@@ -118,7 +118,6 @@ def check_style(text: str, rules: Rules) -> list[dict]:
     return unique
 
 
-NUM = re.compile(r"\d[\d,.]*%?|\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|thirty|forty|fifty|hundred|thousand|million|billion)\b(?:\s+percent)?|\bpercent\b", re.I)
 EXPERIENCE = re.compile(r"\b(?:i|we)(?:['\u2019]ve|\s+have|\s+had)?\s+(?:built|launched|lost|closed|grew|raised|hired|fired|sold|shipped|made|saved|doubled|tripled|cut|paid|quit|started|ran|wrote|tested|tried|signed|won|helped|trained|coached|taught|treated|handled|managed|delivered|onboarded|boosted|generated|booked|landed|scaled|mentored|recruited|fixed|repaired|installed|rebuilt|cleared)\b", re.I)
 _PEOPLE = r"(?:client|customer|student|patient|boss|investor|cofounder|co-founder|member|employee|apprentice|driver|account)s?"
 # a client claim names a client of the writer or says what a client did. A generic "a patient" or "the student" in advice is not a claim.
@@ -129,8 +128,17 @@ NUMWORD_CLAIM = re.compile(rf"\b{_NUMWORD}\s+(?:of\s+(?:my|our|the)\s+)?(?:perce
 RESULT = re.compile(r"\b(?:increased|decreased|grew|dropped|rose|fell|doubled|tripled|halved|improved|reduced|saved)\b[^.]{0,40}\bby\b", re.I)
 
 
+_WORDNUM = r"one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|thirty|forty|fifty|hundred|thousand|million|billion"
+# A figure is a whole number as written: 1500 and 1,500 are the same figure, 15 is not 150 or 5, and "15%" and "15 percent" are the same figure.
+_FIGURE = re.compile(rf"(?<![\d.,])(\d[\d,]*(?:\.\d+)?)(\s*(?:%|percent\b|per\s+cent\b))?|\b({_WORDNUM})\b(\s+(?:percent|per\s+cent)\b)?", re.I)
+
+
 def _numtokens(s: str) -> set[str]:
-    return {re.sub(r"[,]", "", m.group(0).lower().replace("percent", "%").replace(" ", "")).rstrip(".") for m in NUM.finditer(s) if m.group(0).lower() != "percent"}
+    out: set[str] = set()
+    for m in _FIGURE.finditer(s):
+        base = m.group(1).replace(",", "") if m.group(1) else m.group(3).lower()
+        out.add(base + ("%" if m.group(2) or m.group(4) else ""))
+    return out
 
 
 def find_claims(text: str) -> list[dict]:
@@ -164,13 +172,11 @@ def check_claims(text: str, notes: dict[int, str], links: dict[str, int] | None 
         linked = links.get(c["text"])
         support = None
         if linked is not None and linked in notes:
-            body = _norm(notes[linked])
-            if all(n in re.sub(r",", "", body) or n in body for n in nums):
+            if nums <= _numtokens(notes[linked]):  # every figure of the claim is a whole figure of the note, never part of a longer number
                 support = linked
         elif nums:
             for nid, body in notes.items():
-                b = re.sub(r",", "", _norm(body))
-                if all(n in b for n in nums):
+                if nums <= _numtokens(body):
                     support = nid
                     break
         c["source_note_id"] = support

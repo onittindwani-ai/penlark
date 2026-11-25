@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 
-from penlark.config import Settings
+from penlark.config import load_settings
 
 
 def resolve_url(x_url: str | None = None, env_file: str | None = None) -> str:
@@ -12,7 +12,7 @@ def resolve_url(x_url: str | None = None, env_file: str | None = None) -> str:
     If it is set nowhere, stop with a plain message instead of quietly using a local SQLite file."""
     if x_url:
         return x_url
-    settings = Settings(_env_file=env_file or os.environ.get("ENV_FILE", ".env"))
+    settings = load_settings(env_file or os.environ.get("ENV_FILE", ".env"))
     if "database_url" not in settings.model_fields_set:
         raise RuntimeError(
             "DATABASE_URL is not set. Put it in your environment or in the .env file (or pass -x url=...). "

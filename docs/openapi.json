@@ -257,6 +257,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Author Id"
       }
      }
@@ -334,6 +336,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Author Id"
       }
      }
@@ -502,6 +506,25 @@
     }
    }
   },
+  "/api/ideas/status": {
+   "get": {
+    "tags": [
+     "read"
+    ],
+    "summary": "The latest Find ideas run: queued, running, done or failed",
+    "operationId": "ideas_status_api_ideas_status_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/drafts": {
    "get": {
     "tags": [
@@ -563,6 +586,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Draft Id"
       }
      }
@@ -601,6 +626,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Draft Id"
       }
      }
@@ -1001,6 +1028,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Author Id"
       }
      }
@@ -1041,6 +1070,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Sample Id"
       }
      }
@@ -1120,6 +1151,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Profile Id"
       }
      }
@@ -1170,6 +1203,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Profile Id"
       }
      }
@@ -1201,7 +1236,7 @@
     "tags": [
      "write"
     ],
-    "summary": "Find ideas again from all notes",
+    "summary": "Find ideas again from the newest notes. A real install queues a job for the worker; the offline demo has no worker and answers at once.",
     "operationId": "refresh_api_ideas_refresh_post",
     "responses": {
      "200": {
@@ -1229,6 +1264,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Idea Id"
       }
      }
@@ -1269,6 +1306,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Idea Id"
       }
      }
@@ -1319,6 +1358,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Draft Id"
       }
      },
@@ -1328,6 +1369,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Variant Id"
       }
      }
@@ -1368,6 +1411,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Draft Id"
       }
      }
@@ -1408,6 +1453,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Draft Id"
       }
      }
@@ -1458,6 +1505,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Schedule Id"
       }
      }
@@ -1506,6 +1555,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Schedule Id"
       }
      }
@@ -1546,6 +1597,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Draft Id"
       }
      }
@@ -1596,6 +1649,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Draft Id"
       }
      }
@@ -1606,6 +1661,58 @@
       "application/json": {
        "schema": {
         "$ref": "#/components/schemas/SendIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/drafts/{draft_id}/send-outcome": {
+   "post": {
+    "tags": [
+     "write"
+    ],
+    "summary": "After a send with no clear answer: say whether the post was made, once you have looked in the scheduling tool",
+    "operationId": "send_outcome_api_drafts__draft_id__send_outcome_post",
+    "parameters": [
+     {
+      "name": "draft_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
+       "title": "Draft Id"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/OutcomeIn"
        }
       }
      }
@@ -1646,6 +1753,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Rule Id"
       }
      }
@@ -1694,6 +1803,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Rule Id"
       }
      }
@@ -1773,6 +1884,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Exp Id"
       }
      }
@@ -1842,6 +1955,8 @@
       "required": true,
       "schema": {
        "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
        "title": "Approval Id"
       }
      }
@@ -2292,6 +2407,8 @@
     "properties": {
      "author_id": {
       "type": "integer",
+      "maximum": 2147483647.0,
+      "minimum": 1.0,
       "title": "Author Id"
      }
     },
@@ -2305,6 +2422,8 @@
     "properties": {
      "author_id": {
       "type": "integer",
+      "maximum": 2147483647.0,
+      "minimum": 1.0,
       "title": "Author Id"
      },
      "text": {
@@ -2391,6 +2510,8 @@
     "properties": {
      "author_id": {
       "type": "integer",
+      "maximum": 2147483647.0,
+      "minimum": 1.0,
       "title": "Author Id"
      },
      "kind": {
@@ -2416,7 +2537,9 @@
      "author_id": {
       "anyOf": [
        {
-        "type": "integer"
+        "type": "integer",
+        "maximum": 2147483647.0,
+        "minimum": 1.0
        },
        {
         "type": "null"
@@ -2440,9 +2563,12 @@
       "anyOf": [
        {
         "items": {
-         "type": "integer"
+         "type": "integer",
+         "maximum": 2147483647.0,
+         "minimum": 1.0
         },
-        "type": "array"
+        "type": "array",
+        "maxItems": 500
        },
        {
         "type": "null"
@@ -2454,9 +2580,12 @@
       "anyOf": [
        {
         "additionalProperties": {
-         "type": "integer"
+         "type": "integer",
+         "maximum": 2147483647.0,
+         "minimum": 1.0
         },
-        "type": "object"
+        "type": "object",
+        "maxProperties": 500
        },
        {
         "type": "null"
@@ -2598,7 +2727,9 @@
      "draft_id": {
       "anyOf": [
        {
-        "type": "integer"
+        "type": "integer",
+        "maximum": 2147483647.0,
+        "minimum": 1.0
        },
        {
         "type": "null"
@@ -2656,6 +2787,8 @@
     "properties": {
      "author_id": {
       "type": "integer",
+      "maximum": 2147483647.0,
+      "minimum": 1.0,
       "title": "Author Id"
      },
      "text": {
@@ -2665,19 +2798,23 @@
      },
      "source_note_ids": {
       "items": {
-       "type": "integer"
+       "type": "integer",
+       "maximum": 2147483647.0,
+       "minimum": 1.0
       },
       "type": "array",
-      "title": "Source Note Ids",
-      "default": []
+      "maxItems": 500,
+      "title": "Source Note Ids"
      },
      "claim_links": {
       "additionalProperties": {
-       "type": "integer"
+       "type": "integer",
+       "maximum": 2147483647.0,
+       "minimum": 1.0
       },
       "type": "object",
-      "title": "Claim Links",
-      "default": {}
+      "maxProperties": 500,
+      "title": "Claim Links"
      }
     },
     "type": "object",
@@ -2734,6 +2871,25 @@
     ],
     "title": "NoteIn"
    },
+   "OutcomeIn": {
+    "properties": {
+     "posted": {
+      "type": "boolean",
+      "title": "Posted"
+     },
+     "external_id": {
+      "type": "string",
+      "maxLength": 200,
+      "title": "External Id",
+      "default": ""
+     }
+    },
+    "type": "object",
+    "required": [
+     "posted"
+    ],
+    "title": "OutcomeIn"
+   },
    "RuleIn": {
     "properties": {
      "kind": {
@@ -2778,6 +2934,8 @@
     "properties": {
      "author_id": {
       "type": "integer",
+      "maximum": 2147483647.0,
+      "minimum": 1.0,
       "title": "Author Id"
      },
      "title": {

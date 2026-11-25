@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 
 from penlark import learning, service
 from penlark.context import Ctx, set_state
-from penlark.models import Note, Performance
+from penlark.models import Performance
+from sendora_core.audit import record_audit
 from sendora_core.events import record_event
 from sendora_core.jobs import Handler
 
@@ -25,10 +26,13 @@ def job_learn(session: Session, ctx: Ctx) -> dict:
 
 
 def job_ideas(session: Session, ctx: Ctx) -> dict:
-    return {"ideas": service.load_ideas(session, list(session.scalars(select(Note))), ctx)}
+    """Look through the newest notes again. Started by the Find ideas button, never on a timer. The work is bounded (see `ideas.py`) and runs here, not inside a web request."""
+    n = service.load_ideas(session, service.recent_notes(session), ctx)
+    record_audit(session, "system", "ideas.refreshed", None, {"ideas": n})
+    return {"ideas": n}
 
 
-JOBS = {"learn": job_learn}
+JOBS = {"learn": job_learn, "ideas": job_ideas}
 
 
 def make_handlers(ctx: Ctx) -> dict[str, Handler]:

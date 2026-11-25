@@ -3,18 +3,18 @@
 from __future__ import annotations
 
 import logging
-import os
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from penlark.api import routes_admin, routes_auth, routes_demo, routes_public, routes_read, routes_write
-from penlark.config import Settings
+from penlark.config import Settings, load_settings
 from penlark.context import Ctx
 from penlark.datadir import REPO_DATA, data_dir_or_none
+from penlark.dbsetup import make_engine, make_factories, require_current_schema
 from sendora_core.app import SESSION_COOKIE, create_base_app
 from sendora_core.auth import read_session_token
-from sendora_core.db import Base, make_engine, make_session_factory
+from sendora_core.db import Base
 from sendora_core.ratelimit import TokenBucket
 
 log = logging.getLogger("penlark.app")
@@ -52,7 +52,7 @@ def _ensure_builtin_rules(ctx: Ctx) -> None:
 
 
 def create_app(settings: Settings | None = None, ctx: Ctx | None = None) -> FastAPI:
-    settings = settings or Settings()
+    settings = settings or load_settings()
     settings.check_runtime()  # refuse an unsafe configuration before the database is opened or anything is written
     if ctx is None:
         engine = make_engine(settings.database_url)
@@ -61,7 +61,9 @@ def create_app(settings: Settings | None = None, ctx: Ctx | None = None) -> Fast
 
         if settings.database_url.startswith("sqlite"):
             Base.metadata.create_all(engine)  # SQLite zero setup path. Postgres uses `alembic upgrade head`.
-        ctx = Ctx(settings, make_session_factory(engine))
+            require_current_schema(engine)  # a file from an older version is reported in plain words now, not as a database error later
+        factory, write_factory = make_factories(engine)
+        ctx = Ctx(settings, factory, write_factory=write_factory)
         if not settings.seed_dir and (found := data_dir_or_none(None, REPO_DATA)) is not None:
             ctx.settings.seed_dir = str(found)  # a source checkout; an installed copy must be told with SEED_DIR
     _ensure_builtin_rules(ctx)
@@ -97,4 +99,4 @@ def create_app(settings: Settings | None = None, ctx: Ctx | None = None) -> Fast
 
 
 def app_from_env() -> FastAPI:  # uvicorn penlark.api.app:app_from_env --factory
-    return create_app(Settings(_env_file=os.environ.get("ENV_FILE", ".env")))
+    return create_app(load_settings())

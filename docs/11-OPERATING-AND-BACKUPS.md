@@ -15,7 +15,7 @@
 
 ## Daily checks
 
-- The worker is running (the learning loop on the Performance page refreshes every hour).
+- The worker is running (the learning loop on the Performance page refreshes every hour, and the Find ideas button on a real install waits for it).
 - The kill switch is off, and the banner shows the mode you expect.
 - `python3 tools/doctor.py` prints no FAIL.
 

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import csv
 import io
+import math
 import random
 import re
 import statistics
@@ -15,6 +16,7 @@ import statistics
 from penlark.textstats import measure, opener_kind, split_sentences, words
 
 MIN_GROUP = 8
+MAX_COUNT = 2_000_000_000  # the largest count the database column holds
 MAX_POSTS = 1500  # the newest posts only: the permutation test is the slow part
 FIELDS = ("post_ref", "platform", "posted_on", "impressions", "likes", "comments", "shares", "clicks", "text")
 ALIASES = {"post_ref": ("post id", "id", "post_id", "url", "permalink"), "platform": ("platform", "network", "channel"), "posted_on": ("date", "published", "posted", "created", "posted_on", "time"), "impressions": ("impressions", "views", "reach", "impr"),
@@ -49,9 +51,14 @@ def parse_csv(data: str, mapping: dict[str, str] | None = None) -> tuple[list[di
         def num(f: str) -> int:
             v = (row.get(m.get(f, ""), "") or "0").replace(",", "").strip()
             try:
-                return max(0, int(float(v)))
+                x = float(v)
             except ValueError:
+                raise ValueError(f"row {i}: {f} is not a number") from None
+            if not math.isfinite(x):  # "inf", "nan" and "1e999" are text a spreadsheet can hold, but not a count
                 raise ValueError(f"row {i}: {f} is not a number")
+            if x > MAX_COUNT:
+                raise ValueError(f"row {i}: {f} is too large")
+            return max(0, int(x))
         try:
             r = {f: num(f) for f in ("impressions", "likes", "comments", "shares", "clicks")}
         except ValueError as exc:

@@ -13,8 +13,10 @@ def get_ctx(request: Request) -> Ctx:
     return request.app.state.ctx
 
 
-def db(request: Request) -> Iterator[Session]:
-    s = request.app.state.ctx.factory()
+def _session(request: Request, *, writes: bool) -> Iterator[Session]:
+    ctx = request.app.state.ctx
+    factory = ctx.write_factory if writes and ctx.write_factory is not None else ctx.factory
+    s = factory()
     try:
         yield s
         s.commit()
@@ -23,6 +25,21 @@ def db(request: Request) -> Iterator[Session]:
         raise
     finally:
         s.close()
+
+
+SAFE_METHODS = {"GET", "HEAD", "OPTIONS"}
+
+
+def db(request: Request) -> Iterator[Session]:
+    """One session per request. Every route asks for it with `Depends(db, scope="function")`: the commit then happens before the answer is sent, so a save that fails
+    (a locked database, a value that is too long) is an error the person sees, never a success message for a change that was lost.
+    On SQLite a request that can write takes the write lock when it starts, so two writers cannot both read the same last audit row and fork the chain."""
+    yield from _session(request, writes=request.method not in SAFE_METHODS)
+
+
+def db_write(request: Request) -> Iterator[Session]:
+    """For the one GET route that writes (a click on a tracked link)."""
+    yield from _session(request, writes=True)
 
 
 def user(request: Request) -> dict:

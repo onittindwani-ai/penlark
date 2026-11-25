@@ -1,7 +1,7 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge, Button, Card, Dialog, EmptyState, Field, notify } from "@sendora/ui-kit";
 import { ListSkeleton, LoadError, PageHead, Textarea } from "@/components/Parts";
 import { get, post } from "@/lib/api";
@@ -9,6 +9,7 @@ import { useRole } from "@/lib/hooks";
 import type { Author, Idea, Note } from "@/lib/types";
 
 const KINDS = ["post", "script", "email", "newsletter"];
+type IdeasStatus = { status: "none" | "queued" | "running" | "done" | "failed"; ideas: number; message: string };
 
 export default function IdeasPage() {
   const qc = useQueryClient();
@@ -27,7 +28,16 @@ export default function IdeasPage() {
   const [nt, setNt] = useState("");
   const refresh = () => { qc.invalidateQueries({ queryKey: ["ideas"] }); qc.invalidateQueries({ queryKey: ["notes"] }); qc.invalidateQueries({ queryKey: ["overview"] }); qc.invalidateQueries({ queryKey: ["drafts"] }); };
   const drop = useMutation({ mutationFn: (id: number) => post(`/ideas/${id}/drop`), onSuccess: () => { notify.info("Idea dropped."); refresh(); }, onError: (e: Error) => notify.error("Could not drop the idea", e.message) });
-  const find = useMutation({ mutationFn: () => post<{ ideas: number }>("/ideas/refresh"), onSuccess: (r) => { notify.success(r.ideas === 0 ? "Looked through all notes again. No new ideas." : `Looked through all notes again. ${r.ideas} new idea${r.ideas === 1 ? "" : "s"}.`); refresh(); }, onError: (e: Error) => notify.error("Could not look again", e.message) });
+  const [waiting, setWaiting] = useState(false);
+  const status = useQuery({ queryKey: ["ideas-status"], queryFn: () => get<IdeasStatus>("/ideas/status"), enabled: waiting, refetchInterval: waiting ? 3000 : false });
+  useEffect(() => {
+    const st = status.data?.status;
+    if (!waiting || (st !== "done" && st !== "failed")) return;
+    setWaiting(false);
+    if (st === "done") { notify.success(status.data!.ideas === 0 ? "Looked through all notes again. No new ideas." : `Looked through all notes again. ${status.data!.ideas} new idea${status.data!.ideas === 1 ? "" : "s"}.`); refresh(); }
+    else notify.error("Could not look again", status.data!.message);
+  }, [status.data, waiting]); // eslint-disable-line react-hooks/exhaustive-deps
+  const find = useMutation({ mutationFn: () => post<{ ideas: number; queued?: boolean }>("/ideas/refresh"), onSuccess: (r) => { if (r.queued) { notify.info("Looking through your notes. New ideas appear here when it is done."); qc.removeQueries({ queryKey: ["ideas-status"] }); setWaiting(true); return; } notify.success(r.ideas === 0 ? "Looked through all notes again. No new ideas." : `Looked through all notes again. ${r.ideas} new idea${r.ideas === 1 ? "" : "s"}.`); refresh(); }, onError: (e: Error) => notify.error("Could not look again", e.message) });
   const write = useMutation({ mutationFn: () => post<{ id: number }>(`/ideas/${pick?.id}/draft`, { author_id: author, kind }), onSuccess: () => { notify.success("Draft written from your evidence. Fill the brackets in the Studio."); refresh(); setPick(null); router.push("/"); }, onError: (e: Error) => notify.error("Could not write a draft", e.message) });
   const addNote = useMutation({ mutationFn: () => post("/notes", { kind: nk, who: nw, text: nt }), onSuccess: () => { notify.success("Note added."); setAdding(false); setNt(""); setNw(""); refresh(); }, onError: (e: Error) => notify.error("Could not add the note", e.message) });
   if (ideas.isError) return <div className="vp-page"><PageHead title="Ideas" /><LoadError error={ideas.error} onRetry={() => ideas.refetch()} what="ideas" /></div>;
@@ -35,7 +45,8 @@ export default function IdeasPage() {
   const inbox = ideas.data.filter((i) => i.status !== "dropped").sort((a, b) => Number(a.status === "approved") - Number(b.status === "approved") || b.score - a.score); // ideas that still need a draft come first
   return (
     <div className="vp-page">
-      <PageHead title="Ideas" sub="Themes that come back across your calls, comments and emails, each with the exact words people used. The quotes are checked by code against the notes." actions={<><Button feedback={false} disabled={!canWrite} disabledReason={NO} onClick={() => setAdding(true)}>Add a note</Button><Button disabled={!canWrite} disabledReason={NO} onClick={async () => { await find.mutateAsync(); }}>Find ideas again</Button></>} />
+      <PageHead title="Ideas" sub="Themes that come back across your calls, comments and emails, each with the exact words people used. The quotes are checked by code against the notes." actions={<><Button feedback={false} disabled={!canWrite} disabledReason={NO} onClick={() => setAdding(true)}>Add a note</Button><Button disabled={!canWrite || waiting} disabledReason={waiting ? "Looking through your notes" : NO} onClick={async () => { await find.mutateAsync(); }}>Find ideas again</Button></>} />
+      {waiting && status.data ? <p className="vp-mini" role="status">{status.data.message}</p> : null}
       {inbox.length === 0 ? <EmptyState title="No ideas yet" body="Add the calls, comments and emails you got this week, then find ideas again." actionLabel={canWrite ? "Add a note" : undefined} onAction={() => setAdding(true)} /> : (
         <div className="vp-cols">
           {inbox.map((i) => (

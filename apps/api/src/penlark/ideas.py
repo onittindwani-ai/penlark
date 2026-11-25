@@ -113,9 +113,36 @@ def score_group(g: list[Candidate], n_notes: int) -> tuple[float, dict[str, floa
     return round(min(100.0, score), 1), parts
 
 
+# Bounds for the finder, so one writer (or a long call transcript) cannot make it use the memory of the whole server. The pair table below grows with the
+# square of the words kept per note, so each note keeps only its rarest words (the ones that can tell two notes apart).
+MAX_NOTES = 1000  # the newest notes only
+MAX_NOTE_CHARS = 20000  # the same limit the API puts on one note
+MAX_TOTAL_CHARS = 1_000_000  # all notes together; the oldest are left out first
+MAX_STEMS_PER_NOTE = 30
+MAX_THEMES = 400
+
+
+def limit_notes(notes: list[dict], max_notes: int = MAX_NOTES, max_chars: int = MAX_TOTAL_CHARS) -> list[dict]:
+    """The newest notes (the end of the list) that fit the bounds, in their original order. A note longer than MAX_NOTE_CHARS is cut; a quote taken from the start still matches the full note."""
+    kept: list[dict] = []
+    total = 0
+    for n in reversed(notes):
+        text = n["text"][:MAX_NOTE_CHARS]
+        if len(kept) >= max_notes or total + len(text) > max_chars:
+            break
+        kept.append({**n, "text": text})
+        total += len(text)
+    kept.reverse()
+    return kept
+
+
 def find_ideas(notes: list[dict], max_ideas: int = 10) -> list[IdeaOut]:
-    cands = _candidates(notes)
-    n_notes = len({c.note_id for c in cands}) or 1
+    cands = _candidates(limit_notes(notes))
+    by_note: dict[int, list[Candidate]] = defaultdict(list)
+    for c in cands:
+        by_note[c.note_id].append(c)
+    order = {nid: pos for pos, nid in enumerate(by_note)}
+    n_notes = len(by_note) or 1
     df: dict[str, set[int]] = defaultdict(set)
     for c in cands:
         for s in c.stems:
@@ -129,14 +156,15 @@ def find_ideas(notes: list[dict], max_ideas: int = 10) -> list[IdeaOut]:
             note_stems[c.note_id] |= {s for s in c.stems if s in useful}
     pair_notes: dict[tuple[str, str], set[int]] = defaultdict(set)
     for nid, st in note_stems.items():
-        ss = sorted(st)
+        ss = sorted(sorted(st, key=lambda w: (-useful[w], w))[:MAX_STEMS_PER_NOTE])  # the rarest words of the note, then alphabetical so the result never depends on set order
         for x in range(len(ss)):
             for y in range(x + 1, len(ss)):
                 pair_notes[(ss[x], ss[y])].add(nid)
+    pair_notes = {k: ids for k, ids in pair_notes.items() if len(ids) >= 2}  # a pair seen in one note cannot make a theme: do not scan it again and again
     assigned: set[int] = set()
     groups: dict[int, list[Candidate]] = {}
     themes: list[tuple[str, str]] = []
-    while True:
+    while len(themes) < MAX_THEMES:
         best, bk = None, None
         for k, ids in pair_notes.items():
             free = ids - assigned
@@ -149,12 +177,13 @@ def find_ideas(notes: list[dict], max_ideas: int = 10) -> list[IdeaOut]:
             break
         free = pair_notes[bk] - assigned
         assigned |= free
-        groups[len(themes)] = [c for c in cands if c.note_id in free and not c.noise and (c.stems & set(bk))]
+        pair_set = set(bk)
+        groups[len(themes)] = [c for nid in sorted(free, key=order.__getitem__) for c in by_note[nid] if not c.noise and (c.stems & pair_set)]
         themes.append(bk)
     for c in cands:  # a single note can still be an idea when it is a clear, specific question or pain
         if c.note_id not in assigned and not c.noise and c.pain and c.ask:
             groups[len(themes)] = [c]
-            themes.append(tuple(sorted(c.stems & set(useful)))[:2] or ("",))  # type: ignore[arg-type]
+            themes.append(tuple(sorted(s for s in c.stems if s in useful))[:2] or ("",))  # type: ignore[arg-type]
             assigned.add(c.note_id)
     ideas: list[IdeaOut] = []
     for gi, g in groups.items():
@@ -163,8 +192,9 @@ def find_ideas(notes: list[dict], max_ideas: int = 10) -> list[IdeaOut]:
         ids = sorted({c.note_id for c in g})
         counts: dict[str, int] = defaultdict(int)
         for c in g:
-            for s in c.stems & set(useful):
-                counts[s] += 1
+            for s in c.stems:
+                if s in useful:
+                    counts[s] += 1
         theme = [s for s, _ in sorted(counts.items(), key=lambda kv: (-kv[1] * useful[kv[0]], kv[0]))][:4] or list(themes[gi])
         surface = {stem(w): w for c in g for w in words(c.sentence)}
         label = [surface.get(t, t) for t in theme]

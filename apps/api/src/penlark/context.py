@@ -24,6 +24,7 @@ class Ctx:
     factory: sessionmaker[Session]
     scheduler: Any = None
     registry: Any = None
+    write_factory: Any = None  # sessions for requests that can write: on SQLite they take the write lock first (see dbsetup.py). None means the plain factory is used.
 
     def __post_init__(self) -> None:
         self.registry = self.registry or build_registry(self.settings)

@@ -10,7 +10,10 @@
 | "The text is not the text that was approved" | The draft changed after it was approved | Ask a second person to approve this version. |
 | A rule says "was not run" | A banned pattern was too wide to run safely | Edit or delete it on the Rules page: give every repeat an upper limit, for example `\w{1,40}`. |
 | A draft shows "being sent" for long | The app stopped during a send | It frees itself after 30 minutes (the audit log records it). Check the scheduling tool for the post before you send again: if the post is there, sending again would make a second one. |
-| Every request answers 401 | `SESSION_SECRET` differs between web and API, or the cookie is blocked | Use the same value. On http localhost set `INSECURE_COOKIES=1`. |
+| Every request answers 401 | The API's `SESSION_SECRET` was changed since you signed in (old sessions stop working), or the cookie is blocked | Sign in again. The web app does not hold the secret, so there is nothing to match. On http localhost set `INSECURE_COOKIES=1`. |
+| Find ideas stays queued | The worker is not running | Start it (`make worker`, or the worker service in Docker). The Ideas page says so after a minute and a half. |
+| A draft shows "send unclear, check the tool" | The scheduling tool timed out or sent an answer nobody could read, so the post may exist | Open the scheduling tool and look. In the Studio press **It was posted** or **It was not posted**. Nothing else can be done with the draft until you do. |
+| The app stops at start with "made by an older version" | A SQLite file from an older Penlark lacks a column the code needs | See `12-UPDATING.md`: keep a copy and start a new file, or use Postgres. |
 | "Ask a second person to approve" | The asker tried to approve | Sign in as the approver. |
 | "Fill the [BRACKETS]" | The draft still has placeholders | Replace each bracket with your own words. |
 | "Needs a source or a founder fact" | A number or claim has no matching note | Attach the note, link it to the line, or remove the line. |

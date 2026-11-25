@@ -9,15 +9,15 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 
 from sqlalchemy import select
 
-from penlark.config import Settings
+from penlark.config import Settings, load_settings
 from penlark.models import Author
 from sendora_core.audit import record_audit
-from sendora_core.db import Base, make_engine, make_session_factory
+from penlark.dbsetup import make_engine, make_factories
+from sendora_core.db import Base
 
 
 def _factory(settings: Settings):
@@ -27,7 +27,8 @@ def _factory(settings: Settings):
     engine = make_engine(settings.database_url)
     if settings.database_url.startswith("sqlite"):
         Base.metadata.create_all(engine)
-    return make_session_factory(engine)
+    factory, write_factory = make_factories(engine)
+    return write_factory or factory
 
 
 def add_voice(factory, name: str, about: str = "") -> str:
@@ -55,7 +56,7 @@ def main(argv: list[str] | None = None, settings: Settings | None = None) -> int
     v.add_argument("--about", default="")
     sub.add_parser("builtin-rules", help="Save the built in banned phrases and patterns")
     args = ap.parse_args(argv)
-    settings = settings or Settings(_env_file=os.environ.get("ENV_FILE", ".env"))
+    settings = settings or load_settings()
     factory = _factory(settings)
     if args.command == "add-voice":
         print(f"Added the voice {args.name.strip()} ({add_voice(factory, args.name, args.about)}). Next: add some of its writing in the app's Library.")

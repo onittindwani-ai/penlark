@@ -60,7 +60,7 @@ def test_jobs_learn_and_schedule(world):
         assert jobs.job_ideas(s, world)["ideas"] >= 2
         assert jobs.schedule_due(s, world) == 1
         s.commit()
-    assert set(jobs.make_handlers(world)) == {"learn"}
+    assert set(jobs.make_handlers(world)) == {"learn", "ideas"}  # ideas runs when the Find ideas button queues it, not on the hourly schedule
 
 
 def test_first_run_evaluations_are_saved_untouched_and_honest():

@@ -33,6 +33,7 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg://penlark:${POSTGRES_PASSWORD}@db:5432/penlark
       SEED_DIR: /app/data  # set here so an empty SEED_DIR in .env cannot hide the data folder inside the image
+      DEMO_MODE: ${DEMO_MODE:-false}  # a stack with no DEMO_MODE in .env is a real install, never a public demo
       FORWARDED_ALLOW_IPS: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"  # the web container, on the private compose network, passes on the visitor address
       EXPORT_DIR: /data/exports
     volumes:
@@ -55,6 +56,7 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg://penlark:${POSTGRES_PASSWORD}@db:5432/penlark
       SEED_DIR: /app/data  # set here so an empty SEED_DIR in .env cannot hide the data folder inside the image
+      DEMO_MODE: ${DEMO_MODE:-false}
       EXPORT_DIR: /data/exports
     command: ["python", "-m", "penlark.worker"]
     volumes:

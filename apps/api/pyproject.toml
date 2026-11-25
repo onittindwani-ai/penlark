@@ -7,10 +7,8 @@ license = { text = "MIT" }
 dependencies = [
   "sendora-core",
   "alembic>=1.14",
-  "cryptography>=43",
   "uvicorn>=0.30",
-  "pypdf>=7",
-  "reportlab>=5.1",
+  "pypdf[crypto]>=7",  # [crypto] pulls cryptography, which pypdf needs to read an AES encrypted PDF
 ]
 
 [project.optional-dependencies]

@@ -14,7 +14,7 @@ from pathlib import Path
 
 import httpx
 
-from penlark.adapters.base import safe_base_url
+from penlark.adapters.base import guarded_client
 from sendora_core.adapters import AdapterError
 from sendora_core.safety import guard_write
 
@@ -67,7 +67,7 @@ class Postiz:
         if not settings.postiz_api_key:
             raise AdapterError("POSTIZ_API_KEY is empty.")
         self.s = settings
-        self.client = client or httpx.Client(base_url=safe_base_url(settings.postiz_base_url), timeout=30)
+        self.client = client or guarded_client(settings.postiz_base_url, allow_private=getattr(settings, "allow_private_scheduler", False))
 
     def _h(self):
         return {"Authorization": self.s.postiz_api_key, "Content-Type": "application/json"}  # the key goes in the header with no Bearer prefix
@@ -93,8 +93,8 @@ class Postiz:
         try:
             r = self.client.get("/integrations", headers=self._h())
             return (True, "Connected.") if r.status_code == 200 else (False, "Postiz refused the key." if r.status_code in (401, 403) else f"Postiz answered {r.status_code}.")
-        except httpx.HTTPError:
-            return False, "Could not reach Postiz."
+        except (httpx.HTTPError, AdapterError) as exc:
+            return False, str(exc) if isinstance(exc, AdapterError) else "Could not reach Postiz."
 
 
 class Buffer:
@@ -105,7 +105,7 @@ class Buffer:
         if not settings.buffer_token:
             raise AdapterError("BUFFER_TOKEN is empty.")
         self.s = settings
-        self.client = client or httpx.Client(base_url=safe_base_url(settings.buffer_base_url), timeout=30)
+        self.client = client or guarded_client(settings.buffer_base_url, allow_private=getattr(settings, "allow_private_scheduler", False))
 
     def _h(self):
         return {"Authorization": f"Bearer {self.s.buffer_token}", "Content-Type": "application/json"}
@@ -129,8 +129,8 @@ class Buffer:
         try:
             r = self.client.post("/", json={"query": "{ __typename }"}, headers=self._h())
             return (True, "Connected.") if r.status_code == 200 else (False, "Buffer refused the token." if r.status_code in (401, 403) else f"Buffer answered {r.status_code}.")
-        except httpx.HTTPError:
-            return False, "Could not reach Buffer."
+        except (httpx.HTTPError, AdapterError) as exc:
+            return False, str(exc) if isinstance(exc, AdapterError) else "Could not reach Buffer."
 
 
 class Metricool:
@@ -140,7 +140,7 @@ class Metricool:
         if not (settings.metricool_token and settings.metricool_user_id and settings.metricool_blog_id):
             raise AdapterError("METRICOOL_TOKEN, METRICOOL_USER_ID and METRICOOL_BLOG_ID must all be set.")
         self.s = settings
-        self.client = client or httpx.Client(base_url=safe_base_url(settings.metricool_base_url), timeout=30)
+        self.client = client or guarded_client(settings.metricool_base_url, allow_private=getattr(settings, "allow_private_scheduler", False))
 
     def _p(self):
         return {"userId": self.s.metricool_user_id, "blogId": self.s.metricool_blog_id}
@@ -162,5 +162,5 @@ class Metricool:
         try:
             r = self.client.get("/admin/simpleProfiles", params=self._p(), headers={"X-Mc-Auth": self.s.metricool_token})
             return (True, "Connected.") if r.status_code == 200 else (False, "Metricool refused the token." if r.status_code in (401, 403) else f"Metricool answered {r.status_code}.")
-        except httpx.HTTPError:
-            return False, "Could not reach Metricool."
+        except (httpx.HTTPError, AdapterError) as exc:
+            return False, str(exc) if isinstance(exc, AdapterError) else "Could not reach Metricool."
