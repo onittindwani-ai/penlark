@@ -204,7 +204,7 @@ def test_demo_routes_exist_only_in_demo_mode(tmp_path):
     from penlark.api.app import create_app
     from penlark.config import Settings
 
-    app = create_app(Settings(database_url=f"sqlite:///{tmp_path/'p.sqlite3'}", session_secret="Rt7Kq2Vw9Xm4Zc8Lb3Nf6Hy1Js5Dp0Ga2Ue7Tq4Wi9", demo_mode=False, owner_password_hash=None, _env_file=None))
+    app = create_app(Settings(database_url=f"sqlite:///{tmp_path/'p.sqlite3'}", session_secret="test-only-Rt7Kq2Vw9Xm4Zc8Lb3Nf6Hy1Js5Dp0Ga2Ue7Tq4Wi9", demo_mode=False, owner_password_hash=None, _env_file=None))
     c = TestClient(app)
     assert c.post("/api/demo/reset").status_code in (401, 404)
 
