@@ -136,7 +136,7 @@ def test_vendor_keys_and_hashes_are_not_in_the_text_of_the_settings():
     from penlark.config import Settings
 
     st = Settings(postiz_api_key="pz-secret-value-1", buffer_token="bf-secret-value-2", metricool_token="mc-secret-value-3", lead_webhook_secret="hook-secret-value-4", anthropic_api_key="an-secret-value-5",
-                  owner_password_hash="hash-secret-value-6", approver_password_hash="hash-secret-value-7", viewer_password_hash="hash-secret-value-8", session_secret="session-secret-value-9-long-enough", _env_file=None)
+                  owner_password_hash="hash-secret-value-6", approver_password_hash="hash-secret-value-7", viewer_password_hash="hash-secret-value-8", session_secret="test-only-session-secret-value-9-long-enough", _env_file=None)
     text = repr(st) + str(st)
     for needle in ("pz-secret", "bf-secret", "mc-secret", "hook-secret", "an-secret", "hash-secret", "session-secret"):
         assert needle not in text, needle
