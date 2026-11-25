@@ -37,8 +37,9 @@ def from_markdown(text: str, title: str = "") -> Item:
     t = re.sub(r"^---\n.*?\n---\n", "", text, flags=re.S)
     t = re.sub(r"```.*?```", "", t, flags=re.S)
     t = re.sub(r"^\s{0,3}#{1,6}\s*", "", t, flags=re.M)
-    t = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", t)
-    t = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", t)
+    # Every repeat has an upper limit and stops at the end of the line. With open ended repeats a long run of "[" with no "]" took minutes (it grew with the square of the length).
+    t = re.sub(r"!\[[^\]\n]{0,300}\]\([^)\n]{0,2000}\)", "", t)
+    t = re.sub(r"\[([^\]\n]{1,300})\]\([^)\n]{0,2000}\)", r"\1", t)
     t = re.sub(r"(\*\*|__|\*|_|`)", "", t)
     return Item(title or (t.strip().split("\n")[0][:60] if t.strip() else "Untitled"), clean(t), "markdown")
 
@@ -73,7 +74,7 @@ def from_transcript(text: str, title: str = "", speaker: str | None = None) -> I
         s = ln.strip()
         if not s or s.upper() == "WEBVTT" or s.isdigit() or _TS.match(s) or s.startswith(("NOTE ", "Kind:", "Language:")):
             continue
-        s = re.sub(r"<[^>]+>", "", s)
+        s = re.sub(r"<[^>\n]{1,200}>", "", s)  # a tag has an upper length: "<" repeated with no ">" must not take time that grows with the square of the line
         m = re.match(r"^([A-Z][\w .'-]{0,40}):\s+(.*)$", s)
         if speaker is not None:
             if not m or m.group(1).strip().lower() != speaker.strip().lower():
@@ -102,10 +103,12 @@ def from_linkedin_csv(data: str) -> list[Item]:
 
 
 def from_x_archive(data: str) -> list[Item]:
-    m = re.search(r"=\s*(\[.*\])\s*;?\s*$", data.strip(), flags=re.S)
+    # tweets.js is `window.YTD.tweets.part0 = [ ... ]`: take everything from the first "[" to the last "]" (a search with a pattern for this was slow on hostile text)
+    body = data.strip().rstrip(";").rstrip()
+    first, last = body.find("["), body.rfind("]")
     try:
-        rows = json.loads(m.group(1) if m else data)
-    except ValueError as exc:
+        rows = json.loads(body[first:last + 1] if 0 <= first < last else body)
+    except (ValueError, RecursionError) as exc:  # RecursionError: a file of thousands of nested brackets
         raise IngestError("This does not look like tweets.js from an X archive.") from exc
     out = []
     for r in rows if isinstance(rows, list) else []:

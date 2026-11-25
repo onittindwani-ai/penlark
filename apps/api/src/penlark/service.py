@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 from datetime import timedelta
 from pathlib import Path
 
@@ -64,14 +66,17 @@ def evaluate(s: Session, settings, author_id: int, text: str, source_note_ids: l
     m = match(text, prof.stats) if prof else {"score": 0, "confidence": "none", "dimensions": [], "weakest": [], "pull_down": [], "note": "Build a voice profile first."}
     checks = house_rules.check_all(text, rules_for(s, settings), notes_text(s, source_note_ids), {k: int(v) for k, v in (claim_links or {}).items()})
     brackets = [x for x in _brackets(text)]
-    return {"match": m, "rules": checks, "placeholders": brackets, "profile_version": prof.version if prof else None, "profile_locked": bool(prof and prof.locked),
-            "ready": bool(m["score"] >= settings.min_voice_match and checks["ok"] and not brackets)}
+    links = foreign_links(text, settings)
+    return {"match": m, "rules": checks, "placeholders": brackets, "links": links, "profile_version": prof.version if prof else None, "profile_locked": bool(prof and prof.locked),
+            "ready": bool(m["score"] >= settings.min_voice_match and checks["ok"] and not brackets and not links)}
 
 
 def readiness_problem(ev: dict, min_match: float) -> str | None:
     """Why a draft may not go to a second person, in plain words, or None when it may. One place, so asking and approving use the same bar."""
     if ev["placeholders"]:
         return "Fill the [BRACKETS] with your own real words first: " + ", ".join(ev["placeholders"][:4]) + "."
+    if ev.get("links"):
+        return "A link or address in the text is not yours: " + ", ".join(ev["links"][:3]) + ". Take it out, or add its host to REDIRECT_ALLOW_HOSTS if it is yours."
     if ev["rules"]["unsupported_claims"]:
         return "Needs a source or a founder fact: " + ev["rules"]["unsupported_claims"][0]["text"][:120]
     if ev["rules"]["style"]:
@@ -92,10 +97,100 @@ def withdraw_approval(s: Session, d: Draft, actor: str, why: str) -> None:
         record_audit(s, "system", "approval.withdrawn", f"approval:{a.id}", {"draft": d.id, "why": why})
 
 
-def _brackets(text: str) -> list[str]:
-    import re
+# A placeholder such as [YOUR CLIENT NAME]. Both repeats have an upper limit: with open ended repeats a text of "[" and 30,000 capital letters took seconds per check.
+_BRACKETS = re.compile(r"\[[A-Z][A-Z0-9 ,'\-]{2,200}[A-Z0-9\]]{0,8}\]")
 
-    return re.findall(r"\[[A-Z][A-Z0-9 ,'\-]{2,}[A-Z0-9\]]*\]", text)
+
+def _brackets(text: str) -> list[str]:
+    return _BRACKETS.findall(text)
+
+
+# A link, a web address or an email address typed in a draft. The repeats have upper limits so a hostile text cannot make this slow.
+_LINKS = re.compile(r"https?://[^\s<>\"')]{1,300}|\bwww\.[^\s<>\"')]{1,300}|[\w.+-]{1,64}@[\w-]{1,63}(?:\.[\w-]{1,63}){1,5}", re.I)
+
+
+def foreign_links(text: str, settings) -> list[str]:
+    """Links and addresses in a draft that do not belong to the owner: not on REDIRECT_ALLOW_HOSTS and not the host of PUBLIC_BASE_URL. Text from a comment or an email
+    can carry a link a person never meant to publish, so each one must be a deliberate choice."""
+    from urllib.parse import urlparse
+
+    from penlark import attribution
+
+    allow = [*settings.allow_hosts(), urlparse(settings.public_base_url).hostname or ""]
+    out: list[str] = []
+    for found in _LINKS.findall(text):
+        raw = found.rstrip(".,;:!?")
+        host = raw.rsplit("@", 1)[1] if "@" in raw and "://" not in raw and not raw.lower().startswith("www.") else (urlparse(raw if "://" in raw else "https://" + raw).hostname or "")
+        if not attribution.host_matches(host, allow) and raw not in out:
+            out.append(raw)
+    return out
+
+
+def text_digest(text: str) -> str:
+    """The fingerprint of the exact words. An approval is for these words only: change one character and the fingerprint changes."""
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def binding_problem(s: Session, d: Draft) -> str | None:
+    """Why this draft's text is not the text a second person approved, or None when it is. Used before anything leaves the app."""
+    from sendora_core.models import Approval
+
+    a = s.get(Approval, d.approval_id) if d.approval_id else None
+    if a is None or a.action != "draft.approve" or a.status != "approved":
+        return "There is no approval on record for this draft. Ask a second person to approve it."
+    want = (a.payload or {}).get("text_sha256")
+    if not want:
+        return "This approval was made before approvals were tied to the exact text. Ask a second person to approve the draft again."
+    if want != text_digest(d.text):
+        return "The text is not the text that was approved. Ask a second person to approve this version."
+    return None
+
+
+def _aware(moment):
+    """SQLite gives back a time with no zone. Everything here is UTC."""
+    from datetime import UTC
+
+    return moment if moment.tzinfo else moment.replace(tzinfo=UTC)
+
+
+SEND_HOLD = timedelta(minutes=30)  # a draft marked "sending" this long ago was left behind by a send that never finished
+
+
+def lock_draft(s: Session, draft_id: int, ctx=None) -> Draft | None:
+    """Read the draft and hold its row (on Postgres) until this request ends, so an edit and a decision cannot run through each other.
+    With `ctx`, a draft left in "sending" for over half an hour (the app stopped during the send) goes back to approved, with a record: the person is told to check the scheduling tool first."""
+    d = s.execute(select(Draft).where(Draft.id == draft_id).with_for_update().execution_options(populate_existing=True)).scalar_one_or_none()
+    if d is not None and ctx is not None and d.status == "sending" and ctx.now(s) - _aware(d.updated_at) > SEND_HOLD:
+        d.status = "approved"
+        record_audit(s, "system", "draft.send_released", f"draft:{d.id}", {"after_minutes": int(SEND_HOLD.total_seconds() // 60)})
+    return d
+
+
+def ensure_builtin_rules(s: Session) -> int:
+    """Make sure the built in banned phrases and patterns exist as rows (a person can turn each off, never delete it). Safe to run on every start."""
+    have = {(r.kind, r.value) for r in s.scalars(select(HouseRule).where(HouseRule.builtin.is_(True)))}
+    added = 0
+    for ph in house_rules.DEFAULT_BANNED:
+        if ("phrase", ph) not in have:
+            s.add(HouseRule(kind="phrase", value=ph, note="Built in: a generic phrase that sounds machine written.", builtin=True))
+            added += 1
+    for pat, why in house_rules.DEFAULT_PATTERNS:
+        if ("pattern", pat) not in have:
+            s.add(HouseRule(kind="pattern", value=pat, note=why, builtin=True))
+            added += 1
+    s.flush()
+    return added
+
+
+def unique_author_slug(s: Session, name: str) -> str:
+    from penlark import attribution
+
+    base = attribution.slug(name) or "voice"
+    taken = set(s.scalars(select(Author.slug)))
+    slug, n = base, 2
+    while slug in taken:
+        slug, n = f"{base[:36]}-{n}", n + 1
+    return slug
 
 
 def create_drafts_from_idea(s: Session, ctx, idea_id: int, author_id: int, kind: str, actor: str) -> Draft:

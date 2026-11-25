@@ -50,10 +50,11 @@ class Ctx:
         return self.settings.effective_llm_backend is not LLMBackendKind.OFFLINE
 
     def now(self, session: Session):
-        return clock.now(session, self.settings.demo_mode)
+        return clock.now(session, self.settings.demo_shortcuts)
 
     def today(self, session: Session) -> date:
-        return clock.today(session, self.settings.demo_mode)
+        """The calendar day in the TIMEZONE setting (UTC by default). The demo clock is fixed and has no zone."""
+        return clock.today(session, self.settings.demo_shortcuts, self.settings.timezone)
 
 
 def set_state(session: Session, key: str, value: str) -> None:

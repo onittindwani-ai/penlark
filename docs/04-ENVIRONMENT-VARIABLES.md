@@ -6,30 +6,45 @@ Where to put each one: **Local** `.env` in the repo root. **Vercel** the project
 
 | Name | Needed | What it does and how to get it |
 |---|---|---|
+| `APP_NAME` | no | The name the API reports on `/health` and in its docs. Default `penlark`. |
 | `DATABASE_URL` | yes | `sqlite:///./penlark.sqlite3` for local, or `postgresql+psycopg://user:pass@host:5432/db`. Railway: copy it from the Postgres service. Costs nothing for SQLite, a small server or plan for Postgres. Wrong value: the API stops with "database_url must start with sqlite or postgresql". |
-| `SESSION_SECRET` | yes | A long random string, at least 16 characters. Make one with `python3 -c "import secrets;print(secrets.token_urlsafe(48))"`. The web app and the API must use the same one. Wrong: every request answers 401. |
+| `SESSION_SECRET` | yes | A long random string. With `DEMO_MODE=false` the API and the worker refuse to start on a value under 32 characters or on the example value. Make one with `python3 -c "import secrets;print(secrets.token_urlsafe(48))"`. Wrong: every request answers 401. |
 | `MODE` | yes | `draft` (default) sends nothing to a scheduler. `live` allows a send that is approved and confirmed. Switch to live only after doc 09. |
-| `DEMO_MODE` | yes | `true` loads the fictional demo and accepts the demo password. Set `false` for real use. |
-| `KILL_SWITCH` | no | `true` stops every send. Also a button in the app. |
-| `OWNER_EMAIL`, `OWNER_PASSWORD_HASH` | live | Make the hash with `python3 tools/hash_password.py` and paste the result. Wrong: sign in says the email or password is wrong. |
+| `DEMO_MODE` | yes | `true` loads the fictional demo and accepts the demo password. Set `false` for real use. The public demo password, the made up approver and viewer accounts, the demo buttons and the data reset exist only while `DEMO_MODE=true` and `OWNER_PASSWORD_HASH` is empty: setting the hash switches them all off, even if `DEMO_MODE` stays on. A demo refuses to start on a Postgres database unless `ALLOW_DEMO_SERVER=true`. |
+| `ALLOW_DEMO_SERVER` | no | `true` lets a demo run on a server database, for a throw away trial on a private network only. Leave `false`. |
+| `KILL_SWITCH` | no | `true` stops every send and every file export. Also a button in the app: the switch set there is read from the database each time. |
+| `MAX_BODY_BYTES` | no | The largest request the API accepts, in bytes. Default 26214400 (25 MB). A larger request is refused before it is read. |
+| `TIMEZONE` | no | The day that "today" means for exports and the calendar, a name such as `Europe/London` or `America/New_York`. Default `UTC`. |
+| `SEED_DIR` | no | The folder that holds the demo data (`seed/authors.json` and the rest). Found by itself when you run from the repository; the Docker image sets it. Only the demo needs it. |
+| `OWNER_EMAIL`, `OWNER_PASSWORD_HASH` | live | Make the hash with `python3 tools/hash_password.py` and paste the result. With `MODE=live` and `DEMO_MODE=false` the API refuses to start while `OWNER_EMAIL` is still the example address. Wrong: sign in says the email or password is wrong. |
 | `APPROVER_EMAIL`, `APPROVER_PASSWORD_HASH` | live | The second person who approves drafts. Without one, nothing can be approved because the asker cannot approve their own request. |
 | `NO_DASHES`, `MAX_READING_GRADE`, `MIN_VOICE_MATCH`, `REQUIRE_SOURCES` | no | House rule settings. These are decided defaults and a starting point: dashes banned in marketing text (set `NO_DASHES=false` for a client whose style uses them), reading level grade 9 or lower (a text under 8 words is not judged on reading level), a voice match of at least 60 to go to approval, and facts need sources. Change any of them for a client. The built in banned phrase list stays on; each phrase can be turned off on the Rules page. |
 | `CADENCE` | no | The posting rhythm, as `platform:count` pairs separated by commas, posts per week. Default `linkedin:2,x:2` (two posts a week on LinkedIn and two on X). Platforms: linkedin, x, instagram, facebook, threads, youtube, newsletter, email. The Calendar shows planned posts against it for the next four weeks. It is a plan and a nudge: nothing is blocked or sent because of it. Empty means no target. A wrong entry makes `python3 tools/doctor.py` print a PROBLEM line. |
 | `SCHEDULER_ADAPTER` | no | `export` (default), `postiz`, `buffer` or `metricool`. `seed` is the demo. |
-| `EXPORT_DIR` | no | Folder for exported drafts. |
+| `EXPORT_DIR` | no | Folder for exported drafts. Default `./exports`; the Docker image uses `/data/exports`, a volume. The file name holds the draft number, so two drafts never share a file. |
 | `POSTIZ_API_KEY`, `POSTIZ_BASE_URL` | for Postiz | In Postiz: Settings, then the public API key page (UNVERIFIED page name). Cost: Postiz is free to self host. Wrong: "Postiz refused the API key." |
 | `BUFFER_TOKEN`, `BUFFER_BASE_URL` | for Buffer | Create an API key at the Buffer settings API page (the docs link to publish.buffer.com/settings/api, read 2026-11-23). Wrong: "Buffer refused the token." |
+| `METRICOOL_BASE_URL` | no | The Metricool API address. Leave the default. |
 | `METRICOOL_TOKEN`, `METRICOOL_USER_ID`, `METRICOOL_BLOG_ID` | for Metricool | From your Metricool account settings (UNVERIFIED, steps not readable). Wrong: "Metricool refused the token." |
 | `PUBLIC_BASE_URL` | for links | The public address of the web app, used to show short links. |
-| `REDIRECT_ALLOW_HOSTS` | for links | An allow list: comma separated hosts a tracked link may point at, set by the implementer for each client (their own site and booking page). Empty means no link can be made. The demo value is a fictional host. |
+| `REDIRECT_ALLOW_HOSTS` | for links | An allow list: comma separated hosts a tracked link may point at, set by the implementer for each client (their own site and booking page). A plain entry means exactly that host: `example.com` does not allow `blog.example.com`. Write `*.example.com` to allow its subdomains. Empty means no link can be made or followed (only the offline demo has a fictional host of its own). |
 | `LEAD_WEBHOOK_SECRET` | for leads | Shared secret that signs lead events (doc 03). Wrong: the webhook answers 401. |
 | `ALLOW_HTTP_LOCAL_TARGETS` | no | Only for local development: allows http and local hosts as link targets. Leave false in real use. |
+| `LLM_MODE` | no | The older switch. `live` means `anthropic` when `LLM_BACKEND` is empty. Leave it on `fixture`. |
+| `ANTHROPIC_BASE_URL`, `ANTHROPIC_VERSION` | no | The model service address (https, or http only for 127.0.0.1 and localhost tests) and its version header. Leave them. |
+| `LLM_MODEL` | no | One model name for both kinds of job. Empty uses `LLM_HARD_MODEL` and `LLM_BULK_MODEL`. |
+| `LLM_TIMEOUT`, `LLM_MAX_TOKENS`, `LLM_MAX_RETRIES`, `LLM_THINKING` | no | Seconds per request (120), the reply size limit (4096), retries after a busy answer (2), and `default` or `off` for the thinking setting. |
+| `LLM_CALL_BUDGET`, `LLM_BUDGET_USD` | no | The most live model calls per process, and the most tracked spend in US dollars. Empty means no limit. When one is reached the next model call is refused. |
+| `LLM_FIXTURES_DIR`, `LLM_RECORD` | no | Where recorded answers are read from (`fixture`) and, with `LLM_RECORD=true`, written to. |
+| `LLM_REDACT`, `LLM_LOG_PROMPTS` | no | Logs and recorded answers never hold a full prompt or a key (`LLM_REDACT=true`). `LLM_LOG_PROMPTS=true` logs a redacted, shortened prompt, for debugging only. |
 | `LLM_BACKEND`, `ANTHROPIC_API_KEY`, `LLM_HARD_MODEL`, `LLM_BULK_MODEL` | no | Where the draft and guide writer runs. `offline` (default) is a built in template writer, not a language model, and needs no account. `fixture` replays recorded answers from `LLM_FIXTURES_DIR`. `anthropic` calls a real model and needs a key from the Anthropic console API keys page; it has not been run against the real service (UNVERIFIED). `python3 tools/doctor.py` prints `llm_backend=` and names a missing key. |
 | `GUIDE_WRITER`, `DRAFT_WRITER`, `IDEA_FINDER` | no | `rules` or `model`. With a model backend on (`fixture` or `anthropic`) the voice guide (`GUIDE_WRITER`, default `model`), the draft variants (`DRAFT_WRITER`, default `model`) and extra ideas (`IDEA_FINDER`, default `rules`) can come from the model. Code re scores every draft a model writes, a person still approves, and with `LLM_BACKEND=offline` these three change nothing. See `facts/models.md`. |
 | `VIEWER_EMAIL`, `VIEWER_PASSWORD_HASH` | no | A read only sign in for someone who may look but not change anything (a client who watches the queue). It opens every page and changes nothing. Make the hash with `python3 tools/hash_password.py`. |
 | `LOGIN_BURST` | no | How many sign in tries one address and email may make in a row before a short wait (one more every 12 seconds). Leave it at 5 outside tests; the browser tests raise it because every test signs in from one address. |
 | `API_BASE_URL` | web host | The private address of the API, for example `http://api:8000`. Wrong: pages say the server is not reachable. |
 | `INSECURE_COOKIES` | no | Set `1` only for http on localhost. Never in real use. |
-| `POSTGRES_PASSWORD` | compose | The database password for `docker compose`. |
+| `POSTGRES_PASSWORD` | compose | The database password for `docker compose`. Letters and digits only, or percent encoded. Make one with `openssl rand -hex 24`. |
+| `FORWARDED_ALLOW_IPS` | server | Not a Penlark setting: uvicorn reads it. Only these addresses may tell the API who the visitor is (the `X-Forwarded-For` header). The image sets `127.0.0.1`, and `docker-compose.yml` widens it to the private network that holds the web container. Never `*`. |
+| `ENV_FILE` | no | Not a Penlark setting: the path of a settings file to read instead of `.env`. The API, the worker, the database migration and the `penlark.admin` commands all read it. |
 
 Prices are not quoted here. Read each vendor's price page on the day you decide.

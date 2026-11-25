@@ -12,4 +12,9 @@
 - **LinkedIn and X export layouts are from memory** and unverified against a fresh export.
 - **SQLite is the tested path for the full suites.** The migration was run up, down and up on Postgres 17 only.
 - **Single tenant.** One workspace is one client.
-- Not done: screen reader testing, Docker builds, hosting guides, CI run.
+- **Hosting.** The GitHub workflow builds the Docker images and starts the compose stack on a GitHub machine. No Vercel, Railway or Hetzner account was used, so the hosting guides are UNVERIFIED and the Caddy and backup files were never run on a real server.
+- **A send that is cut off.** A draft is marked "being sent" before the scheduling tool is called. If the app stops at that moment nothing says whether the post was made: the draft is released after 30 minutes and the audit log says so, so check the scheduling tool before sending again.
+- **PDFs.** A PDF is read inside the API process, with a cap of 8 MB and 200 pages. A hostile PDF can still make that request slow.
+- **Rate limits are per process.** They are not shared between several API processes.
+- **Two lead events at the same instant** with the same `lead_ref` can both be counted: there is no database rule against it.
+- Not done: screen reader testing, a run on a real host, an independent security test.

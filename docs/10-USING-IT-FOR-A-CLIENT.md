@@ -20,7 +20,7 @@ This guide gives no price figures. It gives the shape of the offer, so you can p
 
 1. Run `02-BUSINESS-BASICS-CHECK.md` with the client: who owns the writing, permission to store it, who is quoted in the notes, and who approves.
 2. Make a fresh copy for this client with `DEMO_MODE=false`, their owner address in `OWNER_EMAIL`, a second person in `APPROVER_EMAIL` and their own `SESSION_SECRET`. Nothing can be approved without a second person, because the one who asks cannot approve.
-3. Ask for writing they own: 15 or more posts, emails or talk transcripts. A LinkedIn or X export works. Do not load another person's posts to copy their voice.
+3. Add the client as a voice (Add a voice in the app, or `python -m penlark.admin add-voice "Name"`). Ask for writing they own: 15 or more posts, emails or talk transcripts. A LinkedIn or X export works. Do not load another person's posts to copy their voice.
 4. Build the voice profile, read the guide together, edit it and lock it. The guide is theirs to change.
 5. Check the house rules together. The shipped defaults are a starting point: dashes banned in marketing text (`NO_DASHES=false` for a client whose style uses them), reading level grade 9 or lower, a voice match of at least 60 to go to approval, and facts that need a source. The built in banned phrase list stays on, and each phrase can be turned off. Add the phrases and claims this client never uses, and keep what they agree to in writing.
 6. Agree the posting rhythm. The default is two posts a week on LinkedIn and two on X (`CADENCE=linkedin:2,x:2`). It shows on the Calendar as a plan and never blocks anything. Set the platforms and counts the client will really keep.

@@ -3,7 +3,7 @@
 ## Backups
 
 - **Database.** Postgres: `deploy/hetzner/backup.sh` or your host's managed backups. SQLite: copy the `.sqlite3` file while the API is stopped, or use `sqlite3 penlark.sqlite3 ".backup backup.sqlite3"`.
-- **Exports.** The exports volume holds saved drafts. Your writing samples, notes and profiles live in the database, so the database backup covers them.
+- **Exports.** The exports volume holds saved drafts, and `deploy/hetzner/backup.sh` copies it too. Your writing samples, notes and profiles live in the database, so the database backup covers them. Backup files hold your clients' writing: keep them readable by their owner only.
 - **Settings.** Keep the `.env` file in a password manager, never in Git.
 
 ## Test a restore

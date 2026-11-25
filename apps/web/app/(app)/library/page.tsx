@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Badge, Button, Card, ConfirmDialog, DataTable, EmptyState, TableSkeleton, notify, type Column } from "@sendora/ui-kit";
 import { useRole } from "@/lib/hooks";
+import { NoVoices } from "@/components/AddVoice";
 import { FileDrop, LoadError, PageHead, Textarea } from "@/components/Parts";
 import { api, get, post } from "@/lib/api";
 import type { Author, Sample } from "@/lib/types";
@@ -31,6 +32,7 @@ export default function LibraryPage() {
     { key: "source", header: "Source", width: "minmax(0, 1fr)", sortValue: (r) => r.source },
   ];
   if (authors.isError || samples.isError) return <div className="vp-page"><PageHead title="Library" /><LoadError error={authors.error ?? samples.error} onRetry={() => samples.refetch()} what="the library" /></div>;
+  if (authors.data && authors.data.length === 0) return <NoVoices title="Library" />;
   return (
     <div className="vp-page">
       <PageHead title="Library" sub="Writing that belongs to this voice: posts, emails, transcripts of talks. Only text you own or provide. Nothing is fetched from anyone's account." actions={

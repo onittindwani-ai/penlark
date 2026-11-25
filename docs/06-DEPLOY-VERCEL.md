@@ -1,6 +1,6 @@
 # Deploy the web app on Vercel
 
-Vercel hosts only the **web** part. The API and worker need a server that stays on (Railway, Hetzner or any host that runs Docker). **Not tested: no Vercel account was used.** `next build` was run locally and passed.
+Vercel hosts only the **web** part. The API and worker need a server that stays on (Railway, Hetzner or any host that runs Docker). **Not tested: no Vercel account was used.** The web build is made by the CI workflow on every push; it was not run by hand for this release.
 
 The Root Directory steps were read from https://vercel.com/docs/monorepos on 2026-11-23 (VERIFIED). The rest is UNVERIFIED.
 
@@ -12,7 +12,7 @@ The Root Directory steps were read from https://vercel.com/docs/monorepos on 202
 6. Set `API_BASE_URL` to your API address with no trailing slash, and `SESSION_SECRET` to the same value the API uses.
 7. Do not set `INSECURE_COOKIES` or `NEXT_PUBLIC_DEMO_HINT`.
 8. Deploy, open the address, sign in.
-9. On the API server run uvicorn with `--proxy-headers` and `--forwarded-allow-ips` set to your proxy, so rate limits see the real visitor.
+9. On the API server run uvicorn with `--proxy-headers` and set `FORWARDED_ALLOW_IPS` to the address your web app reaches the API from (the Docker image reads that variable and defaults to `127.0.0.1`; never `*`), so rate limits see the real visitor. The web app passes on only the last address of `X-Forwarded-For`, the one its own front end added.
 
 ## If the build fails
 

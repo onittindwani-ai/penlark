@@ -14,14 +14,15 @@ Public: /r/<code> (tracked link) and /api/webhooks/lead (signed)
 | `textstats.py`, `dimensions.py` | Measure a text: sentences, punctuation, contractions, openers, vocabulary. Plain meanings and advice for each dimension. |
 | `fingerprint.py` | Build the profile from samples: centre and tolerance per dimension, word habits, openers, favourite words, examples, the radar. |
 | `match.py` | The voice match score by code, per dimension, with the sentences that pull it down. |
-| `house_rules.py` | Banned phrases and patterns, dashes, reading level, the claims check. |
+| `house_rules.py`, `safe_regex.py` | Banned phrases and patterns, dashes, reading level, the claims check; and the check that refuses a pattern that could take far too long. |
 | `ingest.py` | Readers for markdown, text, PDF, transcripts, LinkedIn CSV, X archive. |
 | `guide.py`, `writers.py` | The offline guide and draft templates (labelled, not a language model), and the model path in `model_tasks.py` (voice guide, draft variants, idea finder; code re scores every draft). |
 | `ideas.py` | Notes to ranked ideas with verified quotes. |
 | `learning.py` | CSV import with mapping, trait comparison, permutation test. |
 | `attribution.py`, `experiments.py` | Tracked links, allow list, signature check, funnel, A/B analysis. |
 | `adapters/schedulers.py`, `registry.py` | The scheduler adapters and their tiers. |
-| `service.py`, `world.py`, `demo.py` | Orchestration, the demo world, reset. |
+| `service.py`, `world.py`, `demo.py` | Orchestration (including the fingerprint that ties an approval to its exact text), the demo world, reset. |
+| `config.py`, `datadir.py`, `dburl.py`, `admin.py` | Settings and what is wrong with them, where the demo data folder is, which database the command line tools open, and `python -m penlark.admin`. |
 | `api/` | Routes: read, write, admin, public, demo, auth. |
 
 The shared base (`packages/core-py`, `packages/ui-kit`) is a copy and is never edited here. Version in `packages/BASE_MANIFEST.json`.
@@ -29,7 +30,7 @@ The shared base (`packages/core-py`, `packages/ui-kit`) is a copy and is never e
 ## Rules the code keeps
 1. Style numbers and scores come from code, never from a model.
 2. A model (if one is ever wired) only writes text, and its output passes the same checks.
-3. Every outside write goes through `guard_write`: draft mode and the kill switch stop it.
-4. Every change is audited. Every approval needs a second person.
+3. Every outside write goes through `guard_write` (draft mode and the kill switch stop it) or, for the file export, the kill switch check. Both read the switches set in the app from the database.
+4. Every change is audited. Every approval needs a second person and is for the exact text it was asked for.
 
-API: <!--n:api_paths-->55<!--/n--> paths and <!--n:api_operations-->64<!--/n--> operations in `openapi.json`.
+API: <!--n:api_paths-->55<!--/n--> paths and <!--n:api_operations-->65<!--/n--> operations in `openapi.json`.

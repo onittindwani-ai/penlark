@@ -25,19 +25,37 @@ def approvals(s: Session = Depends(db)):
     return [{"preview": _preview(a, drafts), "id": a.id, "action": a.action, "summary": a.summary, "risk": a.risk, "status": a.status, "requested_by": a.requested_by, "decided_by": a.decided_by, "note": a.decision_note, "created_at": iso(a.created_at), "payload": a.payload} for a in rows]
 
 
+PAST_PREVIEW_CHARS = 1200  # a decided approval shows only the start of its draft; a waiting one shows every character
+
+
 def _preview(a: Approval, drafts: dict) -> dict | None:
-    """What the person is about to approve: the draft text as it is now, so nobody approves a title alone."""
+    """What the person is about to approve: the whole draft text as it is now, and its fingerprint, so nobody approves a title or the first lines alone.
+    The fingerprint is sent back with the decision, so a draft that changed after it was opened cannot be approved by mistake."""
     d = drafts.get(int(a.payload.get("draft_id", 0))) if a.action == "draft.approve" else None
-    return {"draft_id": d.id, "text": d.text[:1200], "status": d.status, "author_id": d.author_id} if d else None
+    if d is None:
+        return None
+    full = a.status == "pending"
+    return {"draft_id": d.id, "text": d.text if full else d.text[:PAST_PREVIEW_CHARS], "truncated": not full and len(d.text) > PAST_PREVIEW_CHARS, "text_sha256": service.text_digest(d.text),
+            "approved_text_sha256": (a.payload or {}).get("text_sha256"), "status": d.status, "author_id": d.author_id}
 
 
 class DecideIn(BaseModel):
     approve: bool
     note: str = Field(default="", max_length=500)
+    text_sha256: str | None = Field(default=None, max_length=64)  # the fingerprint of the text the person was shown, when the app sends it
 
 
 @router.post("/approvals/{approval_id}/decide", summary="Approve or reject. The person who asked cannot decide.")
 def decide_approval(approval_id: int, body: DecideIn, s: Session = Depends(db), ctx: Ctx = Depends(get_ctx), u: dict = Depends(writer)):
+    pre = s.get(Approval, approval_id)
+    if pre is not None and pre.action == "draft.approve" and pre.status == "pending" and body.approve:
+        # Hold the draft row, then check the words are still the words this approval was asked for (and the ones this person was shown).
+        d0 = service.lock_draft(s, int((pre.payload or {}).get("draft_id", 0)))
+        seen = service.text_digest(d0.text) if d0 is not None else None
+        if d0 is None or (pre.payload or {}).get("text_sha256") != seen:
+            raise HTTPException(409, "This draft was changed after it was sent for approval. Ask for approval again.")
+        if body.text_sha256 is not None and body.text_sha256 != seen:
+            raise HTTPException(409, "The draft changed since you opened it. Read it again before you approve.")
     try:
         a = decide(s, approval_id, body.approve, u["user"], u["role"], body.note or None)
     except ApprovalError as exc:

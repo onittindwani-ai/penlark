@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Badge, Button, Card, ConfirmDialog, CopyButton, EmptyState, Skeleton, notify } from "@sendora/ui-kit";
+import { NoVoices } from "@/components/AddVoice";
 import { HighlightEditor } from "@/components/HighlightEditor";
 import { MatchMeter } from "@/components/MatchMeter";
 import { LoadError, PageHead } from "@/components/Parts";
@@ -12,7 +13,7 @@ import { useRole, useSettings } from "@/lib/hooks";
 import { DRAFT_STATUS } from "@/lib/labels";
 import type { Author, Draft, Evaluation, Note } from "@/lib/types";
 
-const STATUS_TONE: Record<string, "neutral" | "success" | "warning" | "accent" | "danger"> = { draft: "neutral", pending_approval: "warning", approved: "success", scheduled: "accent", exported: "accent", published: "accent", rejected: "danger" };
+const STATUS_TONE: Record<string, "neutral" | "success" | "warning" | "accent" | "danger"> = { draft: "neutral", pending_approval: "warning", approved: "success", scheduled: "accent", exported: "accent", sending: "warning", published: "accent", rejected: "danger" };
 
 export default function Studio() {
   const qc = useQueryClient();
@@ -71,6 +72,7 @@ export default function Studio() {
 
   if (authors.isError || drafts.isError) return <div className="vp-page"><PageHead title="Studio" /><LoadError error={authors.error ?? drafts.error} onRetry={() => { authors.refetch(); drafts.refetch(); }} what="the studio" /></div>;
   if (!authors.data || !drafts.data) return <div className="vp-page"><PageHead title="Studio" /><div className="vp-two"><Skeleton height={560} radius={21} /><Skeleton height={640} radius={21} /></div></div>;
+  if (authors.data.length === 0) return <NoVoices title="Studio" />;
   const author = authors.data.find((a) => a.id === authorId);
   const threshold = settings.data?.rules.min_voice_match ?? 60;
   const unsupported = ev?.rules.unsupported_claims ?? [];

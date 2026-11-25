@@ -1,7 +1,7 @@
 """Tracked links and lead attribution.
 
 The redirect is the one public route, so it is the one place an attacker could aim an open redirect. A link can only point at a URL whose host is on the allow list
-(set by the owner), the scheme is https (http only for local development), and the target is stored when the link is made, never taken from the click request.
+(set by the owner; a plain entry means exactly that host, `*.example.com` means its subdomains), the scheme is https (http only for local development), and the target is stored when the link is made, never taken from the click request.
 """
 
 from __future__ import annotations
@@ -19,12 +19,26 @@ class LinkError(ValueError):
     pass
 
 
+def host_matches(host: str, allow: list[str]) -> bool:
+    """True when `host` is on the allow list: a plain entry means exactly that host, `*.example.com` means any subdomain of it (not example.com itself)."""
+    host = host.lower().rstrip(".")
+    for entry in allow:
+        a = entry.strip().lower().rstrip(".")
+        if not a:
+            continue
+        if a.startswith("*."):
+            if len(a) > 2 and host.endswith(a[1:]) and host != a[2:]:
+                return True
+        elif host == a:  # a subdomain someone else controls is not covered by a plain entry
+            return True
+    return False
+
+
 def host_allowed(url: str, allow: list[str], allow_http_local: bool = False) -> bool:
     u = urlparse(url)
     if u.scheme not in ({"https", "http"} if allow_http_local else {"https"}) or not u.hostname or u.username or u.password:
         return False
-    host = u.hostname.lower().rstrip(".")
-    return any(host == a.lower() or host.endswith("." + a.lower()) for a in allow if a)
+    return host_matches(u.hostname, allow)
 
 
 def slug(s: str) -> str:
@@ -58,7 +72,10 @@ def sign(secret: str, body: bytes) -> str:
 def verify_signature(secret: str, body: bytes, header: str | None) -> bool:
     if not secret or not header:
         return False
-    return hmac.compare_digest(sign(secret, body), header.removeprefix("sha256=").strip())
+    try:
+        return hmac.compare_digest(sign(secret, body).encode(), header.removeprefix("sha256=").strip().encode("ascii"))
+    except UnicodeEncodeError:  # a header with a character outside ASCII is a wrong signature, not a crash
+        return False
 
 
 def funnel(links: list[dict], clicks: list[dict], conversions: list[dict]) -> dict:

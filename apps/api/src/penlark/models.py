@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from sendora_core.db import Base, UTCDateTime, utcnow
 
-DRAFT_STATUSES = ("draft", "pending_approval", "approved", "scheduled", "exported", "published", "rejected")
+DRAFT_STATUSES = ("draft", "pending_approval", "approved", "scheduled", "sending", "exported", "published", "rejected")
 NOTE_KINDS = ("call", "comment", "email", "note", "fact")
 
 

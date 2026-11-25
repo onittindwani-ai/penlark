@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -23,7 +23,12 @@ def state(s: Session = Depends(db), ctx: Ctx = Depends(get_ctx)):
 
 @router.post("/reset", summary="Reset to the seed data and a fresh clock")
 def reset(s: Session = Depends(db), ctx: Ctx = Depends(get_ctx), u: dict = Depends(owner)):
-    return demo.reset(s, ctx)
+    try:
+        return demo.reset(s, ctx)
+    except PermissionError as exc:
+        raise HTTPException(403, str(exc)) from exc
+    except FileNotFoundError as exc:  # raised before anything was erased
+        raise HTTPException(503, str(exc)) from exc
 
 
 @router.post("/tick", summary="Run the jobs once, now: find ideas again and recompute what was learned")

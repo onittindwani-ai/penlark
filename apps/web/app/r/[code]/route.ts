@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { lastHop } from "@/lib/clientIp";
 
 const API = process.env.API_BASE_URL ?? "http://127.0.0.1:8000";
 
@@ -8,7 +9,7 @@ export async function GET(request: Request, ctx: { params: Promise<{ code: strin
   if (!/^[a-z0-9]{3,20}$/.test(code)) return new NextResponse("This link does not exist.", { status: 404 });
   let r: Response;
   try {
-    r = await fetch(`${API}/api/public/r/${code}`, { redirect: "manual", cache: "no-store", headers: { "x-forwarded-for": request.headers.get("x-forwarded-for") ?? "", "user-agent": request.headers.get("user-agent") ?? "" } });
+    r = await fetch(`${API}/api/public/r/${code}`, { redirect: "manual", cache: "no-store", headers: { "x-forwarded-for": lastHop(request.headers.get("x-forwarded-for")), "user-agent": request.headers.get("user-agent") ?? "" } });
   } catch {
     return new NextResponse("The link service is not reachable. Try again in a moment.", { status: 502 });
   }

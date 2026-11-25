@@ -10,6 +10,7 @@ import re
 from dataclasses import dataclass
 from functools import lru_cache
 
+from penlark import safe_regex
 from penlark.textstats import reading_grade, split_sentences, words
 
 MIN_WORDS_FOR_GRADE = 8  # the grade formula swings wildly on a few words, so a very short text is not judged on reading level
@@ -85,8 +86,14 @@ def check_style(text: str, rules: Rules) -> list[dict]:
         for m in rx.finditer(text):
             flags.append({"kind": "banned_phrase", "start": m.start(), "end": m.end(), "text": text[m.start():m.end()], "message": f"\"{ph}\" is on the banned list."})
     for pat, why in rules.patterns:
+        unsafe = safe_regex.problem(pat)
+        if unsafe:  # a pattern that could freeze the process is never run: it is shown instead, so a person fixes it on the Rules page
+            flags.append({"kind": "unsafe_rule", "start": 0, "end": 0, "text": "", "message": f"The banned pattern \"{pat[:60]}\" was not run. {unsafe} Edit or delete it on the Rules page."})
+            continue
         try:
-            for m in re.finditer(pat, low):
+            for n, m in enumerate(re.finditer(pat, low)):
+                if n >= safe_regex.MAX_MATCHES:
+                    break
                 flags.append({"kind": "banned_pattern", "start": m.start(), "end": m.end(), "text": text[m.start():m.end()], "message": why})
         except re.error:
             continue
