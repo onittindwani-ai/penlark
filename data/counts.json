@@ -1,7 +1,7 @@
 {
  "tables": 15,
- "api_paths": 55,
- "api_operations": 65,
+ "api_paths": 60,
+ "api_operations": 72,
  "pages": 12,
  "screenshots": 41,
  "tool_groups": 5,
@@ -122,13 +122,13 @@
   "contract_tests": 5
  },
  "e2e": {
-  "tests": 45,
+  "tests": 46,
   "files": 6
  },
  "tests": {
-  "passed": 280,
+  "passed": 428,
   "skipped": 1,
   "failed": 0,
-  "coverage_percent": 94.8
+  "coverage_percent": 95.3
  }
 }

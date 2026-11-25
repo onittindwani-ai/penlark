@@ -247,11 +247,15 @@ def test_a_current_sqlite_file_starts_and_has_nothing_missing(tmp_path):
 
 
 def test_a_slow_upload_does_not_hold_the_write_lock(tmp_path):
-    """The session's first query takes the SQLite write lock, so a route must read its whole body before it asks the database anything."""
+    """The session's first query takes the SQLite write lock, so a route must read its whole body before it asks the database anything, and the database work itself runs on a worker thread.
+    (Changed in round 3: the work moved out of the async function into `_store_upload`, so the check is now on the order of the two steps and on nothing touching the session in between.)"""
     import ast
     from pathlib import Path
 
     src = (Path(__file__).resolve().parents[1] / "src" / "penlark" / "api" / "routes_write.py").read_text()
     fn = next(n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.AsyncFunctionDef) and n.name == "upload_sample")
     body = ast.get_source_segment(src, fn)
-    assert body.index("read_bounded") < body.index("s.get(Author")
+    assert body.index("read_bounded") < body.index("run_in_threadpool(_store_upload")
+    import re
+
+    assert not re.search(r"\bs\.(get|scalars|execute|add|flush)\(|service\.sample_digests", body), "no database call on the event loop"

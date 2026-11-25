@@ -15,6 +15,15 @@ test("dot segments and encoded tricks are refused", () => {
   }
 });
 
+test("a segment that would become a query, a fragment or a parameter once decoded is refused", () => {
+  // the framework decodes a segment before it reaches the guard: "login%3F" arrives as "login?"
+  for (const bad of [["auth", "login?"], ["auth", "login#"], ["auth", "login;x"], ["auth", "login "], ["auth", "login\u007f"], ["auth", "login\u0085"], ["drafts", "1?x=1"], ["a#b"], ["a b"], ["a\tb"], ["a;b"]]) {
+    assert.equal(safePath(bad), null, JSON.stringify(bad));
+  }
+  assert.equal(safePath(["drafts", "12"]), "drafts/12");
+  assert.equal(safePath(["performance"]), "performance");
+});
+
 test("a declared length over the limit is refused before reading", () => {
   assert.equal(bodyAllowed(null, 10), true);
   assert.equal(bodyAllowed("10", 10), true);

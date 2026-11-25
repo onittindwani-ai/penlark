@@ -6,12 +6,15 @@ import hashlib
 import json
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from penlark import attribution
+from penlark.api.bodies import strip_nul
 from penlark.api.deps import db, db_write, get_ctx
 from penlark.context import Ctx
 from penlark.models import Click, Conversion, Link
@@ -68,11 +71,21 @@ async def lead(request: Request, s: Session = Depends(db, scope="function"), ctx
     if not attribution.verify_signature(ctx.settings.lead_webhook_secret, raw, request.headers.get("x-penlark-signature")):
         raise HTTPException(401, "The signature is missing or wrong.")
     try:
-        body = LeadIn(**json.loads(raw))
+        body = LeadIn(**strip_nul(json.loads(raw)))
     except (ValueError, TypeError) as exc:
         raise HTTPException(400, "The body is not valid.") from exc
+    # The database can make this wait for the write lock: it runs on a worker thread, so the server keeps answering everyone else meanwhile.
+    return await run_in_threadpool(_record_lead, s, ctx, body)
+
+
+def _record_lead(s: Session, ctx: Ctx, body: LeadIn) -> dict:
     link = s.scalars(select(Link).where(Link.code == body.link_code)).first() if body.link_code else None
     if s.scalars(select(Conversion).where(Conversion.lead_ref == body.lead_ref, Conversion.kind == body.kind)).first():
         return {"ok": True, "duplicate": True}  # a retry from the sender must not count twice
-    s.add(Conversion(link_id=link.id if link else None, lead_ref=body.lead_ref, kind=body.kind, value=body.value_cents, at=ctx.now(s)))
+    try:
+        with s.begin_nested():  # two identical events at the same moment: the unique index lets one in, the other is the same event again
+            s.add(Conversion(link_id=link.id if link else None, lead_ref=body.lead_ref, kind=body.kind, value=body.value_cents, at=ctx.now(s)))
+            s.flush()
+    except IntegrityError:
+        return {"ok": True, "duplicate": True}
     return {"ok": True, "attributed": link is not None}

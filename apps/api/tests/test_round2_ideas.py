@@ -121,7 +121,7 @@ def test_a_viewer_cannot_start_a_refresh_and_the_demo_still_answers_at_once(tmp_
 def test_the_ideas_job_is_not_on_the_hourly_schedule_and_writes_an_audit_row(world):
     assert "ideas" in jobs.make_handlers(world) and "ideas" not in jobs.INTERVALS
     with world.factory() as s:
-        assert jobs.job_ideas(s, world)["ideas"] >= 0
+        assert jobs.job_ideas(s, world)["ideas"] == 2  # the two themes the demo notes hold
         s.commit()
         from sendora_core.models import AuditEntry
 

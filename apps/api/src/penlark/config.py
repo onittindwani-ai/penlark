@@ -29,7 +29,7 @@ def load_settings(env_file: str | None = None) -> "Settings":
 
 class Settings(BaseAppSettings):
     app_name: str = "penlark"
-    database_url: str = "sqlite:///./penlark.sqlite3"
+    database_url: str = Field(default="sqlite:///./penlark.sqlite3", repr=False)  # a Postgres address holds the password: it never shows in the text of the settings
     owner_email: str = DEFAULT_OWNER_EMAIL
     owner_password_hash: str | None = Field(default=None, repr=False)
     approver_email: str | None = None
@@ -75,6 +75,14 @@ class Settings(BaseAppSettings):
         except (ZoneInfoNotFoundError, ValueError, OSError) as exc:
             raise ValueError("timezone must be a name from the IANA list, for example Europe/London or UTC") from exc
         return v.strip()
+
+    @field_validator("owner_email", "approver_email", "viewer_email")
+    @classmethod
+    def _email_fits_the_log(cls, v: str | None) -> str | None:
+        """The audit log and the approvals keep who did it in 80 characters. A longer address would be refused by a Postgres database in the middle of a request."""
+        if v is not None and len(v.strip()) > 80:
+            raise ValueError("an email address here must be at most 80 characters")
+        return v
 
     def allow_hosts(self) -> list[str]:
         """Hosts a tracked link may point at. Empty means none, except in the offline demo, which has fictional links to one fictional host."""

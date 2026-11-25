@@ -10,7 +10,7 @@ from penlark.config import Settings
 from penlark.config import load_settings as read_settings
 from penlark.context import Ctx
 from penlark.jobs import make_handlers, schedule_due
-from penlark.dbsetup import make_engine, make_factories, require_current_schema
+from penlark.dbsetup import ensure_indexes, make_engine, make_factories, require_current_schema
 from sendora_core.db import Base, session_scope
 from sendora_core.jobs import Worker
 
@@ -38,6 +38,7 @@ def main() -> None:
 
     if settings.database_url.startswith("sqlite"):
         Base.metadata.create_all(engine)
+        ensure_indexes(engine)
         require_current_schema(engine)
     factory, write_factory = make_factories(engine)
     ctx = Ctx(settings, factory, write_factory=write_factory)

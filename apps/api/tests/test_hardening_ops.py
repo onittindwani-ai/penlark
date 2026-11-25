@@ -210,7 +210,9 @@ def test_a_draft_that_is_being_sent_cannot_be_sent_edited_or_exported(tmp_path):
     assert rec.posts == []
 
 
-def test_a_send_that_never_finished_is_released_after_half_an_hour_and_the_audit_log_says_so(tmp_path):
+def test_a_send_that_never_finished_is_held_for_a_person_after_half_an_hour_and_the_audit_log_says_so(tmp_path):
+    # Changed in round 3. This test used to expect the draft back at "approved" after half an hour, which let a second click post it twice when the first post had gone out
+    # just before the app stopped. A send nobody can vouch for is held like any other send with no clear answer: a person checks the tool and says which it was.
     from datetime import timedelta
 
     c, rec, ctx = live_app(tmp_path)
@@ -219,12 +221,17 @@ def test_a_send_that_never_finished_is_released_after_half_an_hour_and_the_audit
         d = s.get(Draft, did)
         d.status, d.updated_at = "sending", clock.DEMO_START - timedelta(minutes=5)
         s.commit()
-    assert c.post(f"/api/drafts/{did}/export", headers=h, json={}).status_code == 409  # five minutes ago: still held
+    assert c.post(f"/api/drafts/{did}/export", headers=h, json={}).status_code == 409  # five minutes ago: still being sent
     with ctx.factory() as s:
         s.get(Draft, did).updated_at = clock.DEMO_START - timedelta(minutes=45)
         s.commit()
-    assert c.post(f"/api/drafts/{did}/export", headers=h, json={}).status_code == 200
-    assert any(e["action"] == "draft.send_released" for e in c.get("/api/audit?limit=20", headers=h).json())
+    assert c.post(f"/api/drafts/{did}/export", headers=h, json={}).status_code == 409  # forty five minutes ago: held for a person, not released
+    with ctx.factory() as s:
+        assert s.get(Draft, did).status == "send_unknown"
+        assert [x.status for x in s.scalars(select(Schedule).where(Schedule.draft_id == did))] == ["unclear"]
+    assert any(e["action"] == "draft.send_unclear" and "app stopped" in e["detail"].get("reason", "") for e in c.get("/api/audit?limit=20", headers=h).json())
+    assert c.post(f"/api/drafts/{did}/send", headers=h, json=body()).status_code == 409 and rec.posts == []
+    assert c.post(f"/api/drafts/{did}/send-outcome", headers=h, json={"posted": False}).json()["status"] == "approved"
 
 
 def test_a_vendor_server_error_leaves_the_draft_held_until_a_person_says_whether_it_was_posted(tmp_path):

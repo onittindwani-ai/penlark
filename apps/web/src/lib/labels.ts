@@ -18,7 +18,7 @@ export const auditTarget = (t: string | null) => {
 };
 
 export const DRAFT_STATUS: Record<string, string> = { draft: "draft", pending_approval: "waiting for approval", approved: "approved", scheduled: "planned", sending: "being sent", send_unknown: "send unclear, check the tool", exported: "exported", published: "published", rejected: "rejected" };
-export const SCHEDULE_STATUS: Record<string, string> = { planned: "planned", exported: "exported to a file", sent: "sent", unclear: "unclear, check the tool", published: "published" };
+export const SCHEDULE_STATUS: Record<string, string> = { planned: "planned", sending: "being sent", exported: "exported to a file", sent: "sent", unclear: "unclear, check the tool", published: "published" };
 export const IDEA_BADGE = (status: string) => (status === "approved" ? "has a draft" : "");
 /** An adapter name as a person writes it. */
 export const ADAPTER_NAME: Record<string, string> = { seed: "Offline demo", export: "File export", postiz: "Postiz", buffer: "Buffer", metricool: "Metricool" };

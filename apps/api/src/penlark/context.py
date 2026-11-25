@@ -14,8 +14,30 @@ from penlark.models import State
 from penlark.offline_llm import OfflineBackend
 from penlark.registry import build_registry, build_scheduler
 from sendora_core.costs import CostTracker
+from sendora_core.db import session_scope
 from sendora_core.llm import LLM, build_llm
 from sendora_core.settings import LLMBackendKind, Mode
+
+
+class DetachedCosts(CostTracker):
+    """Counts the cost of a model call in its own short sessions. The call itself is then free of the caller's session, so the caller can let go of the database write lock
+    while the model answers (a call can take two minutes, and on SQLite one writer at a time is all there is)."""
+
+    def __init__(self, factory: sessionmaker[Session], prices: dict | None = None):
+        super().__init__(None, prices)  # type: ignore[arg-type]
+        self.factory = factory
+
+    def record(self, model: str, purpose: str, input_tokens: int, output_tokens: int):
+        with session_scope(self.factory) as s:
+            return CostTracker(s, self.prices).record(model, purpose, input_tokens, output_tokens)
+
+    def total_usd(self) -> float:
+        with self.factory() as s:
+            return CostTracker(s, self.prices).total_usd()
+
+    def by_purpose(self) -> dict[str, float]:
+        with self.factory() as s:
+            return CostTracker(s, self.prices).by_purpose()
 
 
 @dataclass
@@ -45,6 +67,10 @@ class Ctx:
         # LLM_BACKEND=offline (default) | fixture | anthropic. The offline stand in is the zero account default.
         # The anthropic path is UNVERIFIED against the real service (see model_tasks.py and docs 14).
         return build_llm(self.effective(session), CostTracker(session), offline=OfflineBackend())
+
+    def llm_detached(self, eff: Settings) -> LLM:
+        """The model for a call made with no session open: `eff` is `effective(session)` read before the session let go of its lock, and the cost is written in its own session."""
+        return build_llm(eff, DetachedCosts(self.write_factory or self.factory), offline=OfflineBackend())
 
     def model_on(self) -> bool:
         """True when a model backend (fixture or anthropic) is configured. With the default offline backend every job runs as plain code, exactly as before."""

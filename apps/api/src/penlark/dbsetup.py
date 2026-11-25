@@ -42,6 +42,29 @@ def make_factories(engine: Engine) -> tuple[sessionmaker[Session], sessionmaker[
     return plain, sessionmaker(engine.execution_options(sqlite_begin=IMMEDIATE), expire_on_commit=False)
 
 
+def ensure_indexes(engine: Engine) -> list[str]:
+    """`create_all` builds a missing table with its indexes, but never adds an index to a table that already exists, so a SQLite file made by an earlier version would lack the newer ones.
+    Each missing index is made at start. Before a unique index is made, rows that already break it are removed (the oldest of each is kept): only a repeated event can be one.
+    Postgres gets the same change from `alembic upgrade head`. Returns the names of the indexes that were made."""
+    from sqlalchemy import text
+
+    insp, made = inspect(engine), []
+    for table in Base.metadata.sorted_tables:
+        if not insp.has_table(table.name):
+            continue
+        have = {i["name"] for i in insp.get_indexes(table.name)}
+        for ix in sorted(table.indexes, key=lambda i: i.name or ""):
+            if ix.name in have:
+                continue
+            if ix.unique:
+                cols = ", ".join(c.name for c in ix.columns)
+                with engine.begin() as conn:
+                    conn.execute(text(f"DELETE FROM {table.name} WHERE id NOT IN (SELECT MIN(id) FROM {table.name} GROUP BY {cols})"))
+            ix.create(engine)
+            made.append(ix.name)
+    return made
+
+
 def schema_problems(engine: Engine) -> list[str]:
     """Columns the code expects that the database does not have. SQLite builds missing tables by itself but never adds a column to a table that already exists, so a file made by an older version
     would fail later with an error nobody can read. Postgres is changed with `alembic upgrade head` and is not checked here."""

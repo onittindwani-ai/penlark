@@ -10,8 +10,9 @@ import type { Author, Sample } from "@/lib/types";
 
 export default function LibraryPage() {
   const qc = useQueryClient();
-  const { canWrite } = useRole();
+  const { canWrite, owner } = useRole();
   const NO = "Viewers cannot change anything";
+  const OWNER_ONLY = "Only the owner can remove a sample";
   const authors = useQuery({ queryKey: ["authors"], queryFn: () => get<Author[]>("/authors") });
   const [aid, setAid] = useState(1);
   const samples = useQuery({ queryKey: ["samples", aid], queryFn: () => get<Sample[]>(`/samples?author_id=${aid}`) });
@@ -24,7 +25,7 @@ export default function LibraryPage() {
     mutationFn: async (f: File) => api<{ added: number; skipped?: number }>(`/samples/upload?author_id=${aid}`, { method: "POST", raw: await f.arrayBuffer(), headers: { "x-filename": f.name } }),
     onSuccess: (r) => { if (r.added === 0) notify.info("Nothing new: every text in that file is already in the library."); else notify.success(`Added ${r.added} sample${r.added === 1 ? "" : "s"}.${r.skipped ? ` ${r.skipped} already in the library, skipped.` : ""}`); refresh(); }, onError: (e: Error) => notify.error("Could not read that file", e.message),
   });
-  const remove = useMutation({ mutationFn: (id: number) => api(`/samples/${id}`, { method: "DELETE" }), onSuccess: () => { notify.info("Sample removed."); refresh(); }, onError: (e: Error) => notify.error("Could not remove it", e.message) });
+  const remove = useMutation({ mutationFn: (id: number) => api(`/samples/${id}`, { method: "DELETE" }), onSuccess: () => { notify.info("Sample removed for good. The profile versions built after it were removed too, and a new one was built from the rest."); qc.invalidateQueries({ queryKey: ["profile"] }); refresh(); }, onError: (e: Error) => notify.error("Could not remove it", e.message) });
   const columns: Column<Sample>[] = [
     { key: "title", header: "Sample", width: "minmax(0, 2fr)", sortValue: (r) => r.title },
     { key: "kind", header: "Kind", width: "90px", sortValue: (r) => r.kind },
@@ -39,7 +40,7 @@ export default function LibraryPage() {
         <select className="vp-select" aria-label="Voice" value={aid} onChange={(e) => setAid(Number(e.target.value))}>{(authors.data ?? []).map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}</select>} />
       <div className="vp-two">
         {!samples.data ? <TableSkeleton rows={8} columns={4} /> : samples.data.length === 0 ? <EmptyState title="No samples yet" body="Paste a post or upload a file on the right. Fifteen or more samples give a steadier profile." /> : (
-          <div className="vp-act-88 vp-noopen"><DataTable label="Samples" rows={samples.data} rowKey={(r) => String(r.id)} columns={columns} height={460} rowActions={(r) => <Button size="sm" variant="ghost" disabled={!canWrite} disabledReason={NO} onClick={() => setRm(r)} feedback={false} aria-label={`Remove ${r.title}`}>Remove</Button>} /></div>)}
+          <div className="vp-act-88 vp-noopen"><DataTable label="Samples" rows={samples.data} rowKey={(r) => String(r.id)} columns={columns} height={460} rowActions={(r) => <Button size="sm" variant="ghost" disabled={!owner} disabledReason={canWrite ? OWNER_ONLY : NO} onClick={() => setRm(r)} feedback={false} aria-label={`Remove ${r.title}`}>Remove</Button>} /></div>)}
         <div className="vp-stack">
           <Card title="Paste a sample">
             <div className="vp-stack">
@@ -55,7 +56,7 @@ export default function LibraryPage() {
           </Card>
         </div>
       </div>
-      <ConfirmDialog open={rm !== null} onOpenChange={(o) => !o && setRm(null)} title="Remove this sample?" description="It stops counting the next time you build a profile version. Old versions keep their numbers." confirmLabel="Remove" destructive onConfirm={() => { if (rm) void remove.mutateAsync(rm.id); }} />
+      <ConfirmDialog open={rm !== null} onOpenChange={(o) => !o && setRm(null)} title="Remove this sample?" description="It is removed for good. So is every profile version built after it was added, because those keep its sentences as examples. A new version is built from the samples that are left. This cannot be undone." confirmLabel="Remove" destructive onConfirm={() => { if (rm) void remove.mutateAsync(rm.id); }} />
     </div>
   );
 }

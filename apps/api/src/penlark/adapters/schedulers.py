@@ -19,6 +19,38 @@ from sendora_core.adapters import AdapterError
 from sendora_core.safety import guard_write
 
 
+class UnclearAnswer(ValueError):
+    """The tool answered with a success status but not with the id of a post. The post may or may not exist, so a person decides (the draft is held as "send_unknown")."""
+
+
+def _post_id(value) -> str:
+    """The id of a post as the tool gave it: a text or a number, never empty, never longer than the column that keeps it."""
+    if isinstance(value, bool) or not isinstance(value, (str, int)):
+        return ""
+    return str(value).strip()[:120]
+
+
+def _said(body) -> str:
+    """What a tool said instead of an id, short and with no control characters, for the record and for the person who checks the tool."""
+    found = ""
+    if isinstance(body, dict):
+        for key in ("message", "error", "errors", "detail"):
+            v = body.get(key)
+            if isinstance(v, list) and v:
+                v = v[0].get("message") if isinstance(v[0], dict) else v[0]
+            if isinstance(v, dict):
+                v = v.get("message")
+            if isinstance(v, str) and v.strip():
+                found = v
+                break
+    return "".join(ch for ch in found if ch.isprintable())[:160]
+
+
+def _no_id(tool: str, status: int, body) -> UnclearAnswer:
+    said = _said(body)
+    return UnclearAnswer(f"{tool} answered {status} but did not give the id of a post" + (f" and said: {said}" if said else "") + ".")
+
+
 def _check(settings, approved: bool, confirm: bool, action: str) -> None:
     if not approved:
         raise AdapterError("Only an approved draft can be sent. Ask a second person to approve it first.")
@@ -87,7 +119,10 @@ class Postiz:
         r.raise_for_status()
         data = r.json()
         first = data[0] if isinstance(data, list) and data else data
-        return {"external_id": str(first.get("postId", first.get("id", ""))), "detail": "Scheduled in Postiz."}
+        pid = _post_id(first.get("postId") or first.get("id")) if isinstance(first, dict) else ""
+        if not pid:  # a 200 with an error body or an empty list is not a post: a person looks in Postiz and says what happened
+            raise _no_id("Postiz", r.status_code, first if isinstance(first, dict) else data)
+        return {"external_id": pid, "detail": "Scheduled in Postiz."}
 
     def healthcheck(self):
         try:
@@ -120,10 +155,16 @@ class Buffer:
         if r.status_code in (401, 403):
             raise AdapterError("Buffer refused the token.")
         r.raise_for_status()
-        res = (r.json().get("data") or {}).get("createPost") or {}
-        if "message" in res:
+        body = r.json()
+        data = body.get("data") if isinstance(body, dict) else None
+        res = (data.get("createPost") if isinstance(data, dict) else None) or {}
+        if isinstance(res, dict) and "message" in res:
             raise AdapterError("Buffer said: " + str(res["message"])[:200])
-        return {"external_id": str((res.get("post") or {}).get("id", "")), "detail": "Saved as a draft in Buffer." if as_draft else "Added to the Buffer queue."}
+        post = res.get("post") if isinstance(res, dict) else None
+        pid = _post_id(post.get("id")) if isinstance(post, dict) else ""
+        if not pid:  # GraphQL answers 200 even with an `errors` list and no post
+            raise _no_id("Buffer", r.status_code, body)
+        return {"external_id": pid, "detail": "Saved as a draft in Buffer." if as_draft else "Added to the Buffer queue."}
 
     def healthcheck(self):
         try:
@@ -156,7 +197,11 @@ class Metricool:
             raise AdapterError("Metricool refused the token.")
         r.raise_for_status()
         d = r.json()
-        return {"external_id": str((d.get("data") or d).get("id", "")), "detail": "Scheduled in Metricool."}
+        inner = (d.get("data") or d) if isinstance(d, dict) else {}
+        pid = _post_id(inner.get("id")) if isinstance(inner, dict) else ""
+        if not pid:
+            raise _no_id("Metricool", r.status_code, d)
+        return {"external_id": pid, "detail": "Scheduled in Metricool."}
 
     def healthcheck(self):
         try:

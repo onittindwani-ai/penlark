@@ -25,4 +25,4 @@ Held out notes from a different fictional business: <!--n:eval.ideas.themes_foun
 On the <!--n:seed.posts-->60<!--/n--> planted posts the loop reported the planted long post penalty and the question opener lift at its strict bar, and missed other planted effects (low power at this size). It reported the planted emoji lead (3 posts, 3.2 times the base rate by luck) as "too few to say", never as a pattern. Tests: `apps/api/tests/test_engine.py`.
 
 ## Code
-<!--n:tests.passed-->280<!--/n--> Python tests passed, <!--n:tests.skipped-->1<!--/n--> skipped (the Postgres cycle needs `TEST_POSTGRES_URL`), coverage <!--n:tests.coverage_percent-->94.8<!--/n--> percent. <!--n:e2e.tests-->45<!--/n--> browser tests.
+<!--n:tests.passed-->428<!--/n--> Python tests passed, <!--n:tests.skipped-->1<!--/n--> skipped (the Postgres cycle needs `TEST_POSTGRES_URL`), coverage <!--n:tests.coverage_percent-->95.3<!--/n--> percent. <!--n:e2e.tests-->46<!--/n--> browser tests.

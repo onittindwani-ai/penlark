@@ -4,7 +4,7 @@
   python3 tools/check_docs.py          check
   python3 tools/check_docs.py --fix    also rewrite quoted counts from data/counts.json
 
-Checks: no em or en dashes, no local paths or private links, GitHub links are the repo home page only, every quoted count
+Checks: counts.json agrees with the files (tables, API paths and operations, pages, screenshots, scored tools), no em or en dashes, no local paths or private links, GitHub links are the repo home page only, every quoted count
 (<!--n:path-->value<!--/n-->) equals data/counts.json, every relative link in the Markdown points at a file that exists,
 no leftover words from other systems.
 """
@@ -39,6 +39,10 @@ def main(argv: list[str]) -> int:
     fix = "--fix" in argv
     counts = json.loads((ROOT / "data" / "counts.json").read_text())
     bad: list[str] = []
+    sys.path.insert(0, str(ROOT / "tools"))
+    import measure  # noqa: E402
+
+    bad += measure.drift(counts)  # a count in counts.json that the files no longer agree with
     for f in sorted(set(FILES)):
         rel = f.relative_to(ROOT)
         text = f.read_text(encoding="utf-8")

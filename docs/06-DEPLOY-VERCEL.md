@@ -12,7 +12,7 @@ The Root Directory steps were read from https://vercel.com/docs/monorepos on 202
 6. Set `API_BASE_URL` to your API address with no trailing slash. Do not put `SESSION_SECRET` on Vercel: the web app never reads it, it only passes on the session cookie the API gives out, and the signing key belongs on the API and the worker alone.
 7. Do not set `INSECURE_COOKIES` or `NEXT_PUBLIC_DEMO_HINT`.
 8. Deploy, open the address, sign in.
-9. On the API server run uvicorn with `--proxy-headers` and set `FORWARDED_ALLOW_IPS` to the address your web app reaches the API from (the Docker image reads that variable and defaults to `127.0.0.1`; never `*`), so rate limits see the real visitor. The web app passes on only the last address of `X-Forwarded-For`, the one its own front end added.
+9. On the API server run uvicorn with `--proxy-headers` and set `FORWARDED_ALLOW_IPS` to the address your web app reaches the API from (the Docker image reads that variable and defaults to `127.0.0.1`; never `*`), so rate limits see the real visitor (without it every visitor shares one limit, and the settings page warns about it). The web app passes on only the last address of `X-Forwarded-For`, the one its own front end added.
 
 ## Upload size
 

@@ -45,7 +45,7 @@ Where to put each one: **Local** `.env` in the repo root. **Vercel** the project
 | `API_BASE_URL` | web host | The private address of the API, for example `http://api:8000`. Wrong: pages say the server is not reachable. |
 | `INSECURE_COOKIES` | no | Set `1` only for http on localhost. Never in real use. |
 | `POSTGRES_PASSWORD` | compose | The database password for `docker compose`. Letters and digits only, or percent encoded. Make one with `openssl rand -hex 24`. |
-| `FORWARDED_ALLOW_IPS` | server | Not a Penlark setting: uvicorn reads it. Only these addresses may tell the API who the visitor is (the `X-Forwarded-For` header). The image sets `127.0.0.1`, and `docker-compose.yml` widens it to the private network that holds the web container. Never `*`. |
+| `FORWARDED_ALLOW_IPS` | server | Not a Penlark setting: uvicorn reads it. Only these addresses may tell the API who the visitor is (the `X-Forwarded-For` header). The image sets `127.0.0.1`, and `docker-compose.yml` widens it to the private network that holds the web container. Never `*`. Behind a platform proxy (Vercel, Railway, a load balancer) set it to the proxy's address: without it every visitor looks like one address and shares one rate limit, and the settings page shows a warning once it sees requests that name another address in `X-Forwarded-For`. |
 | `ENV_FILE` | no | Not a Penlark setting: the path of a settings file to read instead of `.env`. The API, the worker, the database migration and the `penlark.admin` commands all read it. |
 
 Prices are not quoted here. Read each vendor's price page on the day you decide.

@@ -8,7 +8,7 @@
 4. Optional: paste `deploy/hetzner/cloud-init.yaml` into the cloud config box. It installs Docker and Compose from Ubuntu's own package repository (`docker.io` and `docker-compose-v2`, the names on Ubuntu 24.04), plus Caddy, and holds no secrets. Do not add any.
 5. Log in with SSH and clone your repository to `/opt/penlark`.
 6. `cp .env.example .env` and fill it in (see `04`): keep `DEMO_MODE=false`, set a `SESSION_SECRET` of 32 or more random characters, `OWNER_EMAIL`, `OWNER_PASSWORD_HASH` and `POSTGRES_PASSWORD` (letters and digits only, for example `openssl rand -hex 24`). Put your two DNS names in `deploy/hetzner/Caddyfile`.
-7. `docker compose up -d --build`.
+7. `docker compose up -d --build`. The compose file already sets `FORWARDED_ALLOW_IPS` to the private network that holds the web container, so the rate limits see the real visitor. If you put the API behind your own proxy as well, set it to that proxy's address (never `*`).
 8. Copy the Caddyfile to `/etc/caddy/Caddyfile` and `sudo systemctl reload caddy`.
 9. Open the web address, sign in, and on the Integrations page press Test.
 

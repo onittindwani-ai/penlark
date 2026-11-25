@@ -8,5 +8,5 @@
 6. Set `REDIRECT_ALLOW_HOSTS` (a plain entry means exactly that host; write `*.example.com` for subdomains) and `LEAD_WEBHOOK_SECRET`. Send one signed test event.
 7. Keep `MODE=draft` and use the file export for the first week.
 8. Pick a scheduler, test with one real account, keep `saveToDraft` on, then consider `MODE=live`.
-9. Check the Audit log chain, and that the kill switch banner works: with it on, a send and a file export are both refused. If the app stops while a draft shows "being sent", the draft is released after 30 minutes and the audit log says so: check the scheduling tool for the post before you send it again. If a draft shows "send unclear", open the tool, look for the post, and press **It was posted** or **It was not posted** in the Studio.
+9. Check the Audit log chain, and that the kill switch banner works: with it on, a send and a file export are both refused. If the app stops while a draft shows "being sent", after 30 minutes the draft is held as "send unclear" and the audit log says so: look in the scheduling tool for the post, then press **It was posted** or **It was not posted**. If a draft shows "send unclear", open the tool, look for the post, and press **It was posted** or **It was not posted** in the Studio.
 10. Write down who approves, and what happens if they are away.

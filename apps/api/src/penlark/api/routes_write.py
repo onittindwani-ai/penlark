@@ -6,12 +6,14 @@ from datetime import datetime, timedelta, timezone
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.concurrency import run_in_threadpool
-from pydantic import BaseModel, Field
+from pydantic import Field
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from penlark import attribution, ingest, learning, safe_regex, service
-from penlark.api.deps import db, get_ctx, writer
+from penlark.adapters.schedulers import UnclearAnswer
+from penlark.api.bodies import Body
+from penlark.api.deps import db, get_ctx, owner, writer
 from penlark.api.routes_public import read_bounded
 from penlark.api.serializers import draft_dict
 from penlark.api.types import MAX_LIST, Id, PathId, QueryId
@@ -27,6 +29,12 @@ from sendora_core.safety import SafetyError
 
 router = APIRouter(prefix="/api", tags=["write"])
 PLATFORM_PATTERN = "^(linkedin|x|instagram|facebook|threads|youtube|newsletter|email)$"
+UNPLAN_REFUSED = {
+    "sent": "This draft was already sent to the scheduling tool, so it stays on the calendar as a record. To take the post down, remove it in the scheduling tool yourself; sending it again from here would make a second post.",
+    "sending": "This draft is being sent right now. Wait for the answer.",
+    "unclear": "A send to the scheduling tool gave no clear answer. Check the tool and say whether the post was made first.",
+    "exported": "This draft was saved to a file, so it stays on the calendar as a record of the export.",
+}
 LOCKED_STATUSES = {"exported", "published", "sending", "send_unknown"}  # the words can no longer change
 
 
@@ -37,7 +45,7 @@ def _rule(fn, *a, **k):
         raise HTTPException(400, str(exc)) from exc
 
 
-class MatchIn(BaseModel):
+class MatchIn(Body):
     author_id: Id
     text: str = Field(max_length=30000)
     source_note_ids: list[Id] = Field(default_factory=list, max_length=MAX_LIST)
@@ -49,7 +57,7 @@ def live_match(b: MatchIn, s: Session = Depends(db, scope="function"), ctx: Ctx 
     return service.evaluate(s, ctx.settings, b.author_id, b.text, b.source_note_ids, b.claim_links)
 
 
-class AuthorIn(BaseModel):
+class AuthorIn(Body):
     name: str = Field(min_length=2, max_length=120)
     about: str = Field(default="", max_length=2000)
 
@@ -68,7 +76,7 @@ def add_author(b: AuthorIn, s: Session = Depends(db, scope="function"), u: dict 
     return {"id": row.id, "slug": row.slug, "name": row.name}
 
 
-class SampleIn(BaseModel):
+class SampleIn(Body):
     author_id: Id
     title: str = Field(default="", max_length=200)
     text: str = Field(min_length=20, max_length=200000)
@@ -91,10 +99,15 @@ def add_sample(b: SampleIn, s: Session = Depends(db, scope="function"), u: dict 
 
 @router.post("/samples/upload", summary="Upload a file: text, markdown, PDF, transcript, LinkedIn Shares.csv or X tweets.js")
 async def upload_sample(request: Request, author_id: QueryId, s: Session = Depends(db, scope="function"), u: dict = Depends(writer)):
-    name = (request.headers.get("x-filename") or "upload.txt")[:150]
+    name = (request.headers.get("x-filename") or "upload.txt")[:150].replace("\x00", "")
     # The file is read and parsed before the database is touched: on SQLite the first query of a request that can write takes the write lock, and a slow upload must not hold it.
     data = await read_bounded(request, ingest.MAX_BYTES, "That file is larger than 8 MB.")  # refused while it arrives, never held whole
     items = await run_in_threadpool(_rule, ingest.detect, name, data)  # reading a file can take a while: not on the thread that serves everyone else
+    # Everything that asks the database (and can wait for its lock) or hashes the library runs on a worker thread, never on the thread that serves everyone else.
+    return await run_in_threadpool(_store_upload, s, author_id, name, items, u["user"])
+
+
+def _store_upload(s: Session, author_id: int, name: str, items: list, user: str) -> dict:
     if s.get(Author, author_id) is None:
         raise HTTPException(404, "No such voice.")
     known, fresh = service.sample_digests(s, author_id), []
@@ -106,21 +119,11 @@ async def upload_sample(request: Request, author_id: QueryId, s: Session = Depen
     for it in fresh:
         s.add(Sample(author_id=author_id, title=it.title[:200], kind=it.kind, text=it.text, source=f"file {name}"[:200]))
         s.flush()
-    record_audit(s, u["user"], "sample.uploaded", name, {"items": len(fresh), "skipped": len(items) - len(fresh)})
+    record_audit(s, user, "sample.uploaded", name, {"items": len(fresh), "skipped": len(items) - len(fresh)})
     return {"added": len(fresh), "skipped": len(items) - len(fresh)}
 
 
-@router.delete("/samples/{sample_id}", summary="Remove a sample")
-def delete_sample(sample_id: PathId, s: Session = Depends(db, scope="function"), u: dict = Depends(writer)):
-    row = s.get(Sample, sample_id)
-    if row is None:
-        raise HTTPException(404, "No such sample.")
-    s.delete(row)
-    record_audit(s, u["user"], "sample.removed", f"sample:{sample_id}", {})
-    return {"ok": True}
-
-
-class BuildIn(BaseModel):
+class BuildIn(Body):
     author_id: Id
 
 
@@ -130,7 +133,7 @@ def build(b: BuildIn, s: Session = Depends(db, scope="function"), ctx: Ctx = Dep
     return {"id": p.id, "version": p.version, "diff": p.diff}
 
 
-class GuideIn(BaseModel):
+class GuideIn(Body):
     guide: str = Field(max_length=6000)
 
 
@@ -156,7 +159,7 @@ def lock(profile_id: PathId, s: Session = Depends(db, scope="function"), u: dict
     return {"ok": True}
 
 
-class NoteIn(BaseModel):
+class NoteIn(Body):
     kind: str = Field(pattern="^(call|comment|email|note|fact)$")
     who: str = Field(default="", max_length=200)
     text: str = Field(min_length=8, max_length=20000)
@@ -197,7 +200,7 @@ def drop(idea_id: PathId, s: Session = Depends(db, scope="function"), u: dict = 
     return {"ok": True}
 
 
-class DraftFromIdea(BaseModel):
+class DraftFromIdea(Body):
     author_id: Id
     kind: str = Field(default="post", pattern="^(post|script|email|newsletter)$")
 
@@ -208,7 +211,7 @@ def draft_from_idea(idea_id: PathId, b: DraftFromIdea, s: Session = Depends(db, 
     return {"id": d.id}
 
 
-class DraftIn(BaseModel):
+class DraftIn(Body):
     text: str = Field(max_length=30000)
     author_id: Id | None = None
     title: str | None = Field(default=None, max_length=200)
@@ -278,14 +281,14 @@ def request(draft_id: PathId, s: Session = Depends(db, scope="function"), ctx: C
     return {"approval_id": a.id}
 
 
-class ScheduleIn(BaseModel):
+class ScheduleIn(Body):
     platform: str = Field(default="linkedin", pattern=PLATFORM_PATTERN)
     run_on: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
 
 
 @router.post("/drafts/{draft_id}/schedule", summary="Put an approved draft on the calendar (a plan, nothing is sent)")
-def schedule(draft_id: PathId, b: ScheduleIn, s: Session = Depends(db, scope="function"), u: dict = Depends(writer)):
-    d = s.get(Draft, draft_id)
+def schedule(draft_id: PathId, b: ScheduleIn, s: Session = Depends(db, scope="function"), ctx: Ctx = Depends(get_ctx), u: dict = Depends(writer)):
+    d = service.lock_draft(s, draft_id, ctx)  # held until this request ends, so a send or an edit cannot run through it
     if d is None:
         raise HTTPException(404, "No such draft.")
     if d.status not in {"approved", "scheduled"}:
@@ -304,13 +307,17 @@ def schedule(draft_id: PathId, b: ScheduleIn, s: Session = Depends(db, scope="fu
     return {"id": row.id}
 
 
-class MoveIn(BaseModel):
+class MoveIn(Body):
     run_on: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
 
 
 @router.put("/schedule/{schedule_id}", summary="Move a planned item to another day (drag on the calendar)")
-def move(schedule_id: PathId, b: MoveIn, s: Session = Depends(db, scope="function"), u: dict = Depends(writer)):
+def move(schedule_id: PathId, b: MoveIn, s: Session = Depends(db, scope="function"), ctx: Ctx = Depends(get_ctx), u: dict = Depends(writer)):
     row = s.get(Schedule, schedule_id)
+    if row is None:
+        raise HTTPException(404, "No such item.")
+    service.lock_draft(s, row.draft_id, ctx)
+    row = s.get(Schedule, schedule_id, populate_existing=True)  # read again now that the draft is held
     if row is None:
         raise HTTPException(404, "No such item.")
     if row.status != "planned":
@@ -324,14 +331,18 @@ def move(schedule_id: PathId, b: MoveIn, s: Session = Depends(db, scope="functio
     return {"ok": True, "from": old}
 
 
-@router.delete("/schedule/{schedule_id}", summary="Take an item off the calendar")
-def unschedule(schedule_id: PathId, s: Session = Depends(db, scope="function"), u: dict = Depends(writer)):
+@router.delete("/schedule/{schedule_id}", summary="Take a planned item off the calendar. Only a plan can be removed: a sent or exported item is a record.")
+def unschedule(schedule_id: PathId, s: Session = Depends(db, scope="function"), ctx: Ctx = Depends(get_ctx), u: dict = Depends(writer)):
     row = s.get(Schedule, schedule_id)
     if row is None:
         raise HTTPException(404, "No such item.")
-    if row.status == "unclear":
-        raise HTTPException(409, "A send to the scheduling tool gave no clear answer. Check the tool and say whether the post was made first.")
-    d = s.get(Draft, row.draft_id)
+    d = service.lock_draft(s, row.draft_id, ctx)
+    row = s.get(Schedule, schedule_id, populate_existing=True)  # read again now that the draft is held
+    if row is None:
+        raise HTTPException(404, "No such item.")
+    if row.status != "planned":
+        # A sent row is the only thing that stops a second send of the same words: taking it away would put the draft back to approved and a second click would post it twice.
+        raise HTTPException(409, UNPLAN_REFUSED.get(row.status, "Only a planned item can be taken off the calendar."))
     s.delete(row)
     s.flush()
     if d and d.status == "scheduled" and not s.scalar(select(Schedule.id).where(Schedule.draft_id == d.id)):
@@ -340,7 +351,7 @@ def unschedule(schedule_id: PathId, s: Session = Depends(db, scope="function"), 
     return {"ok": True}
 
 
-class ExportIn(BaseModel):
+class ExportIn(Body):
     platform: str | None = Field(default=None, pattern=PLATFORM_PATTERN)
 
 
@@ -373,7 +384,7 @@ def export(draft_id: PathId, b: ExportIn, s: Session = Depends(db, scope="functi
     return res
 
 
-class SendIn(BaseModel):
+class SendIn(Body):
     platform: str = Field(default="linkedin", pattern=PLATFORM_PATTERN)
     channel_id: str = Field(min_length=1, max_length=120)
     confirm: bool = False
@@ -381,10 +392,17 @@ class SendIn(BaseModel):
     run_on: str | None = Field(default=None, pattern=r"^\d{4}-\d{2}-\d{2}$")
 
 
-def _stop_send(s: Session, d: Draft, before: str, user: str, why: str, code: int = 409) -> HTTPException:
+def _sending_row(s: Session, draft_id: int) -> Schedule | None:
+    return s.scalars(select(Schedule).where(Schedule.draft_id == draft_id, Schedule.status == "sending").order_by(Schedule.id.desc())).first()
+
+
+def _stop_send(s: Session, draft_id: int, before: str, user: str, why: str, code: int = 409) -> HTTPException:
     """Put the draft back where it was, keep a record that the send did not go through (committed now, before the error rolls the request back), and return the error."""
+    d = service.lock_draft(s, draft_id)
     d.status = before
-    record_audit(s, user, "draft.send_failed", f"draft:{d.id}", {"reason": why[:200]})
+    if (row := _sending_row(s, draft_id)) is not None:
+        s.delete(row)  # the calendar row written when the send started: nothing was posted, so it goes
+    record_audit(s, user, "draft.send_failed", f"draft:{draft_id}", {"reason": why[:200]})
     s.commit()
     return HTTPException(code, why)
 
@@ -399,14 +417,13 @@ def _clearly_not_sent(exc: Exception) -> bool:
     return isinstance(exc, _NEVER_SENT)
 
 
-def _unclear_send(s: Session, d: Draft, user: str, adapter: str, platform: str, run_on: str) -> HTTPException:
+def _unclear_send(s: Session, draft_id: int, user: str, adapter: str, platform: str, run_on: str, reason: str = "") -> HTTPException:
     """A timeout, a server error or an answer nobody can read: the post may exist. The draft stays out of reach (no second send, no edit) until a person checks the tool and says which it was."""
-    d.status = "send_unknown"
-    s.add(Schedule(draft_id=d.id, platform=platform, run_on=run_on, status="unclear", adapter=adapter, external_id="", detail=f"{adapter} gave no clear answer. Check it, then say whether the post was made."))
+    d = service.lock_draft(s, draft_id)
+    service.hold_unclear_send(s, d, user, adapter, platform, run_on, reason)
     why = f"{adapter} did not give a clear answer. The post may or may not have been made. Check {adapter} first, then tell the app: it was posted, or it was not."
-    record_audit(s, user, "draft.send_unclear", f"draft:{d.id}", {"adapter": adapter})
     s.commit()
-    return HTTPException(502, why)
+    return HTTPException(502, why + (f" ({reason})" if reason else ""))
 
 
 @router.post("/drafts/{draft_id}/send", summary="Send an approved draft to Postiz, Buffer or Metricool. Needs live mode, an approval and confirm.")
@@ -427,39 +444,44 @@ def send(draft_id: PathId, b: SendIn, s: Session = Depends(db, scope="function")
         raise HTTPException(409, "This draft was already sent to the scheduling tool. Open it there; sending it again would make a second post.")
     if d.status in {"approved", "scheduled"} and (why := service.binding_problem(s, d)) is not None:
         raise HTTPException(409, why)
-    before = d.status
+    before, text, run_on = d.status, d.text, when.date().isoformat()
     # Claim the draft in one conditional step: a second request that arrives while this one is out at the vendor finds it no longer approved and stops.
     claimed = s.execute(update(Draft).where(Draft.id == d.id, Draft.status.in_(("approved", "scheduled"))).values(status="sending", updated_at=ctx.now(s))) if before in {"approved", "scheduled"} else None
     if claimed is not None and claimed.rowcount != 1:
         raise HTTPException(409, "This draft is being sent or was just sent.")
-    if claimed is not None:
-        s.commit()  # visible to every other request from now on, and still visible if this process stops half way
-        d = service.lock_draft(s, draft_id)
+    if claimed is not None:  # the calendar row of this send: it becomes "sent" or "unclear", or goes if the tool clearly said no
+        s.add(Schedule(draft_id=d.id, platform=b.platform, run_on=run_on, status="sending", adapter=sched.name, detail=f"Being sent to {sched.name}."))
     eff = ctx.effective(s)  # the kill switch and the draft mode, read from the database now
     once = copy.copy(sched)  # a copy for this request: the shared adapter is never changed, so another request cannot borrow these settings
     once.s = eff
+    s.commit()  # the claim is visible to every other request from now on, and still there if this process stops half way. The write lock is let go here: nothing below may hold it while the vendor answers.
     try:
-        res = once.send(d.text, b.platform, when, b.channel_id, approved=before in {"approved", "scheduled"}, confirm=b.confirm, as_draft=b.as_draft)
+        res = once.send(text, b.platform, when, b.channel_id, approved=before in {"approved", "scheduled"}, confirm=b.confirm, as_draft=b.as_draft)
     except (AdapterError, SafetyError) as exc:
-        raise _stop_send(s, d, before, u["user"], str(exc)) from exc
+        raise _stop_send(s, draft_id, before, u["user"], str(exc)) from exc
     except (httpx.HTTPError, ValueError, KeyError, TypeError, AttributeError) as exc:
         if _clearly_not_sent(exc):  # it never left, or the tool said no with a reason: nothing was posted
-            raise _stop_send(s, d, before, u["user"], f"{sched.name} did not take the post ({type(exc).__name__}). Nothing was posted.", 502) from exc
-        raise _unclear_send(s, d, u["user"], sched.name, b.platform, when.date().isoformat()) from exc  # the post may exist: keep the draft held
-    s.add(Schedule(draft_id=d.id, platform=b.platform, run_on=when.date().isoformat(), status="sent", adapter=sched.name, external_id=res["external_id"], detail=res["detail"]))
+            raise _stop_send(s, draft_id, before, u["user"], f"{sched.name} did not take the post ({type(exc).__name__}). Nothing was posted.", 502) from exc
+        raise _unclear_send(s, draft_id, u["user"], sched.name, b.platform, run_on, str(exc) if isinstance(exc, UnclearAnswer) else "") from exc  # the post may exist: keep the draft held
+    d = service.lock_draft(s, draft_id)
+    row = _sending_row(s, draft_id)
+    if row is None:
+        row = Schedule(draft_id=draft_id, platform=b.platform, run_on=run_on, adapter=sched.name)
+        s.add(row)
+    row.status, row.external_id, row.detail = "sent", res["external_id"][:120], res["detail"][:300]
     d.status = "published" if not b.as_draft else "scheduled"
-    record_audit(s, u["user"], "draft.sent", f"draft:{d.id}", {"adapter": sched.name, "as_draft": b.as_draft})
+    record_audit(s, u["user"], "draft.sent", f"draft:{draft_id}", {"adapter": sched.name, "as_draft": b.as_draft})
     return res
 
 
-class OutcomeIn(BaseModel):
+class OutcomeIn(Body):
     posted: bool
-    external_id: str = Field(default="", max_length=200)
+    external_id: str = Field(default="", max_length=120)  # the column that keeps it holds 120
 
 
 @router.post("/drafts/{draft_id}/send-outcome", summary="After a send with no clear answer: say whether the post was made, once you have looked in the scheduling tool")
 def send_outcome(draft_id: PathId, b: OutcomeIn, s: Session = Depends(db, scope="function"), ctx: Ctx = Depends(get_ctx), u: dict = Depends(writer)):
-    d = service.lock_draft(s, draft_id)
+    d = service.lock_draft(s, draft_id, ctx)  # a send left behind for over half an hour becomes "send_unknown" here too
     if d is None:
         raise HTTPException(404, "No such draft.")
     if d.status != "send_unknown":
@@ -480,7 +502,7 @@ def send_outcome(draft_id: PathId, b: OutcomeIn, s: Session = Depends(db, scope=
     return {"status": d.status}
 
 
-class RuleIn(BaseModel):
+class RuleIn(Body):
     kind: str = Field(pattern="^(phrase|pattern)$")
     value: str = Field(min_length=2, max_length=300)
     note: str = Field(default="", max_length=300)
@@ -502,7 +524,7 @@ def add_rule(b: RuleIn, s: Session = Depends(db, scope="function"), u: dict = De
     return {"id": row.id}
 
 
-class RuleToggle(BaseModel):
+class RuleToggle(Body):
     enabled: bool
 
 
@@ -528,7 +550,7 @@ def delete_rule(rule_id: PathId, s: Session = Depends(db, scope="function"), u: 
     return {"ok": True}
 
 
-class ImportIn(BaseModel):
+class ImportIn(Body):
     csv: str = Field(max_length=5_000_000)
     mapping: dict[str, str] | None = None
     preview: bool = True
@@ -538,7 +560,10 @@ class ImportIn(BaseModel):
 def import_csv(b: ImportIn, s: Session = Depends(db, scope="function"), u: dict = Depends(writer)):
     import csv, io
 
-    headers = next(csv.reader(io.StringIO(b.csv)), [])
+    try:
+        headers = next(csv.reader(io.StringIO(b.csv)), [])
+    except csv.Error:
+        return {"ok": False, "headers": [], "suggested": {}, "message": learning.CSV_CELL_TOO_LONG, "rows": 0, "problems": []}
     sug = learning.suggest_mapping(headers)
     mapping = b.mapping or sug
     try:
@@ -563,7 +588,7 @@ def import_csv(b: ImportIn, s: Session = Depends(db, scope="function"), u: dict 
     return {"ok": True, "headers": headers, "suggested": sug, "rows": len(fresh), "duplicates": dupes, "problems": problems[:20], "saved": not b.preview, "sample": fresh[:3]}
 
 
-class LinkIn(BaseModel):
+class LinkIn(Body):
     target: str = Field(max_length=800)
     post_ref: str = Field(default="", max_length=200)
     draft_id: Id | None = None
@@ -575,6 +600,8 @@ class LinkIn(BaseModel):
 @router.post("/links", summary="Make a tracked short link. The target host must be on the allow list.")
 def make_link(b: LinkIn, s: Session = Depends(db, scope="function"), ctx: Ctx = Depends(get_ctx), u: dict = Depends(writer)):
     target = _rule(attribution.make_target, b.target, ctx.settings.allow_hosts(), b.source, b.medium, b.campaign, "", ctx.settings.allow_http_local_targets)
+    if len(target) > 1000:  # the stored address (with the tracking words added) must fit its column
+        raise HTTPException(400, "That address is too long once the tracking words are added. Use a shorter address, or shorter campaign, source and medium names.")
     same = s.scalars(select(Link).where(Link.target == target, Link.post_ref == b.post_ref, Link.draft_id == b.draft_id, Link.campaign == attribution.slug(b.campaign), Link.source == attribution.slug(b.source), Link.medium == attribution.slug(b.medium))).first()
     if same is not None:  # pressing the button twice must not make two links that split the clicks
         return {"id": same.id, "code": same.code, "short_url": f"{ctx.settings.public_base_url.rstrip('/')}/r/{same.code}", "short_path": f"/r/{same.code}", "target": same.target, "existing": True}
@@ -586,7 +613,7 @@ def make_link(b: LinkIn, s: Session = Depends(db, scope="function"), ctx: Ctx = 
     return {"id": row.id, "code": code, "short_url": f"{ctx.settings.public_base_url.rstrip('/')}/r/{code}", "short_path": f"/r/{code}", "target": target, "existing": False}
 
 
-class ExperimentIn(BaseModel):
+class ExperimentIn(Body):
     name: str = Field(min_length=3, max_length=200)
     metric: str = Field(default="link clicks", max_length=60)
     a_label: str = Field(default="A", max_length=60)
@@ -602,7 +629,7 @@ def make_experiment(b: ExperimentIn, s: Session = Depends(db, scope="function"),
     return {"id": row.id}
 
 
-class CountsIn(BaseModel):
+class CountsIn(Body):
     a_n: int = Field(ge=0, le=10**9)
     a_hits: int = Field(ge=0, le=10**9)
     b_n: int = Field(ge=0, le=10**9)

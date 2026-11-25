@@ -20,3 +20,7 @@
 - **What stays on the vendor side.** Posts and tokens held by Postiz, Buffer or Metricool are governed by their own terms.
 
 Your writing samples are stored in the database in plain text, because the engine measures them. Protect the database like the writing itself. Back up and delete it when the client leaves.
+
+To remove one thing for good, the owner can delete a note, a writing sample, a draft, a voice or imported post numbers (see `14`). A deletion takes the copies of its words that the app itself made: the ideas quoted from a note, the profile versions built after a sample, the variants, calendar rows and exported file of a draft. It does not reach copies you made outside the app (a file you copied from the export folder, a backup) or a draft that was written from a note and still quotes it. A draft that was sent cannot be deleted. Text with a NUL character has it taken out before it is stored, and a note, a sample or a draft is never shown in the audit log, which keeps ids and counts only.
+
+The web app sends a Content-Security-Policy that allows only its own address for scripts, styles, images, fonts and requests, and no framing. Its scripts still need `unsafe-inline` (see `14`). Settings never print the database address, so a Postgres password does not appear in a log line or an error page.

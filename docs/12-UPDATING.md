@@ -4,6 +4,7 @@
 2. Pull the new version and read `../CHANGELOG.md`.
 3. `make install`, or `.venv/bin/pip install -c constraints.txt -e packages/core-py -e "apps/api[dev]"` and `pnpm install`. If your environment was made with uv, use `uv pip install --python .venv/bin/python -c constraints.txt -e packages/core-py -e "apps/api[dev]"` instead of pip.
 4. Postgres: `cd apps/api && ../../.venv/bin/alembic upgrade head`. SQLite creates missing tables by itself, but it cannot add a column to a table that already exists. The API and the worker check for that at start and stop with one message ("made by an older version") if the file is behind the code. Then keep a copy of the file, start with a new `DATABASE_URL` (a new file) and re enter or re import what you need, or move to Postgres. Version 1.0.1 changes no table, so a 1.0.0 file keeps working.
+   Going to 1.0.1 from an earlier 1.0.x adds one unique index on `vp_conversion` (revision 0002): `alembic upgrade head` makes it on Postgres, and the API and worker make it on a SQLite file at start. Repeated lead events already stored are removed first (the oldest of each is kept), so the totals on the Attribution page can drop by the number of repeats.
 5. `pnpm build`, restart the API, worker and web app.
 6. Run `python3 tools/doctor.py`, open the Voice profile page, and press Test on the Integrations page.
 

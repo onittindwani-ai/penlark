@@ -23,6 +23,9 @@ ALIASES = {"post_ref": ("post id", "id", "post_id", "url", "permalink"), "platfo
            "likes": ("likes", "reactions", "like_count"), "comments": ("comments", "replies", "comment_count"), "shares": ("shares", "reposts", "retweets"), "clicks": ("clicks", "link clicks", "url clicks"), "text": ("text", "content", "post", "caption", "commentary")}
 
 
+CSV_CELL_TOO_LONG = "A cell in that file is longer than 128 KB, or the file is not a plain CSV. Check the export, or paste the numbers in smaller pieces."
+
+
 class ImportError_(ValueError):
     pass
 
@@ -40,14 +43,22 @@ def suggest_mapping(headers: list[str]) -> dict[str, str]:
 
 def parse_csv(data: str, mapping: dict[str, str] | None = None) -> tuple[list[dict], list[str]]:
     rd = csv.DictReader(io.StringIO(data))
-    if not rd.fieldnames:
+    try:
+        fields = rd.fieldnames
+    except csv.Error as exc:
+        raise ImportError_(CSV_CELL_TOO_LONG) from exc
+    if not fields:
         raise ImportError_("The file has no header row.")
     m = mapping or suggest_mapping(rd.fieldnames)
     missing = [f for f in ("impressions", "text") if f not in m]
     if missing:
         raise ImportError_("Map these columns first: " + ", ".join(missing) + ".")
     rows, problems = [], []
-    for i, row in enumerate(rd, start=2):
+    try:
+        yield_rows = list(enumerate(rd, start=2))
+    except csv.Error as exc:  # a cell over the reader's limit (128 KB), or a stray NUL
+        raise ImportError_(CSV_CELL_TOO_LONG) from exc
+    for i, row in yield_rows:
         def num(f: str) -> int:
             v = (row.get(m.get(f, ""), "") or "0").replace(",", "").strip()
             try:

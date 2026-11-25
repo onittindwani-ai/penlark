@@ -5,6 +5,7 @@
 3. API: `make api`. Worker: `make worker`. Web: `pnpm build` then `make web`. The offline demo needs no worker (the Find ideas button answers at once). A real install (`DEMO_MODE=false`) needs it running: Find ideas is queued for the worker, and the hourly learning loop runs there. Safari: with `make web` the session cookie is marked Secure, and whether Safari keeps a Secure cookie on plain `http://localhost` was not tested here. If you cannot stay signed in on Safari, set `INSECURE_COOKIES=1` for local use only, or use Chrome or Firefox.
 4. Tests: `make test` (Python) and `pnpm e2e` (browser, needs Google Chrome).
 5. `make seed-check` re runs the three evaluations. `make check-env` checks your `.env`.
+6. The scripts in `tools/` (`doctor.py`, `hash_password.py` and the others) start the project's own Python by themselves, so `python3 tools/doctor.py` works on a fresh clone once `make install` has made `.venv`. Without a `.venv` they say to run `make install`. You can always run them as `.venv/bin/python tools/doctor.py`.
 
 ## Your own install (not the demo)
 

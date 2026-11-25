@@ -662,6 +662,46 @@
       }
      }
     }
+   },
+   "delete": {
+    "tags": [
+     "delete"
+    ],
+    "summary": "Delete a draft for good, with its variants, calendar rows and exported file. A sent draft stays. Owner only.",
+    "operationId": "delete_draft_api_drafts__draft_id__delete",
+    "parameters": [
+     {
+      "name": "draft_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
+       "title": "Draft Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
    }
   },
   "/api/schedule": {
@@ -800,6 +840,45 @@
        "minimum": 1,
        "default": 5000,
        "title": "Limit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "tags": [
+     "delete"
+    ],
+    "summary": "Delete every imported post number row. Needs confirm=true. Owner only.",
+    "operationId": "delete_all_performance_api_performance_delete",
+    "parameters": [
+     {
+      "name": "confirm",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "boolean",
+       "default": false,
+       "title": "Confirm"
       }
      }
     ],
@@ -1031,48 +1110,6 @@
        "maximum": 2147483647,
        "minimum": 1,
        "title": "Author Id"
-      }
-     }
-    ],
-    "responses": {
-     "200": {
-      "description": "Successful Response",
-      "content": {
-       "application/json": {
-        "schema": {}
-       }
-      }
-     },
-     "422": {
-      "description": "Validation Error",
-      "content": {
-       "application/json": {
-        "schema": {
-         "$ref": "#/components/schemas/HTTPValidationError"
-        }
-       }
-      }
-     }
-    }
-   }
-  },
-  "/api/samples/{sample_id}": {
-   "delete": {
-    "tags": [
-     "write"
-    ],
-    "summary": "Remove a sample",
-    "operationId": "delete_sample_api_samples__sample_id__delete",
-    "parameters": [
-     {
-      "name": "sample_id",
-      "in": "path",
-      "required": true,
-      "schema": {
-       "type": "integer",
-       "maximum": 2147483647,
-       "minimum": 1,
-       "title": "Sample Id"
       }
      }
     ],
@@ -1546,7 +1583,7 @@
     "tags": [
      "write"
     ],
-    "summary": "Take an item off the calendar",
+    "summary": "Take a planned item off the calendar. Only a plan can be removed: a sent or exported item is a record.",
     "operationId": "unschedule_api_schedule__schedule_id__delete",
     "parameters": [
      {
@@ -1900,6 +1937,174 @@
       }
      }
     },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/notes/{note_id}": {
+   "delete": {
+    "tags": [
+     "delete"
+    ],
+    "summary": "Delete a note for good, with the ideas found only from it. Owner only. Says which drafts still quote it.",
+    "operationId": "delete_note_api_notes__note_id__delete",
+    "parameters": [
+     {
+      "name": "note_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
+       "title": "Note Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/samples/{sample_id}": {
+   "delete": {
+    "tags": [
+     "delete"
+    ],
+    "summary": "Delete a writing sample for good, with every voice profile version built after it was added, and build a new one. Owner only.",
+    "operationId": "delete_sample_api_samples__sample_id__delete",
+    "parameters": [
+     {
+      "name": "sample_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
+       "title": "Sample Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/authors/{author_id}": {
+   "delete": {
+    "tags": [
+     "delete"
+    ],
+    "summary": "Delete a voice for good, with its samples, profile versions and drafts. A voice with a sent draft stays. Owner only.",
+    "operationId": "delete_author_api_authors__author_id__delete",
+    "parameters": [
+     {
+      "name": "author_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
+       "title": "Author Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/performance/{row_id}": {
+   "delete": {
+    "tags": [
+     "delete"
+    ],
+    "summary": "Delete one imported post number row. Owner only.",
+    "operationId": "delete_performance_row_api_performance__row_id__delete",
+    "parameters": [
+     {
+      "name": "row_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 1,
+       "title": "Row Id"
+      }
+     }
+    ],
     "responses": {
      "200": {
       "description": "Successful Response",
@@ -2879,7 +3084,7 @@
      },
      "external_id": {
       "type": "string",
-      "maxLength": 200,
+      "maxLength": 120,
       "title": "External Id",
       "default": ""
      }

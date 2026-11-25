@@ -11,6 +11,7 @@ import csv
 import io
 import json
 import re
+import time
 from dataclasses import dataclass
 
 MAX_BYTES = 8_000_000
@@ -49,6 +50,24 @@ def from_text(text: str, title: str = "") -> Item:
     return Item(title or (t.split("\n")[0][:60] if t else "Untitled"), t, "text")
 
 
+PDF_MAX_PAGES = 200
+PDF_MAX_CHARS = 2_000_000  # a crafted file can make a few pages give megabytes of text
+PDF_SECONDS = 20.0  # reading is checked between pages: a file that makes one page slow cannot be stopped from outside, but many slow pages are
+
+
+def _pdf_text(rd, clock=time.monotonic) -> str:
+    start, parts, total = clock(), [], 0
+    for page in rd.pages[:PDF_MAX_PAGES]:
+        if clock() - start > PDF_SECONDS:
+            raise IngestError("That PDF took too long to read. Split it into smaller files or paste the text.")
+        text = page.extract_text() or ""
+        total += len(text)
+        parts.append(text)
+        if total > PDF_MAX_CHARS:
+            raise IngestError("That PDF holds far more text than a writing sample should. Split it into smaller files or paste the text.")
+    return "\n\n".join(parts)
+
+
 def from_pdf(data: bytes, title: str = "") -> Item:
     if len(data) > MAX_BYTES:
         raise IngestError("That PDF is larger than 8 MB.")
@@ -56,7 +75,9 @@ def from_pdf(data: bytes, title: str = "") -> Item:
         from pypdf import PdfReader
 
         rd = PdfReader(io.BytesIO(data))
-        t = "\n\n".join((p.extract_text() or "") for p in rd.pages[:200])
+        t = _pdf_text(rd)
+    except IngestError:
+        raise
     except Exception as exc:  # a damaged file must give a clear message, never a crash
         raise IngestError("That PDF could not be read. Export it again or paste the text.") from exc
     if not t.strip():
@@ -92,13 +113,16 @@ def from_transcript(text: str, title: str = "", speaker: str | None = None) -> I
 def from_linkedin_csv(data: str) -> list[Item]:
     rd = csv.DictReader(io.StringIO(data))
     need = {"ShareCommentary"}
-    if not rd.fieldnames or not need <= set(rd.fieldnames):
-        raise IngestError("This does not look like LinkedIn's Shares.csv. Expected a ShareCommentary column.")
-    out = []
-    for row in rd:
-        t = clean(row.get("ShareCommentary") or "")
-        if len(t.split()) >= 8:
-            out.append(Item(t[:60], t, "post", (row.get("Date") or "")[:10]))
+    try:
+        if not rd.fieldnames or not need <= set(rd.fieldnames):
+            raise IngestError("This does not look like LinkedIn's Shares.csv. Expected a ShareCommentary column.")
+        out = []
+        for row in rd:
+            t = clean(row.get("ShareCommentary") or "")
+            if len(t.split()) >= 8:
+                out.append(Item(t[:60], t, "post", (row.get("Date") or "")[:10]))
+    except csv.Error as exc:  # one cell over the reader's limit of 128 KB
+        raise IngestError("A cell in that file is longer than 128 KB, so it does not look like LinkedIn's Shares.csv.") from exc
     return out
 
 
@@ -113,8 +137,9 @@ def from_x_archive(data: str) -> list[Item]:
     out = []
     for r in rows if isinstance(rows, list) else []:
         t = r.get("tweet", r) if isinstance(r, dict) else {}
+        t = t if isinstance(t, dict) else {}  # a file of the right name with the wrong shape must be skipped, not crash
         txt = t.get("full_text") or ""
-        if not txt or txt.startswith("RT @") or t.get("retweeted") is True:
+        if not isinstance(txt, str) or not txt or txt.startswith("RT @") or t.get("retweeted") is True:
             continue
         txt = re.sub(r"https?://\S+", "", txt)
         txt = re.sub(r"^(?:@\w+\s+)+", "", txt)

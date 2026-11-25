@@ -5,12 +5,13 @@ const MAX_BODY_LOGIN = 8 * 1024; // a sign in is a few hundred bytes
 const MAX_BODY_API = 9 * 1024 * 1024; // the largest legitimate request is an uploaded writing file (the API accepts up to 8 MB) or a pasted post-numbers CSV (up to 5 MB)
 
 /** The path segments to forward, or null when the request must be refused. A segment that is "." or "..", or holds a slash, a backslash or a percent sign
- *  (so it could be decoded into one later), is refused; so is auth/login (signing in goes through /api/session so the token stays out of page scripts),
+ *  (so it could be decoded into one later), a question mark, a hash or a semicolon (the framework hands the segment over already decoded, so `login%3F` arrives as
+ *  `login?` and would be read by the API as a path and a query), a space or any control character, is refused; so is auth/login (signing in goes through /api/session so the token stays out of page scripts),
  *  and anything under webhooks or tools. Matched by whole segment, never by a text prefix. */
 export function safePath(segments: string[]): string | null {
   if (!segments.length) return null;
   for (const seg of segments) {
-    if (!seg || seg === "." || seg === ".." || /[\\/%\u0000-\u001f]/.test(seg)) return null;
+    if (!seg || seg === "." || seg === ".." || /[\\/%?#;\s\u0000-\u001f\u007f-\u009f]/.test(seg)) return null;
   }
   const [first, second] = segments.map((x) => x.toLowerCase());
   if (BLOCKED_FIRST.has(first!) || (first === "auth" && second === "login")) return null;

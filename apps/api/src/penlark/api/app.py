@@ -7,11 +7,12 @@ import logging
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from penlark.api import routes_admin, routes_auth, routes_demo, routes_public, routes_read, routes_write
+from penlark.api import routes_admin, routes_auth, routes_delete, routes_demo, routes_public, routes_read, routes_write
 from penlark.config import Settings, load_settings
 from penlark.context import Ctx
 from penlark.datadir import REPO_DATA, data_dir_or_none
-from penlark.dbsetup import make_engine, make_factories, require_current_schema
+from penlark.proxywatch import ProxyWatch
+from penlark.dbsetup import ensure_indexes, make_engine, make_factories, require_current_schema
 from sendora_core.app import SESSION_COOKIE, create_base_app
 from sendora_core.auth import read_session_token
 from sendora_core.db import Base
@@ -61,6 +62,7 @@ def create_app(settings: Settings | None = None, ctx: Ctx | None = None) -> Fast
 
         if settings.database_url.startswith("sqlite"):
             Base.metadata.create_all(engine)  # SQLite zero setup path. Postgres uses `alembic upgrade head`.
+            ensure_indexes(engine)  # an index added in a later version is made on a file from an earlier one
             require_current_schema(engine)  # a file from an older version is reported in plain words now, not as a database error later
         factory, write_factory = make_factories(engine)
         ctx = Ctx(settings, factory, write_factory=write_factory)
@@ -81,10 +83,12 @@ def create_app(settings: Settings | None = None, ctx: Ctx | None = None) -> Fast
     # so the owner is held up for at most a short while by someone hammering the account, never locked out.
     app.state.login_account_bucket = TokenBucket(capacity=max(20, ctx.settings.login_burst * 4), refill_per_sec=1 / 30)
     app.state.click_bucket = TokenBucket(capacity=60, refill_per_sec=2.0)
+    app.state.proxy_watch = ProxyWatch()
 
     @app.middleware("http")
     async def require_session(request: Request, call_next):
         p = request.url.path
+        request.app.state.proxy_watch.note(request.client.host if request.client else None, request.headers.get("x-forwarded-for"))
         if p.startswith("/api/") and p not in PUBLIC and not p.startswith(PUBLIC_PREFIX):
             token = request.cookies.get(SESSION_COOKIE) or request.headers.get("x-session")
             data = read_session_token(ctx.settings.session_secret, token) if token else None
@@ -93,7 +97,7 @@ def create_app(settings: Settings | None = None, ctx: Ctx | None = None) -> Fast
             request.state.user = data
         return await call_next(request)
 
-    for r in (routes_auth, routes_read, routes_write, routes_admin, routes_public, routes_demo):
+    for r in (routes_auth, routes_read, routes_write, routes_delete, routes_admin, routes_public, routes_demo):
         app.include_router(r.router)
     return app
 
