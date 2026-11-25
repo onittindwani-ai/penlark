@@ -11,6 +11,6 @@
 
 `cp .env.example .env`, then follow `04-ENVIRONMENT-VARIABLES.md`. For your own install set `SESSION_SECRET` (32 or more random characters), `OWNER_EMAIL`, `OWNER_PASSWORD_HASH` and `APPROVER_EMAIL` with `APPROVER_PASSWORD_HASH`, and keep `DEMO_MODE=false`. To keep the settings somewhere else, set `ENV_FILE=/path/to/file`: the API, the worker, the database migration and the `penlark.admin` commands all read that file instead of `.env`.
 
-A new install starts empty, with the built in banned phrases already in place. Add the first voice (the person or brand you write for) on the Studio, Library or Voice profile page with **Add a voice**, or with `python -m penlark.admin add-voice "Sam Rivera"`. Then add some of their writing in the Library and build the profile (`10`).
+A new install starts empty, with the built in banned phrases already in place. Add the first voice (the person or brand you write for) on the Studio, Library or Voice profile page with **Add a voice**, or with `.venv/bin/python -m penlark.admin add-voice "Sam Rivera"` (run it from the repository folder: the command lives in the project's own Python, which `make install` made in `.venv`). Then add some of their writing in the Library and build the profile (`10`).
 
 The browser tests build their own demo database in `.demo/`. Delete `.demo`, `.next`, `node_modules` and `.venv` any time: they are rebuilt.

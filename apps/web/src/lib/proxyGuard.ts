@@ -1,13 +1,13 @@
 /** Rules for what the web proxy will forward to the private API. Kept apart from the route so they can be tested without a server. */
 
-const BLOCKED_FIRST = new Set(["webhooks", "tools"]); // the signed webhooks go to the API directly, not through the web app
+const BLOCKED_FIRST = new Set(["webhooks", "tools", "public"]); // the signed webhooks go to the API directly, not through the web app; the tracked link (public) is served by /r/<code>, never as a page of this origin
 const MAX_BODY_LOGIN = 8 * 1024; // a sign in is a few hundred bytes
 const MAX_BODY_API = 9 * 1024 * 1024; // the largest legitimate request is an uploaded writing file (the API accepts up to 8 MB) or a pasted post-numbers CSV (up to 5 MB)
 
 /** The path segments to forward, or null when the request must be refused. A segment that is "." or "..", or holds a slash, a backslash or a percent sign
  *  (so it could be decoded into one later), a question mark, a hash or a semicolon (the framework hands the segment over already decoded, so `login%3F` arrives as
  *  `login?` and would be read by the API as a path and a query), a space or any control character, is refused; so is auth/login (signing in goes through /api/session so the token stays out of page scripts),
- *  and anything under webhooks or tools. Matched by whole segment, never by a text prefix. */
+ *  and anything under webhooks, tools or public. Matched by whole segment, never by a text prefix. */
 export function safePath(segments: string[]): string | null {
   if (!segments.length) return null;
   for (const seg of segments) {

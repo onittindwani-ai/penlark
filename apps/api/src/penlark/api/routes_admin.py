@@ -6,6 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from penlark import service
+from penlark.api.bodies import Body
 from penlark.api.deps import db, get_ctx, owner, writer
 from penlark.api.serializers import iso
 from penlark.api.types import PathId
@@ -40,7 +41,7 @@ def _preview(a: Approval, drafts: dict) -> dict | None:
             "approved_text_sha256": (a.payload or {}).get("text_sha256"), "status": d.status, "author_id": d.author_id}
 
 
-class DecideIn(BaseModel):
+class DecideIn(Body):
     approve: bool
     note: str = Field(default="", max_length=500)
     text_sha256: str | None = Field(default=None, max_length=64)  # the fingerprint of the text the person was shown, when the app sends it

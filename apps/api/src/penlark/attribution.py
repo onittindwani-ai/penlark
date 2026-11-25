@@ -40,13 +40,27 @@ def host_matches(host: str, allow: list[str]) -> bool:
     return False
 
 
+def parse_address(url: str):
+    """The parsed address, or None when it cannot be parsed at all (`https://[abc`, a host that changes when it is normalised, a bracket that is not an address). Never raises."""
+    try:
+        return urlparse(url)
+    except ValueError:
+        return None
+
+
 def host_allowed(url: str, allow: list[str], allow_http_local: bool = False) -> bool:
     if "\\" in url or any(ord(ch) <= 32 or ord(ch) == 127 for ch in url):  # a backslash or a space or control character: browsers and parsers read such an address differently
         return False
-    u = urlparse(url)
-    if u.scheme not in ({"https", "http"} if allow_http_local else {"https"}) or not u.hostname or u.username or u.password:
+    u = parse_address(url)
+    if u is None:
         return False
-    return host_matches(u.hostname, allow)
+    try:
+        host, user, password = u.hostname, u.username, u.password
+    except ValueError:
+        return False
+    if u.scheme not in ({"https", "http"} if allow_http_local else {"https"}) or not host or user or password:
+        return False
+    return host_matches(host, allow)
 
 
 def slug(s: str) -> str:

@@ -67,6 +67,8 @@ class Settings(BaseAppSettings):
     cadence: str = "linkedin:2,x:2"  # posts a week per platform, a plan and a nudge on the calendar, never a block
     timezone: str = "UTC"  # TIMEZONE: the calendar day that "today" means for exports and the calendar, for example Europe/London or America/New_York
 
+    send_hour: int = Field(default=9, ge=0, le=23)  # SEND_HOUR: the hour of the day, in TIMEZONE, at which a send for a chosen day goes out (09 means 9 in the morning)
+
     @field_validator("timezone")
     @classmethod
     def _timezone_known(cls, v: str) -> str:

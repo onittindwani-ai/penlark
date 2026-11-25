@@ -37,6 +37,11 @@ def db(request: Request) -> Iterator[Session]:
     yield from _session(request, writes=request.method not in SAFE_METHODS)
 
 
+def db_read(request: Request) -> Iterator[Session]:
+    """For a POST that only reads (a live check of a text): it never takes the write lock, so it cannot make a real save wait."""
+    yield from _session(request, writes=False)
+
+
 def db_write(request: Request) -> Iterator[Session]:
     """For the one GET route that writes (a click on a tracked link)."""
     yield from _session(request, writes=True)

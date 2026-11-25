@@ -6,7 +6,7 @@ test("ordinary paths pass and the private ones never do", () => {
   assert.equal(safePath(["drafts", "12"]), "drafts/12");
   assert.equal(safePath(["approvals", "7", "decide"]), "approvals/7/decide");
   assert.equal(safePath(["auth", "me"]), "auth/me");
-  for (const bad of [["auth", "login"], ["Auth", "login"], ["auth", "login", "x"], ["webhooks", "lead"], ["tools", "x"]]) assert.equal(safePath(bad), null, bad.join("/"));
+  for (const bad of [["auth", "login"], ["Auth", "login"], ["auth", "login", "x"], ["webhooks", "lead"], ["tools", "x"], ["public", "r", "abc"], ["Public", "r", "abc"]]) assert.equal(safePath(bad), null, bad.join("/"));
 });
 
 test("dot segments and encoded tricks are refused", () => {

@@ -15,6 +15,7 @@ Where to put each one: **Local** `.env` in the repo root. **Vercel** the project
 | `KILL_SWITCH` | no | `true` stops every send and every file export. Also a button in the app: the switch set there is read from the database each time. |
 | `MAX_BODY_BYTES` | no | The largest request the API accepts, in bytes. Default 26214400 (25 MB). A larger request is refused before it is read. |
 | `TIMEZONE` | no | The day that "today" means for exports and the calendar, a name such as `Europe/London` or `America/New_York`. Default `UTC`. |
+| `SEND_HOUR` | no | The hour of the day, 0 to 23 in `TIMEZONE`, at which a send for a chosen day goes out. Default `9`. A send with no date goes out tomorrow at that hour. A date and hour that are already past are refused. |
 | `SEED_DIR` | no | The folder that holds the demo data (`seed/authors.json` and the rest). Found by itself when you run from the repository; the Docker image sets it. Only the demo needs it. |
 | `OWNER_EMAIL`, `OWNER_PASSWORD_HASH` | live | Make the hash with `python3 tools/hash_password.py` and paste the result. With `MODE=live` and `DEMO_MODE=false` the API refuses to start while `OWNER_EMAIL` is still the example address. Wrong: sign in says the email or password is wrong. |
 | `APPROVER_EMAIL`, `APPROVER_PASSWORD_HASH` | live | The second person who approves drafts. Without one, nothing can be approved because the asker cannot approve their own request. |

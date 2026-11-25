@@ -140,30 +140,60 @@ def _brackets(text: str) -> list[str]:
 
 # A link, a web address or an email address typed in a draft. The repeats have upper limits so a hostile text cannot make this slow.
 _LINKS = re.compile(r"https?://[^\s<>\"')]{1,300}|\bwww\.[^\s<>\"')]{1,300}|[\w.+-]{1,64}@[\w-]{1,63}(?:\.[\w-]{1,63}){1,5}", re.I)
-# A web address with no http in front: "evil.com/free" or "bit.ly/x". Plain words with a dot in them ("Next.js", "e.g.", "file.txt") are not addresses, so only an ending that is a known
-# web ending counts, or a link shortener.
-_BARE = re.compile(r"(?<![\w@./:-])((?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.){1,4}([a-z]{2,24}))(?::\d{1,5})?(?:/[^\s<>\"')]{0,300})?(?![\w-])", re.I)
-_TLDS = frozenset("com net org io co ai app dev me ly gl to xyz info biz us uk de fr es it nl eu ca au in ch se no dk fi be at pl ru cn jp kr br mx online site store shop tech cloud link click page top vip cc tv fm ws ac sh gg gd id ink club live news".split())
+# A web address with no http in front: "evil.com/free" or "bit.ly/x". A label may hold any letter or digit (a domain such as "bücher.de" or "пример.рф" is an address). Plain words with a dot in them
+# ("Next.js", "e.g.", "file.txt") are not addresses, so only a known web ending counts, a link shortener, or any ending followed by a path ("evil.foo/x"). The ending is read in lower case.
+_LABEL = r"[^\W_](?:[\w-]{0,61}[^\W_])?"
+_BARE = re.compile(rf"(?<![\w@./:-])((?:{_LABEL}\.){{1,4}}(xn--[a-z0-9-]{{2,59}}|[a-z]{{2,24}}|[^\W\d_]{{2,24}}))(?::\d{{1,5}})?(?:/[^\s<>\"')]{{0,300}})?(?![a-z0-9-])", re.I)
+_CC = ("ad ae af ag al ao ar at au az ba bb bd be bf bg bh bi bj bm bn bo br bs bt bw bz ca cd cf cg ch ci ck cl cm cn co cr cu cv cx cy cz de dj dk dm dz ec ee eg er es et eu fi fj fo fr ga ge gf gg gh gi gl gm gn gp gq gr gt gu gw gy hk hn hr ht hu id ie il im in io iq ir it je jm jo jp ke kg kh ki km kn kp kr kw ky kz lb lc li lk lr ls lt lu lv ly mc me mg mk ml mm mn mq mr ms mt mu mv mw mx mz na nc ne nf ng ni nl no np nr nu nz om pe pf pg ph pk pl pm pn pr ps pt pw qa ro rw sa sb sc sd se sg sh si sk sl sm sn sr sv sx sy sz tc td tg th tj tk tl tm tn to tr tt tv tw tz ua ug uk us uy uz vc ve vg vi vn vu wf ws ye yt za zm zw")
+_GTLD = ("com net org info biz mobi asia xyz app dev ai page top vip click link live news online site store shop tech cloud club ink zip mov cam rest icu buzz monster world today space website email digital agency solutions center network systems services "
+         "support group company lol host wiki casino poker bingo porn sex adult xxx stream download review party science loan bid trade racing gmbh ltd inc llc casa kim lat ooo ovh wang xin")
+_IDN_TLDS = frozenset("рф рус онлайн сайт москва дети орг ком бел укр срб католик 中国 中國 中文网 网站 网络 公司 香港 台湾 台灣 新加坡 日本 한국 닷컴 ไทย भारत ভারত இந்தியா السعودية مصر امارات اونلاين شبكة موقع קום".split())
+_TLDS = frozenset((_CC + " " + _GTLD).split()) | frozenset("ly gl".split())
+_FILE_ENDINGS = frozenset("js jsx ts tsx json md py rs txt html htm css yml yaml csv pdf png jpg jpeg gif svg docx xlsx pptx toml ini cfg log rb php java kt swift go c h cpp lock env conf".split())
+# Words that start a sentence and are also a web ending ("Done.It works"): skipped only when the first letter is a capital, the rest is lower case, and there is no path or port.
+_SENTENCE_WORDS = frozenset("it in is at as my so no to me us be by go id am an do he we of on or up if ok hi".split())
 _SHORTENERS = frozenset("bit.ly t.co tinyurl.com goo.gl ow.ly buff.ly lnkd.in is.gd rb.gy cutt.ly t.ly shorturl.at rebrand.ly tiny.cc s.id trib.al dlvr.it youtu.be amzn.to fb.me wp.me".split())
+# Punctuation of Chinese, Japanese and Korean writing that ends an address (a full width colon, slash, comma or full stop right after it); a browser cannot go to a host that holds one.
+_LINK_ENDERS = str.maketrans({c: " " for c in "，。；：！？、）（」「』『】【》《〉〈”“’‘／＼"})
+_IDEOGRAPHIC_DOT = re.compile(r"(?<=[A-Za-z0-9-])[。｡](?=[A-Za-z0-9])")  # `evil。com`: a browser reads this full stop as a dot in a host name
+
+
+def scan_text(text: str) -> str:
+    """The text as an address scan should read it: the ideographic full stop inside an address is a dot, the punctuation that ends an address ends it, and every full width letter, digit,
+    dot and at sign is the plain one a browser would make of it."""
+    import unicodedata
+
+    return unicodedata.normalize("NFKC", _IDEOGRAPHIC_DOT.sub(".", text).translate(_LINK_ENDERS))
 
 
 def _host_of(raw: str) -> str | None:
     """The host a browser would go to for this address, or None when the address is written so that a parser and a browser could read it differently:
-    a backslash (`https://evil.com\\@example.org/x` is read as evil.com by a browser and as example.org by a parser), a user name or a password in front of the host."""
-    from urllib.parse import urlparse
+    a backslash (`https://evil.com\\@example.org/x` is read as evil.com by a browser and as example.org by a parser), a user name or a password in front of the host,
+    or text that cannot be an address at all (`https://[YOUR LINK]`, which makes the parser stop with an error)."""
+    from penlark import attribution
 
     if "\\" in raw:
         return None
-    u = urlparse(raw if "://" in raw else "https://" + raw)
-    if u.username is not None or u.password is not None or "@" in u.netloc:
+    u = attribution.parse_address(raw if "://" in raw else "https://" + raw)
+    if u is None:
         return None
-    return u.hostname or ""
+    try:
+        if u.username is not None or u.password is not None or "@" in u.netloc:
+            return None
+        return u.hostname or ""
+    except ValueError:
+        return None
+
+
+def _known_ending(tld: str, domain: str) -> bool:
+    return tld in _TLDS or domain in _SHORTENERS or tld.startswith("xn--") or any(tld.startswith(i) for i in _IDN_TLDS if not i.isascii())
 
 
 def foreign_links(text: str, settings) -> list[str]:
     """Links and addresses in a draft that do not belong to the owner: not on REDIRECT_ALLOW_HOSTS and not the host of PUBLIC_BASE_URL. Text from a comment or an email
     can carry a link a person never meant to publish, so each one must be a deliberate choice. An address written two ways at once (a backslash, a name and password in front
-    of the host) is always foreign, and so is a bare address such as `evil.com/free` or a shortened link such as `bit.ly/x`."""
+    of the host) is always foreign, and so is a bare address such as `evil.com/free` (in any case or script) or a shortened link such as `bit.ly/x`. Text that only looks like a link
+    (`https://[YOUR LINK]`) is flagged too, never a crash."""
     from urllib.parse import urlparse
 
     from penlark import attribution
@@ -175,6 +205,7 @@ def foreign_links(text: str, settings) -> list[str]:
         if raw not in out:
             out.append(raw)
 
+    text = scan_text(text)
     for found in _LINKS.findall(text):
         raw = found.rstrip(".,;:!?")
         if "@" in raw and "://" not in raw and not raw.lower().startswith("www."):
@@ -185,8 +216,13 @@ def foreign_links(text: str, settings) -> list[str]:
             flag(raw)
     rest = _LINKS.sub(" ", text)  # what is left once the addresses above are taken out: look for bare ones
     for m in _BARE.finditer(rest):
-        domain, tld = m.group(1).lower(), m.group(2)
-        if tld != tld.lower() or (tld not in _TLDS and domain not in _SHORTENERS):  # "Done.It works" is a missing space after a full stop, not an address
+        domain, tld_raw = m.group(1).lower(), m.group(2)
+        tld = tld_raw.lower()
+        has_path = "/" in m.group(0)
+        plain_end = m.group(0) == m.group(1)
+        if plain_end and tld_raw[:1].isupper() and tld_raw[1:].islower() and tld in _SENTENCE_WORDS and domain.count(".") == 1:
+            continue  # "Done.It works" is a missing space after a full stop, not an address
+        if not (_known_ending(tld, domain) or (has_path and tld not in _FILE_ENDINGS)):
             continue
         if not attribution.host_matches(domain, allow):
             flag(m.group(0).rstrip(".,;:!?"))

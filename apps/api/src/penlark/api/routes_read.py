@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel, Field
+from pydantic import Field
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from penlark import attribution, cadence, dimensions, experiments, fingerprint, learning, service
-from penlark.api.deps import db, get_ctx
+from penlark.api.bodies import Body
+from penlark.api.deps import db, db_read, get_ctx
 from penlark.api.serializers import draft_dict, iso
 from penlark.api.types import Id, PathId, QueryId
 from penlark.context import Ctx
@@ -53,13 +54,13 @@ def profile(author_id: QueryId, s: Session = Depends(db, scope="function")):
     return {"profile": _profile_dict(p) if p else None, "versions": versions}
 
 
-class CompareIn(BaseModel):
+class CompareIn(Body):
     author_id: Id
     text: str = Field(max_length=20000)
 
 
 @router.post("/profile/compare", summary="Overlay a text on the profile radar")
-def compare(b: CompareIn, s: Session = Depends(db, scope="function")):
+def compare(b: CompareIn, s: Session = Depends(db_read, scope="function")):
     from penlark.textstats import measure
 
     p = service.latest_profile(s, b.author_id)

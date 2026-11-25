@@ -30,7 +30,7 @@ async function forward(request: Request, ctx: { params: Promise<{ path: string[]
   const body = ["GET", "HEAD"].includes(request.method) ? undefined : await readLimited(request, MAX_BODY_API);
   if (body === null) return NextResponse.json({ error: { message: "The request is too large." } }, { status: 413 });
   const send = () => fetch(`${API}/api/${joined}${url.search}`, {
-    method: request.method, headers, body, signal: request.signal, cache: "no-store",
+    method: request.method, headers, body, signal: request.signal, cache: "no-store", redirect: "manual", // an answer that is a redirect is passed on as it is, never followed and served from this origin
   });
   let upstream: Response;
   try {

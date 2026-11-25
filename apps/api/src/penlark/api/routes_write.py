@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import copy
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, time, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -13,7 +14,7 @@ from sqlalchemy.orm import Session
 from penlark import attribution, ingest, learning, safe_regex, service
 from penlark.adapters.schedulers import UnclearAnswer
 from penlark.api.bodies import Body
-from penlark.api.deps import db, get_ctx, owner, writer
+from penlark.api.deps import db, db_read, get_ctx, owner, writer
 from penlark.api.routes_public import read_bounded
 from penlark.api.serializers import draft_dict
 from penlark.api.types import MAX_LIST, Id, PathId, QueryId
@@ -53,7 +54,7 @@ class MatchIn(Body):
 
 
 @router.post("/match", summary="Live voice match and house rule check of any text. Writes nothing.")
-def live_match(b: MatchIn, s: Session = Depends(db, scope="function"), ctx: Ctx = Depends(get_ctx)):
+def live_match(b: MatchIn, s: Session = Depends(db_read, scope="function"), ctx: Ctx = Depends(get_ctx)):
     return service.evaluate(s, ctx.settings, b.author_id, b.text, b.source_note_ids, b.claim_links)
 
 
@@ -431,15 +432,22 @@ def send(draft_id: PathId, b: SendIn, s: Session = Depends(db, scope="function")
     d = service.lock_draft(s, draft_id, ctx)
     if d is None:
         raise HTTPException(404, "No such draft.")
+    if d.status == "sending":  # the first send is still out at the tool: this request must not touch its calendar row
+        raise HTTPException(409, "This draft is being sent right now. Wait for the answer.")
     if d.status == "send_unknown":
         raise HTTPException(409, "The last send gave no clear answer. Check the scheduling tool, then say whether the post was made (It was posted, or It was not posted) before anything else.")
     sched = ctx.scheduler
     if not hasattr(sched, "send") or sched.name in {"export", "seed"}:
         raise HTTPException(409, "The file export never sends. Choose Postiz, Buffer or Metricool in the settings.")
+    if b.run_on and sched.name == "buffer":  # Penlark has no verified way to give Buffer a time, so a date would be dropped without a word: say so instead
+        raise HTTPException(400, "Buffer adds the post to its own queue or saves a draft, and Penlark cannot give it a date. Leave the date empty and choose the time in Buffer.")
     try:
-        when = datetime.strptime(b.run_on, "%Y-%m-%d").replace(tzinfo=timezone.utc) if b.run_on else ctx.now(s) + timedelta(days=1)
+        day = datetime.strptime(b.run_on, "%Y-%m-%d").date() if b.run_on else ctx.today(s) + timedelta(days=1)
     except ValueError as exc:
         raise HTTPException(400, "That is not a real date.") from exc
+    when = datetime.combine(day, time(ctx.settings.send_hour), tzinfo=ZoneInfo(ctx.settings.timezone)).astimezone(timezone.utc)  # the send hour in the owner's timezone, not midnight UTC
+    if when < ctx.now(s) - timedelta(minutes=1):
+        raise HTTPException(400, "That date and hour are in the past, so the scheduling tool would post at once or refuse. Pick a later date.")
     if d.status in {"approved", "scheduled"} and s.scalar(select(Schedule.id).where(Schedule.draft_id == d.id, Schedule.status == "sent")):
         raise HTTPException(409, "This draft was already sent to the scheduling tool. Open it there; sending it again would make a second post.")
     if d.status in {"approved", "scheduled"} and (why := service.binding_problem(s, d)) is not None:
@@ -489,7 +497,8 @@ def send_outcome(draft_id: PathId, b: OutcomeIn, s: Session = Depends(db, scope=
     row = s.scalars(select(Schedule).where(Schedule.draft_id == d.id, Schedule.status == "unclear").order_by(Schedule.id.desc())).first()
     if b.posted:  # it exists at the tool: the draft is handed over, and it can never be sent a second time from here
         if row is None:
-            row = Schedule(draft_id=d.id, platform="linkedin", run_on=ctx.today(s).isoformat(), adapter=ctx.scheduler.name)
+            last = s.scalars(select(Schedule).where(Schedule.draft_id == d.id).order_by(Schedule.id.desc())).first()  # the platform of the send, not a guess
+            row = Schedule(draft_id=d.id, platform=last.platform if last else "linkedin", run_on=ctx.today(s).isoformat(), adapter=ctx.scheduler.name)
             s.add(row)
         row.status, row.external_id, row.detail = "sent", b.external_id.strip(), f"A person confirmed the post exists in {ctx.scheduler.name}."
         d.status = "scheduled"
@@ -599,6 +608,8 @@ class LinkIn(Body):
 
 @router.post("/links", summary="Make a tracked short link. The target host must be on the allow list.")
 def make_link(b: LinkIn, s: Session = Depends(db, scope="function"), ctx: Ctx = Depends(get_ctx), u: dict = Depends(writer)):
+    if attribution.parse_address(b.target) is None:  # `https://[x` is not an address at all: a clear refusal, never a crash
+        raise HTTPException(422, "That is not a web address. Check the square brackets and any full width punctuation, then try again.")
     target = _rule(attribution.make_target, b.target, ctx.settings.allow_hosts(), b.source, b.medium, b.campaign, "", ctx.settings.allow_http_local_targets)
     if len(target) > 1000:  # the stored address (with the tracking words added) must fit its column
         raise HTTPException(400, "That address is too long once the tracking words are added. Use a shorter address, or shorter campaign, source and medium names.")
