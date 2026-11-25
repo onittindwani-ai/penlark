@@ -129,7 +129,7 @@ def test_an_unsafe_start_is_refused_before_the_database_file_exists(tmp_path):
 def test_a_live_install_with_the_example_owner_address_is_refused(tmp_path):
     with pytest.raises(ConfigError, match="OWNER_EMAIL"):
         create_app(real_settings(tmp_path, mode="live", owner_email="owner@example.test"))
-    assert TestClient(create_app(real_settings(tmp_path, mode="live"))).get("/health").json()["mode"] == "live"  # a real address is fine
+    assert TestClient(create_app(real_settings(tmp_path, mode="live"))).get("/health").json() == {"status": "ok"}  # a real address is fine, and /health tells a stranger nothing else
 
 
 def test_the_refusal_happens_before_any_demo_data_is_written(tmp_path, monkeypatch):
