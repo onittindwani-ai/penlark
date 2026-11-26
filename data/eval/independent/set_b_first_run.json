@@ -3254,5 +3254,5 @@
    }
   ]
  },
- "note": "Scores come from plain code (profile statistics, rule lists, word counts), not a language model. The texts are fictional and assembled from sentence banks."
+ "note": "Scores come from plain code (profile statistics, rule lists, word counts), not a language model. The texts are sample data and assembled from sentence banks."
 }

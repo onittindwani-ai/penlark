@@ -1,6 +1,6 @@
 # Penlark specification
 
-Penlark helps one person or one small team write posts, scripts, emails and newsletters in their own voice, with a person approving everything. It never publishes by itself. All people, companies, numbers and posts in the demo are fictional.
+Penlark helps one person or one small team write posts, scripts, emails and newsletters in their own voice, with a person approving everything. It never publishes by itself. All people, companies, numbers and posts in the demo are sample data.
 
 ## Hard limits
 1. It never invents personal facts or results. Any number, result, client or personal experience in a draft must link to a source note, or it is flagged "needs a source or a founder fact".
@@ -14,7 +14,7 @@ Author, Sample, VoiceProfile (versioned, lockable), Note (calls, comments, email
 
 ## Pipeline
 1. Ingest: markdown, text, PDF, a pasted post, a transcript file (plain, WebVTT, SRT, "Speaker: text"), a LinkedIn export (Shares.csv layout, UNVERIFIED), an X archive (tweets.js layout, UNVERIFIED), YouTube transcript text.
-2. Build a voice profile. Code measures 14 style dimensions. A guide in plain words is written by the offline stand in (rules, NOT a language model) or by the live model path (`model_tasks.py`, run only against a local fake server, UNVERIFIED). The human edits the guide and locks the profile. Versions keep a diff.
+2. Build a voice profile. Code measures 14 style dimensions. A guide in plain words is written by the offline stand in (rules, NOT a language model) or by the live model path (`model_tasks.py`, run only against a local mock server, UNVERIFIED). The human edits the guide and locks the profile. Versions keep a diff.
 3. Idea finder: notes become ranked ideas. Each idea carries a verbatim evidence quote that code proves exists in the source note. Score rubric in code.
 4. Writers: the offline stand in fills templates from the evidence and the profile. Labelled "not a language model". The live path goes through the base LLM wrapper (`model_tasks.py`, UNVERIFIED live); code re scores every model draft.
 5. Voice match score: pure code, 0 to 100, per dimension, with the sentences that pull the score down and a plain suggestion per dimension. Fast enough to run on every keystroke.

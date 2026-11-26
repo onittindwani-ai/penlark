@@ -9,7 +9,7 @@ Every outside fact, with where it came from, the date, and whether it was run fo
 | Buffer API: GraphQL at `https://api.buffer.com`, Bearer token, `createPost` with text, channelId, schedulingType, mode, saveToDraft | https://developers.buffer.com/examples/create-draft-post.html | 2026-11-23 | VERIFIED from docs, adapter not run live |
 | Buffer scheduled post example | not read | | UNVERIFIED |
 | Metricool OpenAPI 3.0.1 exists at app.metricool.com/api/swagger.json; base URL and auth header X-Mc-Auth read, the scheduler post path was NOT read (file about 1.6 million characters) | https://app.metricool.com/api/swagger.json | 2026-11-23 | header and base URL VERIFIED, post shape UNVERIFIED |
-| Language model path: `POST /v1/messages` through the base wrapper, three jobs, code re scoring | see `facts/models.md` | 2026-11-23 | UNVERIFIED live (fake server and fixtures only) |
+| Language model path: `POST /v1/messages` through the base wrapper, three jobs, code re scoring | see `facts/models.md` | 2026-11-23 | UNVERIFIED live (mock server and fixtures only) |
 | LinkedIn Shares.csv columns (Date, ShareLink, ShareCommentary, SharedUrl, MediaUrl, Visibility) | memory (help page could not be read) | 2026-11-23 | UNVERIFIED |
 | X archive tweets.js layout (`window.YTD.tweets.part0 = [...]`, `tweet.full_text`) | memory | 2026-11-23 | UNVERIFIED |
 | YouTube transcript text with timestamps | handled as plain text lines | 2026-11-23 | UNVERIFIED layout |

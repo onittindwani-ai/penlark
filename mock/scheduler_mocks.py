@@ -1,4 +1,4 @@
-"""Fake Postiz, Buffer and Metricool servers written from public docs. Postiz and Buffer shapes were read on 2026-11-23, Metricool from memory. Nothing here is the real service."""
+"""Mock Postiz, Buffer and Metricool servers written from public docs. Postiz and Buffer shapes were read on 2026-11-23, Metricool from memory. Nothing here is the real service."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ class PostizMock:
 
         @self.app.get("/public/v1/integrations")
         def integrations(authorization: str | None = Header(default=None)):
-            return JSONResponse({"error": "unauthorized"}, 401) if authorization != self.key else [{"id": "ch-1", "name": "Fictional LinkedIn", "identifier": "linkedin"}]
+            return JSONResponse({"error": "unauthorized"}, 401) if authorization != self.key else [{"id": "ch-1", "name": "Sample LinkedIn", "identifier": "linkedin"}]
 
         @self.app.post("/public/v1/posts")
         async def create(request: Request, authorization: str | None = Header(default=None)):

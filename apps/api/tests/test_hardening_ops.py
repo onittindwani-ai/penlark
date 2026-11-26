@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[3]
 
 # ---- bodies are read in small pieces and refused as soon as they are too large ----
 
-class FakeRequest:
+class StubRequest:
     """Just enough of a request to watch how much of a body was read."""
 
     def __init__(self, chunks, declared=None):
@@ -43,23 +43,23 @@ class FakeRequest:
 
 
 def test_a_declared_length_over_the_limit_is_refused_before_any_byte_is_read():
-    r = FakeRequest([b"x" * 100] * 50, declared=5000)
+    r = StubRequest([b"x" * 100] * 50, declared=5000)
     with pytest.raises(HTTPException) as e:
         asyncio.run(read_bounded(r, 1000))
     assert e.value.status_code == 413 and r.read == 0
 
 
 def test_a_body_with_no_declared_length_is_cut_off_as_it_arrives():
-    r = FakeRequest([b"x" * 100] * 1000)
+    r = StubRequest([b"x" * 100] * 1000)
     with pytest.raises(HTTPException) as e:
         asyncio.run(read_bounded(r, 1000))
     assert e.value.status_code == 413 and r.read <= 11  # about ten pieces, not the thousand it could have sent
 
 
 def test_a_body_at_the_limit_is_read_whole_and_a_bad_length_header_is_refused():
-    assert asyncio.run(read_bounded(FakeRequest([b"a" * 500, b"b" * 500], declared=1000), 1000)) == b"a" * 500 + b"b" * 500
+    assert asyncio.run(read_bounded(StubRequest([b"a" * 500, b"b" * 500], declared=1000), 1000)) == b"a" * 500 + b"b" * 500
     with pytest.raises(HTTPException):
-        asyncio.run(read_bounded(FakeRequest([b"x"], declared="abc"), 1000))
+        asyncio.run(read_bounded(StubRequest([b"x"], declared="abc"), 1000))
 
 
 def sign(body: bytes, secret="hook-secret-for-tests"):
@@ -432,11 +432,11 @@ def test_the_placeholders_are_listed_and_stop_a_live_install(tmp_path):
 
 def test_the_version_is_the_same_everywhere(tmp_path):
     version = real_client(tmp_path).app.version
-    assert version == "1.0.1"
+    assert version == "1.0.2"
     assert f'version = "{version}"' in (ROOT / "apps/api/pyproject.toml").read_text()
     assert json.loads((ROOT / "package.json").read_text())["version"] == version
     assert json.loads((ROOT / "apps/web/package.json").read_text())["version"] == version
-    assert (ROOT / "CHANGELOG.md").read_text().split("## ")[1].startswith(f"{version} (2026-11-25)")
+    assert (ROOT / "CHANGELOG.md").read_text().split("## ")[1].startswith(f"{version} (2026-11-27)")
 
 
 # ---- .env.example and the docs list every setting ----

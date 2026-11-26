@@ -54,5 +54,5 @@
   "gareth->gareth": 8
  },
  "wrong_texts": {},
- "note": "Match scores come from code, not a language model. Texts are short (30 to 90 words) and every text is fictional."
+ "note": "Match scores come from code, not a language model. Texts are short (30 to 90 words) and every text is sample data."
 }

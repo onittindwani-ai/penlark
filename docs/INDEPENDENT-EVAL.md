@@ -1,6 +1,6 @@
 # Independent evaluation (held out sets A and B)
 
-Two test sets, A and B, were written by separate agents who never saw the code, from three documents only (the spec, the start guide and the capabilities page). Each set has 4 fictional authors with 20 training samples each, 60 held out texts (10 per author, 10 by an outsider, 10 generic machine sounding texts), 51 drafts with planted house rule violations and clean ones with keys, and 20 notes with 5 planted themes and 4 decoys. The scorer is `tools/eval_independent.py`; its readings were fixed in its docstring before any run. The files are in `data/eval/independent/`. Everything is fictional. Scores come from plain code, not a language model.
+Two test sets, A and B, were written by separate AI test authors who never saw the code, from three documents only (the spec, the start guide and the capabilities page). Each set has 4 sample authors with 20 training samples each, 60 held out texts (10 per author, 10 by an outsider, 10 generic machine sounding texts), 51 drafts with planted house rule violations and clean ones with keys, and 20 notes with 5 planted themes and 4 decoys. The scorer is `tools/eval_independent.py`; its readings were fixed in its docstring before any run. The files are in `data/eval/independent/`. Everything is sample data. Scores come from plain code, not a language model.
 
 ## What was run, in this order
 1. Set A, run once with the engine as it was after the first build: `set_a_first_run.json`, saved untouched.

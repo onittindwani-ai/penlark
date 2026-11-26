@@ -1,13 +1,13 @@
 # Quick demo (5 minutes, no accounts)
 
-Everything in the demo is fictional: three authors, <!--n:seed.notes-->24<!--/n--> notes, <!--n:seed.posts-->60<!--/n--> posts with numbers.
+Everything in the demo is sample data: three authors, <!--n:seed.notes-->24<!--/n--> notes, <!--n:seed.posts-->60<!--/n--> posts with numbers.
 
 1. `make install` (needs uv or Python 3.12, and pnpm: run `corepack enable` or `npm i -g pnpm` if you do not have it), then `pnpm build`.
 2. Terminal 1: `DEMO_MODE=true MODE=draft .venv/bin/python -m uvicorn penlark.api.app:app_from_env --factory --port 8000`
 3. Terminal 2: `cd apps/web && API_BASE_URL=http://127.0.0.1:8000 INSECURE_COOKIES=1 pnpm exec next start -p 3000`
 4. Open http://localhost:3000, sign in as `owner@example.test` with the password `demo-password-1`.
 
-The demo password, the made up `approver@example.test` and `viewer@example.test` accounts and the demo buttons exist only while `DEMO_MODE=true` and `OWNER_PASSWORD_HASH` is empty. Never put a demo on the internet with real writing in it.
+The demo password, the demo `approver@example.test` and `viewer@example.test` accounts and the demo buttons exist only while `DEMO_MODE=true` and `OWNER_PASSWORD_HASH` is empty. Never put a demo on the internet with real writing in it.
 
 Docker is for a real install, not for the demo: a demo refuses to start on the Postgres database that compose uses. For a real install with Docker: `cp .env.example .env`, keep `DEMO_MODE=false`, set a `SESSION_SECRET` of 32 or more random characters (`python3 -c "import secrets; print(secrets.token_urlsafe(48))"`), `OWNER_EMAIL`, `OWNER_PASSWORD_HASH` (from `python3 tools/hash_password.py`) and `POSTGRES_PASSWORD` (letters and digits only, for example `openssl rand -hex 24`), then `docker compose up -d --build`. The GitHub workflow in `.github/workflows/ci.yml` builds the images and starts this stack on a GitHub machine; the compose files were never run on a real server by the author.
 

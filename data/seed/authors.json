@@ -1,17 +1,17 @@
 [
  {
   "slug": "tobias",
-  "name": "Tobias Rennick (fictional)",
-  "about": "A terse founder of Larkspur, a small invoicing tool for freelancers. Fictional."
+  "name": "Tobias Rennick (sample)",
+  "about": "A terse founder of Larkspur, a small invoicing tool for freelancers. Sample data."
  },
  {
   "slug": "imani",
-  "name": "Imani Castellan (fictional)",
-  "about": "A warm teacher who writes about learning. Fictional."
+  "name": "Imani Castellan (sample)",
+  "about": "A warm teacher who writes about learning. Sample data."
  },
  {
   "slug": "gareth",
-  "name": "Gareth Whitlow (fictional)",
-  "about": "A formal management consultant. Fictional."
+  "name": "Gareth Whitlow (sample)",
+  "about": "A formal management consultant. Sample data."
  }
 ]

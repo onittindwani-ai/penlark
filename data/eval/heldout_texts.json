@@ -1,5 +1,5 @@
 {
- "_note": "Held out set for the voice match evaluation. Everything here is fictional and was written BEFORE any voice match code existed, and before the training samples of each author were finalised. Authors: tobias (terse founder), imani (warm teacher), gareth (formal consultant). noor is a fourth author the profiles never saw. generic is generic AI sounding text. The evaluation runs once and the first run is saved untouched.",
+ "_note": "Held out set for the voice match evaluation. Everything here is sample data and was written BEFORE any voice match code existed, and before the training samples of each author were finalised. Authors: tobias (terse founder), imani (warm teacher), gareth (formal consultant). noor is a fourth author the profiles never saw. generic is generic AI sounding text. The evaluation runs once and the first run is saved untouched.",
  "texts": [
   {"id":"h01","label":"tobias","text":"We lost a client today. Fair. We were late twice.\n\nSo here is the fix. One owner per project. One weekly update. No exceptions.\n\nI wrote it on the wall. Eleven days later, nobody is late."},
   {"id":"h02","label":"tobias","text":"Hiring is slow. That is the point.\n\nWe talked to 40 people. We hired 2. Both started on a Monday and shipped by Friday.\n\nFast hiring is just expensive firing."},

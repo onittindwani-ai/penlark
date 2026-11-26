@@ -14,7 +14,7 @@ This guide gives no price figures. It gives the shape of the offer, so you can p
 - **Running it, monthly.** A short review of the drafts that were edited most, the ideas that came from real calls and comments, the learning loop (what the best posts had in common, with the sample sizes), the banned phrase list and the approvals that waited too long. State plainly how many hours a month that includes.
 - **Source material, separately.** Good drafts need real examples, numbers and stories. Recording calls, writing case notes and collecting client comments is real work for the client's team or for you, priced on its own.
 - **Costs that pass through, at cost.** Hosting, the scheduler tool's own fees and any model usage. Show these as the client's own accounts, not as your markup.
-- **Never charge for** a promised engagement, a promised number of leads or a promised follower count. The learning loop describes past posts and does not show cause. Never present the demo numbers as a result: the demo authors are fictional.
+- **Never charge for** a promised engagement, a promised number of leads or a promised follower count. The learning loop describes past posts and does not show cause. Never present the demo numbers as a result: the demo authors are sample data.
 
 ## Onboarding checklist
 

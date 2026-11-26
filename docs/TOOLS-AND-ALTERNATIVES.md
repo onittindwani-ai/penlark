@@ -118,7 +118,7 @@ What Penlark has for each: Bitly: Not built, any shortener's address can go in a
 | Anthropic model | paid | 90 | 70 | 85 | 55 | 40 | 45 | **71.5** | reference |
 | Offline templates | built in | 40 | 100 | 95 | 100 | 100 | 100 | **78.2** | 44 percent of Anthropic model |
 
-What Penlark has for each: Anthropic model: Real code through the shared wrapper, fake server only, UNVERIFIED (never run live); Offline templates: Built in, tested (run and tested).
+What Penlark has for each: Anthropic model: Real code through the shared wrapper, mock server only, UNVERIFIED (never run live); Offline templates: Built in, tested (run and tested).
 
 **Evidence, Anthropic model**
 
@@ -127,7 +127,7 @@ What Penlark has for each: Anthropic model: Real code through the shared wrapper
 - Reliability and upkeep (85): A hosted service, with retries in the shared wrapper.
 - Cost (55): Billed per use. See the vendor page.
 - Data control (40): Prompts leave your machine. Sample text is passed as untrusted data.
-- Integration depth (45): The code path exists and is tested against a fake server only. Output goes through every check.
+- Integration depth (45): The code path exists and is tested against a mock server only. Output goes through every check.
 - Sources: https://docs.anthropic.com/ (checked not fetched)
 
 **Evidence, Offline templates**
@@ -142,7 +142,7 @@ What Penlark has for each: Anthropic model: Real code through the shared wrapper
 
 **Recommendation by user type**
 
-- **Beginner:** Leave it on the offline templates. They give a skeleton in your style with brackets for every real fact, so nothing is invented. You write the facts.
+- **Beginner:** Leave it on the offline templates. They give a skeleton in your style with brackets for every real fact, so nothing is added that you did not give. You write the facts.
 - **Implementer running it for clients:** Wire the live model only after you have read the held out match numbers. The live path was never run with a real key. It must still pass the voice match, house rules and claims check before a person sees an approve button.
 - **Cost sensitive owner:** Offline templates cost nothing. A live model is billed per use. See the vendor price page, no figure is quoted here.
 - **When open source is the right call:** No open source model is built in. If a client needs text to stay on their own machine, ask Claude Code to write an adapter for a local model, and run the held out voice test on its output first.

@@ -2,7 +2,7 @@
 
 1. `DEMO_MODE=false`, real `SESSION_SECRET` (32 or more characters), `OWNER_EMAIL` that is not the example address (a live start is refused otherwise), owner and approver emails and password hashes, and your `TIMEZONE`. `python3 tools/doctor.py` shows no PROBLEM.
 2. Add the voice (Add a voice, or `.venv/bin/python -m penlark.admin add-voice`), load the person's real writing (15 or more samples) and build the profile. Read the guide, edit it, lock it.
-3. Read the voice match numbers in `EVALUATION.md`: they came from short fictional texts, so score some of the person's own held back posts before you trust the meter.
+3. Read the voice match numbers in `EVALUATION.md`: they came from short sample texts, so score some of the person's own held back posts before you trust the meter.
 4. Add the person's own banned phrases and the facts they will never claim (House rules).
 5. Add notes with real numbers as `fact` notes. Drafts can only use figures that appear there as the same whole figure (a note with `15 percent` does not source a claim of `5 percent`).
 6. Set `REDIRECT_ALLOW_HOSTS` (a plain entry means exactly that host; write `*.example.com` for subdomains) and `LEAD_WEBHOOK_SECRET`. Send one signed test event.

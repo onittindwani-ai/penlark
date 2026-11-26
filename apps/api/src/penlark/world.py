@@ -1,4 +1,4 @@
-"""Load the fictional demo world from data/seed. Three fictional authors, notes, 60 posts with numbers, tracked links, experiments."""
+"""Load the sample demo world from data/seed. Three sample authors, notes, 60 posts with numbers, tracked links, experiments."""
 
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ def load_world(s: Session, ctx) -> dict:
         s.flush()
         authors[a["slug"]] = row
         for i, t in enumerate(_load(seed, f"samples_{a['slug']}.json"), start=1):
-            s.add(Sample(author_id=row.id, title=f"Sample {i}: {t.strip().splitlines()[0][:50]}", kind="text", text=t, source="seed (fictional)"))
+            s.add(Sample(author_id=row.id, title=f"Sample {i}: {t.strip().splitlines()[0][:50]}", kind="text", text=t, source="seed (sample)"))
     s.flush()
     notes = []
     for n in _load(seed, "notes.json"):

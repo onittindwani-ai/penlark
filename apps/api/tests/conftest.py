@@ -74,6 +74,6 @@ def seed_samples(a):
 
 @pytest.fixture(autouse=True)
 def _no_key_from_the_shell(monkeypatch):
-    """The developer's shell may hold a real ANTHROPIC_API_KEY. No test may use it: tests that need a key set one explicitly and point it at a local fake server."""
+    """The developer's shell may hold a real ANTHROPIC_API_KEY. No test may use it: tests that need a key set one explicitly and point it at a local mock server."""
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.delenv("ANTHROPIC_BASE_URL", raising=False)

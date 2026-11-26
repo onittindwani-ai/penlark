@@ -1,6 +1,6 @@
 """House rules: banned phrases and patterns, no dashes, reading level, and the claims check.
 
-The claims check is the guard against invented facts. A sentence that holds a number, a result, a client or a personal experience must be tied to a
+The claims check is the guard against facts with no source. A sentence that holds a number, a result, a client or a personal experience must be tied to a
 source note whose own text contains the same numbers. Otherwise the draft is flagged "needs a source or a founder fact". Penlark never fills the gap itself.
 """
 

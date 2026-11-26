@@ -1,4 +1,4 @@
-"""Demo mode: reset to the seed data and move the clock. Fictional people, offline stand ins, nothing real is touched."""
+"""Demo mode: reset to the seed data and move the clock. Sample people, offline stand ins, nothing real is touched."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ KEEP_TABLES = {"core_audit"}  # the audit chain is evidence: even a demo reset n
 
 
 def reset(session: Session, ctx) -> dict:
-    """Erase the working tables and load the fictional seed. Only while demo shortcuts are on (DEMO_MODE and no owner password), and on SQLite unless
+    """Erase the working tables and load the sample seed. Only while demo shortcuts are on (DEMO_MODE and no owner password), and on SQLite unless
     ALLOW_DEMO_SERVER is set: with a real owner password, or on a server database, this is refused here too, whatever route or tool called it."""
     st = ctx.settings
     if not st.demo_shortcuts:

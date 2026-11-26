@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Voice match evaluation on the held out texts (data/eval/heldout_texts.json), written before the match code.
 
-For each of three fictional authors a profile is built from that author's training samples. Every held out text is scored against every profile.
+For each of three sample authors a profile is built from that author's training samples. Every held out text is scored against every profile.
 Reported: top 1 accuracy for the three authors, the confusion pairs, the mean score own against others, and an AUC (the chance that a text by the author scores
 higher on the author's profile than a text by someone else). Outsider texts (a fourth author) and generic machine sounding texts are shown separately.
 
@@ -51,7 +51,7 @@ def run() -> dict:
     ok = sum(per_class[a]["top1_correct"] for a in AUTHORS)
     wrong = {t["id"]: {a: round(v, 1) for a, v in scores[t["id"]].items()} for t in texts if t["label"] in AUTHORS and max(AUTHORS, key=lambda x: scores[t["id"]][x]) != t["label"]}
     return {"texts": len(texts), "author_texts": n_auth, "top1_correct": ok, "top1_accuracy": round(ok / n_auth, 3), "mean_auc": round(sum(per_class[a]["auc"] for a in AUTHORS) / 3, 3), "per_class": per_class, "confusion": confusion, "wrong_texts": wrong,
-            "note": "Match scores come from code, not a language model. Texts are short (30 to 90 words) and every text is fictional."}
+            "note": "Match scores come from code, not a language model. Texts are short (30 to 90 words) and every text is sample data."}
 
 
 if __name__ == "__main__":

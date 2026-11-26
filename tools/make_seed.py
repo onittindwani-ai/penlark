@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Generate the fictional performance seed: 60 posts with numbers, tracked links with clicks and leads, two experiments, and the answer key.
+"""Generate the sample performance seed: 60 posts with numbers, tracked links with clicks and leads, two experiments, and the answer key.
 
-Everything is fictional. Effects are planted by construction: a question opener raises the engagement rate by 40 percent, a number in the first line by 30 percent,
+Everything is sample data. Effects are planted by construction: a question opener raises the engagement rate by 40 percent, a number in the first line by 30 percent,
 and a long post lowers it by 35 percent. Three posts use an emoji and, by planted luck, did very well: that is the false lead a careful learning loop must not report.
 Run: python3 tools/make_seed.py   (deterministic: the same files every time)
 """
@@ -88,9 +88,9 @@ def main() -> None:
         {"name": "Question opener against statement opener", "metric": "link clicks", "a_label": "Statement", "a_n": 1800, "a_hits": 54, "b_label": "Question", "b_n": 1750, "b_hits": 89},
         {"name": "Short post against long post", "metric": "link clicks", "a_label": "Short", "a_n": 60, "a_hits": 2, "b_label": "Long", "b_n": 55, "b_hits": 5}], indent=1) + "\n")
     (SEED / "authors.json").write_text(json.dumps([
-        {"slug": "tobias", "name": "Tobias Rennick (fictional)", "about": "A terse founder of Larkspur, a small invoicing tool for freelancers. Fictional."},
-        {"slug": "imani", "name": "Imani Castellan (fictional)", "about": "A warm teacher who writes about learning. Fictional."},
-        {"slug": "gareth", "name": "Gareth Whitlow (fictional)", "about": "A formal management consultant. Fictional."}], indent=1) + "\n")
+        {"slug": "tobias", "name": "Tobias Rennick (sample)", "about": "A terse founder of Larkspur, a small invoicing tool for freelancers. Sample data."},
+        {"slug": "imani", "name": "Imani Castellan (sample)", "about": "A warm teacher who writes about learning. Sample data."},
+        {"slug": "gareth", "name": "Gareth Whitlow (sample)", "about": "A formal management consultant. Sample data."}], indent=1) + "\n")
     key.update({"posts": len(posts), "planted_real_effects": {"opens_with_question": "+40 percent engagement rate", "number_in_first_line": "+30 percent", "long_post_over_150_words": "-35 percent"},
                 "planted_false_lead": "uses_emoji: only 3 posts, rate set 3.2 times the base by luck; the learning loop must report too few, never a pattern",
                 "hot_links": ["seed002", "seed005"], "experiments": {"Question opener against statement opener": "difference", "Short post against long post": "too_small"}})

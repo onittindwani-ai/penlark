@@ -3187,7 +3187,7 @@
   },
   "ideas_matching_no_theme": [
    {
-    "title": "I never know what to write on a sympathy card without sounding fake",
+    "title": "I never know what to write on a sympathy card without sounding cold",
     "notes": [
      "A-n04"
     ],
@@ -3262,7 +3262,7 @@
    },
    {
     "rank": 2,
-    "title": "I never know what to write on a sympathy card without sounding fake",
+    "title": "I never know what to write on a sympathy card without sounding cold",
     "notes": [
      "A-n04"
     ],
@@ -3288,5 +3288,5 @@
    }
   ]
  },
- "note": "Scores come from plain code (profile statistics, rule lists, word counts), not a language model. The texts are fictional and assembled from sentence banks."
+ "note": "Scores come from plain code (profile statistics, rule lists, word counts), not a language model. The texts are sample data and assembled from sentence banks."
 }

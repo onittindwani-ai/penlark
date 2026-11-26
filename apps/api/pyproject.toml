@@ -1,6 +1,6 @@
 [project]
 name = "penlark"
-version = "1.0.1"
+version = "1.0.2"
 description = "Penlark: drafts in a person's own voice, checked against house rules and approved by a second person before anything leaves"
 requires-python = ">=3.12"
 license = { text = "MIT" }

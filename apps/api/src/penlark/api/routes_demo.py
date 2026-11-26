@@ -51,10 +51,10 @@ class StressIn(BaseModel):
     n: int = Field(ge=1, le=20000)
 
 
-@router.post("/stress-posts", summary="Add many fictional posts, to check that long tables stay fast")
+@router.post("/stress-posts", summary="Add many sample posts, to check that long tables stay fast")
 def stress(b: StressIn, s: Session = Depends(db, scope="function"), ctx: Ctx = Depends(get_ctx), u: dict = Depends(owner)):
     from penlark.models import Performance
 
-    s.bulk_insert_mappings(Performance, [{"post_ref": f"load-{i}", "platform": "linkedin", "posted_on": "2026-01-01", "text": f"Fictional load post {i}. It exists only to fill a long table.", "impressions": 1000, "likes": 20, "comments": 2, "shares": 1, "clicks": 3, "draft_id": None} for i in range(b.n)])
+    s.bulk_insert_mappings(Performance, [{"post_ref": f"load-{i}", "platform": "linkedin", "posted_on": "2026-01-01", "text": f"Sample load post {i}. It exists only to fill a long table.", "impressions": 1000, "likes": 20, "comments": 2, "shares": 1, "clicks": 3, "draft_id": None} for i in range(b.n)])
     record_event(s, "demo.stress", None, None, {"n": b.n})
     return {"added": b.n}

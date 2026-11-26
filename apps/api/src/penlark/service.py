@@ -67,7 +67,7 @@ def build_profile(s: Session, author_id: int, actor: str, ctx=None) -> VoiceProf
     texts = [x.text for x in samples]
     stats = fingerprint.build_profile(texts)
     prev = latest_profile(s, author_id)
-    name = author.name.replace(" (fictional)", "")
+    name = author.name.replace(" (sample)", "")
     text, source, note = guide.offline_guide(stats, name), "offline stand in", ""
     if ctx is not None and ctx.model_on() and ctx.settings.guide_writer == "model" and not (prev and prev.locked):
         eff = ctx.effective(s)
@@ -325,7 +325,7 @@ def create_drafts_from_idea(s: Session, ctx, idea_id: int, author_id: int, kind:
     if ctx.model_on() and ctx.settings.draft_writer == "model":
         author = s.get(Author, author_id)
         eff, note_ids, idea_in = ctx.effective(s), list(idea.note_ids), {"title": idea.title, "evidence": idea.evidence}
-        stats, guide_text, name = prof.stats, prof.guide, (author.name if author else "").replace(" (fictional)", "")
+        stats, guide_text, name = prof.stats, prof.guide, (author.name if author else "").replace(" (sample)", "")
         s.commit()  # the write lock is let go before the model is asked, and the re scoring of each variant reads in its own session
 
         def score(t: str) -> dict:

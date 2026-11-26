@@ -81,7 +81,7 @@ export function AppFrame({ children }: { children: ReactNode }) {
       {s?.kill_switch ? (
         <div className="vp-banner vp-banner--danger" role="status"><strong>Kill switch is on.</strong> <span className="vp-hide-sm vp-grow">Nothing is sent to a scheduler. Writing, approving and exporting to a file still work.</span><span className="vp-grow vp-show-sm" /> <Button size="sm" variant="ghost" disabled={!owner} disabledReason="Only the owner can turn it off" onClick={async () => { await toggleKill.mutateAsync(false); }}>Turn it off</Button></div>
       ) : s && demo ? (
-        <div className="vp-banner vp-banner--info" role="status"><strong>Demo mode.</strong> <span className="vp-grow vp-hide-sm">Fictional authors and posts. Offline templates write the drafts, not a language model. {demoDate ? `Demo date: ${demoDate}.` : ""}</span><span className="vp-grow vp-show-sm" />
+        <div className="vp-banner vp-banner--info" role="status"><strong>Demo mode.</strong> <span className="vp-grow vp-hide-sm">Sample authors and posts. Offline templates write the drafts, not a language model. {demoDate ? `Demo date: ${demoDate}.` : ""}</span><span className="vp-grow vp-show-sm" />
           <Button size="sm" variant="primary" disabled={!canWrite} disabledReason="Viewers cannot run jobs" onClick={async () => { await run.mutateAsync(); }}>Run now</Button>
           <Button size="sm" disabled={!canWrite} disabledReason="Viewers cannot move the clock" onClick={async () => { await advance.mutateAsync(24); }}>+1 day</Button></div>
       ) : s?.effective_mode === "draft" ? (
@@ -110,7 +110,7 @@ export function AppFrame({ children }: { children: ReactNode }) {
       </AppShell>
       <CommandPalette items={items} open={palette} onOpenChange={setPalette} placeholder="Go to a page or run an action" />
       <ConfirmDialog open={confirmKill} onOpenChange={setConfirmKill} title="Pause all sending?" description="The kill switch stops every send to a scheduler at once. Writing, approving and exporting to a file keep working. You can turn it off again from the banner or the top bar." confirmLabel="Pause all" destructive onConfirm={() => void toggleKill.mutateAsync(true)} />
-      <ConfirmDialog open={confirmReset} onOpenChange={setConfirmReset} title="Reset the demo?" description="This puts the fictional seed data back and clears everything you did in the demo." confirmLabel="Reset" destructive onConfirm={() => void reset.mutateAsync()} />
+      <ConfirmDialog open={confirmReset} onOpenChange={setConfirmReset} title="Reset the demo?" description="This puts the sample seed data back and clears everything you did in the demo." confirmLabel="Reset" destructive onConfirm={() => void reset.mutateAsync()} />
     </>
   );
 }

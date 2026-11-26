@@ -1,7 +1,7 @@
 """Record the model answers for the seed world into data/llm_fixtures/, so the demo can replay them with LLM_BACKEND=fixture and no account.
 
 IMPORTANT: these are NOT answers of a real model. The recording goes through the real anthropic code path (request building, schema, response parsing, the checks by code)
-against a local fake server that answers with the offline stand in. So the fixtures prove the replay path and the request shape, not model quality. Replace them with a
+against a local mock server that answers with the offline stand in. So the fixtures prove the replay path and the request shape, not model quality. Replace them with a
 recording from a real key (LLM_RECORD=true, LLM_BACKEND=anthropic) when you have one. Never commit recordings made from real client data.
 
 What is recorded: building the demo world with the model path on: the three voice guides (GUIDE_WRITER=model), the draft variants of the first two ideas (DRAFT_WRITER=model) and
@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "apps" / "api" / "src"))
 sys.path.insert(0, str(ROOT))
 
-from mock.anthropic_mock import FakeAnthropic  # noqa: E402
+from mock.anthropic_mock import StubAnthropic  # noqa: E402
 from penlark import demo, service  # noqa: E402
 from penlark.config import Settings  # noqa: E402
 from penlark.context import Ctx  # noqa: E402
@@ -51,9 +51,9 @@ def record(out: Path = OUT, work: Path | None = None) -> dict:
         shutil.rmtree(out)
     if work is not None:
         Path(work).mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(dir=work) as tmp, FakeAnthropic(stand_in) as fake:
+    with tempfile.TemporaryDirectory(dir=work) as tmp, StubAnthropic(stand_in) as stub:
         settings = Settings(database_url=f"sqlite:///{tmp}/rec.sqlite3", session_secret="record-secret-record-secret", seed_dir=str(ROOT / "data"), export_dir=f"{tmp}/exports", llm_backend="anthropic",
-                            anthropic_api_key="fake-key-for-local-server", anthropic_base_url=fake.url, llm_record=True, llm_fixtures_dir=str(out), _env_file=None, **MODEL_SETTINGS)
+                            anthropic_api_key="stub-key-for-local-server", anthropic_base_url=stub.url, llm_record=True, llm_fixtures_dir=str(out), _env_file=None, **MODEL_SETTINGS)
         eng = make_engine(settings.database_url)
         Base.metadata.create_all(eng)
         ctx = Ctx(settings, make_session_factory(eng))
@@ -66,10 +66,10 @@ def record(out: Path = OUT, work: Path | None = None) -> dict:
             s.commit()
     files = len(list(out.glob("*.json")))
     (out / "README.txt").write_text(
-        "Recorded from a LOCAL FAKE server that answers with the offline stand in. Not answers of a real model.\n"
+        "Recorded from a LOCAL MOCK server that answers with the offline stand in. Not answers of a real model.\n"
         "They prove the replay path and the request shape only. Replay with LLM_BACKEND=fixture LLM_FIXTURES_DIR=data/llm_fixtures GUIDE_WRITER=model DRAFT_WRITER=model IDEA_FINDER=model.\n"
         "Regenerate: python tools/record_llm_fixtures.py\n", encoding="utf-8")
-    return {**info["seed"], "files": files, "requests_to_fake_server": len(fake.requests)}
+    return {**info["seed"], "files": files, "requests_to_mock_server": len(stub.requests)}
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Score Penlark on an independent test set (written by agents who never saw the code).
+"""Score Penlark on an independent test set (written by separate AI test authors who never saw the code).
 
 A set folder holds `authors.json`, `heldout_texts.json`, `heldout_key.json`, `drafts.json`, `drafts_key.json`, `notes.json` and `ideas_key.json`.
 Nothing goes through the database: the profile builder, the voice match, the house rule checker and the idea finder are pure code, and this tool calls them directly,
@@ -314,7 +314,7 @@ def run(folder: Path, set_letter: str) -> dict:
     prof = profiles_of(data)
     return {"set": set_letter, "folder": folder.name, "settings": {"min_voice_match": MIN_MATCH, "max_reading_grade": MAX_GRADE, "no_dashes": True, "require_sources": True},
             "voice": score_voice(data, prof, set_letter), "flags": score_flags(data, prof), "ideas": score_ideas(data),
-            "note": "Scores come from plain code (profile statistics, rule lists, word counts), not a language model. The texts are fictional and assembled from sentence banks."}
+            "note": "Scores come from plain code (profile statistics, rule lists, word counts), not a language model. The texts are sample data and assembled from sentence banks."}
 
 
 def summary(res: dict) -> dict:

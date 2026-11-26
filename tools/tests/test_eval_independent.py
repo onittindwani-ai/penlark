@@ -1,4 +1,4 @@
-"""Tests for the independent evaluation tool on a tiny made up set (NOT one of the held out sets)."""
+"""Tests for the independent evaluation tool on a tiny sample set (NOT one of the held out sets)."""
 
 import json
 import sys

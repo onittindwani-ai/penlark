@@ -44,14 +44,14 @@ def test_an_owner_password_switches_every_demo_shortcut_off_even_when_demo_mode_
     assert any("owner password is set" in p for p in c.app.state.ctx.settings.problems())
 
 
-def test_the_demo_password_and_the_made_up_accounts_work_only_while_demo_shortcuts_are_on(tmp_path):
+def test_the_demo_password_and_the_demo_accounts_work_only_while_demo_shortcuts_are_on(tmp_path):
     c = demo_client(tmp_path, demo_mode=True)
     h = {"x-session": c.post("/api/auth/login", json={"email": "approver@example.test", "password": "demo-password-1"}).json()["token"], "x-penlark": "1"}
     assert c.get("/api/auth/me", headers=h).json() == {"user": "approver@example.test", "role": "approver", "demo_mode": True}
     assert c.post("/api/auth/login", json={"email": "approver@example.test", "password": "wrong-password"}).status_code == 401
 
 
-def test_a_real_install_has_no_made_up_accounts(tmp_path):
+def test_a_real_install_has_no_demo_accounts(tmp_path):
     c = real_client(tmp_path)
     assert c.post("/api/auth/login", json={"email": "approver@example.test", "password": "demo-password-1"}).status_code == 401
     assert c.post("/api/auth/login", json={"email": "viewer@example.test", "password": "demo-password-1"}).status_code == 401

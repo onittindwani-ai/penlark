@@ -14,7 +14,7 @@ from sendora_core.costs import DEFAULT_PRICES
 from sendora_core.settings import BaseAppSettings, ConfigError, LLMBackendKind, Mode
 
 DEFAULT_OWNER_EMAIL = "owner@example.test"
-DEMO_ALLOW_HOST = "larkspur.example.test"  # the fictional host of the demo's tracked links; used only while demo shortcuts are on
+DEMO_ALLOW_HOST = "larkspur.example.test"  # the sample host of the demo's tracked links; used only while demo shortcuts are on
 
 
 def load_settings(env_file: str | None = None) -> "Settings":
@@ -87,7 +87,7 @@ class Settings(BaseAppSettings):
         return v
 
     def allow_hosts(self) -> list[str]:
-        """Hosts a tracked link may point at. Empty means none, except in the offline demo, which has fictional links to one fictional host."""
+        """Hosts a tracked link may point at. Empty means none, except in the offline demo, which has sample links to one sample host."""
         hosts = [h.strip() for h in self.redirect_allow_hosts.split(",") if h.strip()]
         return hosts or ([DEMO_ALLOW_HOST] if self.demo_shortcuts else [])
 

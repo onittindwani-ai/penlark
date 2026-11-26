@@ -322,7 +322,7 @@
    "job": "What writes the first draft",
    "reference": "anthropic",
    "recommendation": {
-    "beginner": "Leave it on the offline templates. They give a skeleton in your style with brackets for every real fact, so nothing is invented. You write the facts.",
+    "beginner": "Leave it on the offline templates. They give a skeleton in your style with brackets for every real fact, so nothing is added that you did not give. You write the facts.",
     "implementer": "Wire the live model only after you have read the held out match numbers. The live path was never run with a real key. It must still pass the voice match, house rules and claims check before a person sees an approve button.",
     "cost_sensitive": "Offline templates cost nothing. A live model is billed per use. See the vendor price page, no figure is quoted here.",
     "open_source_when": "No open source model is built in. If a client needs text to stay on their own machine, ask Claude Code to write an adapter for a local model, and run the held out voice test on its output first."
@@ -332,7 +332,7 @@
      "id": "anthropic",
      "name": "Anthropic model",
      "kind": "paid",
-     "supported_in_penlark": "Real code through the shared wrapper, fake server only, UNVERIFIED",
+     "supported_in_penlark": "Real code through the shared wrapper, mock server only, UNVERIFIED",
      "run": "never run live",
      "sources": [
       {
@@ -363,7 +363,7 @@
       },
       "integration": {
        "score": 45,
-       "evidence": "The code path exists and is tested against a fake server only. Output goes through every check."
+       "evidence": "The code path exists and is tested against a mock server only. Output goes through every check."
       }
      }
     },

@@ -2,7 +2,7 @@
 
 Write in your own voice, with a person approving everything. Penlark learns how one person writes, turns the calls, comments and emails they get into ranked ideas, drafts in their style, scores every sentence against their voice as they type, and refuses to let a number or a client story through unless it comes from a real note. It never publishes by itself.
 
-Everything in the demo is fictional. The offline writer is a set of templates, not a language model.
+Everything in the demo is sample data and nothing leaves your computer. The offline writer is a set of templates, not a language model.
 
 ![Studio with the live voice match meter](docs/screenshots/page-studio-desktop.png)
 
@@ -15,7 +15,7 @@ Everything in the demo is fictional. The offline writer is a set of templates, n
 ![Voice profile radar](docs/screenshots/state-2-detail-radar-axis-desktop.png)
 
 ## Honest numbers (`docs/EVALUATION.md`)
-Held out voice match: <!--n:eval.voice.correct-->24<!--/n--> of <!--n:eval.voice.of-->24<!--/n--> authors right, mean AUC <!--n:eval.voice.auc-->0.975<!--/n-->, with caveats: short fictional texts, and generic machine sounding prose still scored <!--n:eval.voice.generic_mean_best-->79.0<!--/n--> against a formal profile. Tests: <!--n:tests.passed-->428<!--/n--> passed, coverage <!--n:tests.coverage_percent-->95.3<!--/n--> percent, <!--n:e2e.tests-->46<!--/n--> browser tests. Independent held out sets (A first run, B first run): `docs/INDEPENDENT-EVAL.md`; generic machine text is stopped by the house rules, not reliably by the voice match. Nothing was run against a real vendor or a real model key: Postiz, Buffer and Metricool are UNVERIFIED live, and no real host was deployed to (the GitHub workflow builds the Docker images and starts the stack on a GitHub machine).
+Held out voice match: <!--n:eval.voice.correct-->24<!--/n--> of <!--n:eval.voice.of-->24<!--/n--> authors right, mean AUC <!--n:eval.voice.auc-->0.975<!--/n-->, with caveats: short sample texts, and generic machine sounding prose still scored <!--n:eval.voice.generic_mean_best-->79.0<!--/n--> against a formal profile. Tests: <!--n:tests.passed-->495<!--/n--> passed, coverage <!--n:tests.coverage_percent-->95.4<!--/n--> percent, <!--n:e2e.tests-->46<!--/n--> browser tests. Independent held out sets (A first run, B first run): `docs/INDEPENDENT-EVAL.md`; generic machine text is stopped by the house rules, not reliably by the voice match. Nothing was run against a real vendor or a real model key: Postiz, Buffer and Metricool are UNVERIFIED live, and no real host was deployed to (the GitHub workflow builds the Docker images and starts the stack on a GitHub machine).
 
 ## Try it
 ```

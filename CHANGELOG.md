@@ -1,7 +1,10 @@
 # Changelog
 
+## 1.0.2 (2026-11-27)
+- Documentation and demo label updates.
+
 ## 1.0.1 (2026-11-25)
-- Hardening after a security review. The public demo password, the made up approver and viewer accounts, the demo buttons and the data reset now exist only while `DEMO_MODE` is on and no `OWNER_PASSWORD_HASH` is set. Setting the hash switches them off even if `DEMO_MODE` stays on, and the demo clock goes with them. The reset never erases the audit log and is refused on a server database. The API and the worker refuse an unsafe start (an example or short `SESSION_SECRET`, a demo on Postgres, the example `OWNER_EMAIL` with `MODE=live`) before the database is opened or anything is written.
+- Hardening after a security review. The public demo password, the demo approver and viewer accounts, the demo buttons and the data reset now exist only while `DEMO_MODE` is on and no `OWNER_PASSWORD_HASH` is set. Setting the hash switches them off even if `DEMO_MODE` stays on, and the demo clock goes with them. The reset never erases the audit log and is refused on a server database. The API and the worker refuse an unsafe start (an example or short `SESSION_SECRET`, a demo on Postgres, the example `OWNER_EMAIL` with `MODE=live`) before the database is opened or anything is written.
 - An approval is for the exact words. The approver now sees every character of a draft (it was the first 1,200), the approval keeps a fingerprint of the text, and deciding, planning on the calendar, exporting and sending are refused when the text changed. On Postgres the draft row is locked while it is edited or decided. An approval made before this release has no fingerprint: its draft cannot be exported until a second person approves it again. The API accepts a new approval request for such a draft; the Studio's Ask for approval button stays switched off while a draft shows as approved, so the request has to be made through the API until that is changed.
 - Text that could freeze the app: banned patterns need an upper limit on every repeat and no repeat inside a repeat (refused when added, shown and skipped if already stored), the placeholder check and the markdown, transcript and X archive readers use bounded patterns, and uploads are read while they arrive (8 MB) off the main thread.
 - Sign in: the email is compared without spaces or capitals for the limit and the lookup, with limits per address, per account and per address and account, field sizes are capped, and an unknown email costs the same work as a wrong password. The public click route uses the address uvicorn resolved, never the typed `X-Forwarded-For`; the web app passes on only the last address. The lead webhook and uploads are read in small pieces and refused as soon as they are too large, and a signature header with a strange character is a plain 401.
@@ -38,7 +41,7 @@
 - Plain words for the audit log (with a detail sheet), the integrations page (no raw category names) and the calendar week. Short links show the address the app is open on.
 
 ## Earlier changes in 1.0.0 (round 4, part M)
-- Model path for the voice guide, draft variants and idea finder (`model_tasks.py`), selected by `LLM_BACKEND` plus `GUIDE_WRITER`, `DRAFT_WRITER`, `IDEA_FINDER`. Code re scores every model draft, a model cannot approve or schedule, live use UNVERIFIED. Local fake server and recorded fixtures.
+- Model path for the voice guide, draft variants and idea finder (`model_tasks.py`), selected by `LLM_BACKEND` plus `GUIDE_WRITER`, `DRAFT_WRITER`, `IDEA_FINDER`. Code re scores every model draft, a model cannot approve or schedule, live use UNVERIFIED. Local mock server and recorded fixtures.
 - The approval request now refuses a draft under the minimum voice match.
 - Banned phrases match hyphens, curly apostrophes and word endings; 34 more stock phrases; narrower client claims, number words as figures, more experience verbs; better stemmer for the idea finder.
 - Independent held out sets A and B, scorer `tools/eval_independent.py`, `docs/INDEPENDENT-EVAL.md`.

@@ -111,13 +111,13 @@ test("the voice you pick in the studio is saved with the draft", async ({ page }
   await page.waitForLoadState("networkidle");
   const voice = page.getByLabel("Voice", { exact: true });
   await expect(page.getByRole("button", { name: "Save draft" })).toHaveAttribute("aria-disabled", "true"); // nothing to save yet
-  await voice.selectOption({ label: "Imani Castellan (fictional)" });
+  await voice.selectOption({ label: "Imani Castellan (sample)" });
   await expect(page.getByText("unsaved changes")).toBeVisible();
   await page.getByRole("button", { name: "Save draft" }).click();
   await expect(page.getByText("Draft saved.").first()).toBeVisible();
   await page.reload();
   await expect(voice).toHaveValue("2");
-  await expect(page.getByText("Voice: Imani Castellan (fictional)")).toBeVisible();
+  await expect(page.getByText("Voice: Imani Castellan (sample)")).toBeVisible();
 });
 
 test("leaving a draft with unsaved changes asks first", async ({ page }) => {

@@ -1,4 +1,4 @@
-{"_note":"Held out drafts for the house rule and claims checks. Fictional. Written before the checks were run and not tuned afterwards. style_violation is true when a person would call the text machine sounding or breaking a house rule (dashes, generic phrases). claim_violation is true when a number, a result, a client or a personal experience has no matching source note in `notes`.",
+{"_note":"Held out drafts for the house rule and claims checks. Sample data. Written before the checks were run and not tuned afterwards. style_violation is true when a person would call the text machine sounding or breaking a house rule (dashes, generic phrases). claim_violation is true when a number, a result, a client or a personal experience has no matching source note in `notes`.",
  "drafts":[
  {"id":"d01","text":"Invoices go out on the day the work ends. Short email, due date first, a thank you at the end.","notes":[],"style_violation":false,"claim_violation":false},
  {"id":"d02","text":"Reminders work better when they are plain. Say what was done, what it cost, and when it is due.","notes":[],"style_violation":false,"claim_violation":false},

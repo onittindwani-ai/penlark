@@ -7,5 +7,5 @@
 - Style numbers and the voice match come from code. Do not replace them with a model.
 - Held out files in `data/eval` and their `*_first_run.json` results are not edited or tuned against.
 - Run `make test`, `python3 tools/check_docs.py` and `python3 tools/score_tools.py --check` before you say something works.
-- No em dashes or en dashes in anything shipped. Plain words. Fictional examples are labelled.
+- No em dashes or en dashes in anything shipped. Plain words. Sample examples are labelled.
 - Use the recipe prompts in `prompts/` to connect a tool we did not build.
