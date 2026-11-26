@@ -7,8 +7,9 @@ packages:
   - git
   - caddy
   - ufw
+  - docker.io
+  - docker-compose-v2
 runcmd:
-  - curl -fsSL https://get.docker.com | sh
   - ufw allow 22/tcp
   - ufw allow 80/tcp
   - ufw allow 443/tcp

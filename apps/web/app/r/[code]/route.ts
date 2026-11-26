@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { lastHop } from "@/lib/clientIp";
 
 const API = process.env.API_BASE_URL ?? "http://127.0.0.1:8000";
 
@@ -8,10 +9,11 @@ export async function GET(request: Request, ctx: { params: Promise<{ code: strin
   if (!/^[a-z0-9]{3,20}$/.test(code)) return new NextResponse("This link does not exist.", { status: 404 });
   let r: Response;
   try {
-    r = await fetch(`${API}/api/public/r/${code}`, { redirect: "manual", cache: "no-store", headers: { "x-forwarded-for": request.headers.get("x-forwarded-for") ?? "", "user-agent": request.headers.get("user-agent") ?? "" } });
+    r = await fetch(`${API}/api/public/r/${code}`, { redirect: "manual", cache: "no-store", headers: { "x-forwarded-for": lastHop(request.headers.get("x-forwarded-for")), "user-agent": request.headers.get("user-agent") ?? "" } });
   } catch {
     return new NextResponse("The link service is not reachable. Try again in a moment.", { status: 502 });
   }
+  if (r.status === 429) return new NextResponse("Too many people opened links at the same moment. Wait a minute and open the link again.", { status: 429, headers: { "Retry-After": "60", "Cache-Control": "no-store" } });
   const to = r.headers.get("location");
   if (r.status === 302 && to) return NextResponse.redirect(to, { status: 302, headers: { "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" } });
   return new NextResponse(r.status === 410 ? "This link no longer points at an allowed address." : "This link does not exist.", { status: r.status === 410 ? 410 : 404 });

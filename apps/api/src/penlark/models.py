@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import JSON, Boolean, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import JSON, Boolean, Float, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from sendora_core.db import Base, UTCDateTime, utcnow
 
-DRAFT_STATUSES = ("draft", "pending_approval", "approved", "scheduled", "exported", "published", "rejected")
+DRAFT_STATUSES = ("draft", "pending_approval", "approved", "scheduled", "sending", "exported", "published", "rejected")
 NOTE_KINDS = ("call", "comment", "email", "note", "fact")
 
 
@@ -152,6 +152,8 @@ class Click(Base):
 
 class Conversion(Base):
     __tablename__ = "vp_conversion"
+    # One lead or customer event counts once: two identical webhooks at the same moment cannot both be stored (the check in the route alone cannot see the other request on Postgres).
+    __table_args__ = (Index("uq_vp_conversion_lead_kind", "lead_ref", "kind", unique=True),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     link_id: Mapped[int | None] = mapped_column(ForeignKey("vp_link.id"), nullable=True, index=True)
     lead_ref: Mapped[str] = mapped_column(String(120))

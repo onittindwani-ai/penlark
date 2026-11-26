@@ -15,7 +15,7 @@ Everything in the demo is fictional. The offline writer is a set of templates, n
 ![Voice profile radar](docs/screenshots/state-2-detail-radar-axis-desktop.png)
 
 ## Honest numbers (`docs/EVALUATION.md`)
-Held out voice match: <!--n:eval.voice.correct-->24<!--/n--> of <!--n:eval.voice.of-->24<!--/n--> authors right, mean AUC <!--n:eval.voice.auc-->0.975<!--/n-->, with caveats: short fictional texts, and generic machine sounding prose still scored <!--n:eval.voice.generic_mean_best-->79.0<!--/n--> against a formal profile. Tests: <!--n:tests.passed-->149<!--/n--> passed, coverage <!--n:tests.coverage_percent-->92.3<!--/n--> percent, <!--n:e2e.tests-->45<!--/n--> browser tests. Independent held out sets (A first run, B first run): `docs/INDEPENDENT-EVAL.md`; generic machine text is stopped by the house rules, not reliably by the voice match. Nothing was run against a real vendor or a real model key: Postiz, Buffer and Metricool are UNVERIFIED live.
+Held out voice match: <!--n:eval.voice.correct-->24<!--/n--> of <!--n:eval.voice.of-->24<!--/n--> authors right, mean AUC <!--n:eval.voice.auc-->0.975<!--/n-->, with caveats: short fictional texts, and generic machine sounding prose still scored <!--n:eval.voice.generic_mean_best-->79.0<!--/n--> against a formal profile. Tests: <!--n:tests.passed-->428<!--/n--> passed, coverage <!--n:tests.coverage_percent-->95.3<!--/n--> percent, <!--n:e2e.tests-->46<!--/n--> browser tests. Independent held out sets (A first run, B first run): `docs/INDEPENDENT-EVAL.md`; generic machine text is stopped by the house rules, not reliably by the voice match. Nothing was run against a real vendor or a real model key: Postiz, Buffer and Metricool are UNVERIFIED live, and no real host was deployed to (the GitHub workflow builds the Docker images and starts the stack on a GitHub machine).
 
 ## Try it
 ```
@@ -24,7 +24,7 @@ pnpm build
 make api        # one terminal
 make web        # another terminal, then open http://localhost:3000
 ```
-Sign in as `owner@example.test`, password `demo-password-1`. Full steps: `docs/01-QUICK-DEMO.md`.
+Sign in as `owner@example.test`, password `demo-password-1` (the demo only: it stops working the moment `OWNER_PASSWORD_HASH` is set). For your own install see `docs/05-RUN-LOCALLY.md`. Full steps: `docs/01-QUICK-DEMO.md`.
 
 ## Docs
 Start at `docs/00-START-HERE.md`. Setup, deploy (Vercel, Railway, Hetzner), go live, security and limits are numbered 00 to 15. Reference: `docs/ARCHITECTURE.md`, `docs/CAPABILITIES.md`, `docs/TOOLS-AND-ALTERNATIVES.md`, `docs/DESIGN-NOTES.md`, `docs/EVALUATION.md`, `docs/GLOSSARY.md`, `docs/FACTS-AND-SOURCES.md`.

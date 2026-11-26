@@ -23,3 +23,7 @@ uploads/
 demo.sqlite3-*
 exports/
 .demo/
+.env.*
+!.env.example
+*.pem
+*.key

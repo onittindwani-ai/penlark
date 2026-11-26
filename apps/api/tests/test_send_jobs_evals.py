@@ -60,7 +60,7 @@ def test_jobs_learn_and_schedule(world):
         assert jobs.job_ideas(s, world)["ideas"] >= 2
         assert jobs.schedule_due(s, world) == 1
         s.commit()
-    assert set(jobs.make_handlers(world)) == {"learn"}
+    assert set(jobs.make_handlers(world)) == {"learn", "ideas"}  # ideas runs when the Find ideas button queues it, not on the hourly schedule
 
 
 def test_first_run_evaluations_are_saved_untouched_and_honest():
@@ -94,4 +94,5 @@ def test_stress_posts_and_clock(client):
     assert len(client.get("/api/performance?limit=20000", headers=h).json()) == 360
     t0 = client.get("/api/demo/state", headers=h).json()["now"]
     t1 = client.post("/api/demo/advance", headers=h, json={"hours": 24}).json()["now"]
-    assert t1 > t0 and client.post("/api/demo/tick", headers=h).json()["learn"]["patterns"] >= 0
+    seen = sum(1 for t in client.get("/api/learning", headers=h).json()["traits"] if t["status"] == "pattern")  # the same count the page shows
+    assert t1 > t0 and client.post("/api/demo/tick", headers=h).json()["learn"] == {"posts": 360, "patterns": seen}

@@ -8,8 +8,9 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
-from penlark import house_rules, service
-from penlark.models import Author, Click, Conversion, Draft, Experiment, HouseRule, Link, Note, Performance, Sample, Schedule
+from penlark import service
+from penlark.datadir import data_dir
+from penlark.models import Author, Click, Conversion, Draft, Experiment, Link, Note, Performance, Sample, Schedule
 from sendora_core.approvals import request_approval
 
 DEMO_DEFAULT_REQUESTER = "owner@example.test"
@@ -25,7 +26,7 @@ def _load(seed: Path, name: str):
 
 
 def load_world(s: Session, ctx) -> dict:
-    seed = Path(ctx.settings.seed_dir) / "seed"
+    seed = data_dir(ctx.settings.seed_dir) / "seed"
     now = ctx.now(s)
     authors = {}
     for a in _load(seed, "authors.json"):
@@ -54,11 +55,7 @@ def load_world(s: Session, ctx) -> dict:
         s.add(Conversion(link_id=c["link_id"], lead_ref=c["lead_ref"], kind=c["kind"], value=c["value"], at=now))
     for e in _load(seed, "experiments.json"):
         s.add(Experiment(name=e["name"], metric=e["metric"], a_label=e["a_label"], b_label=e["b_label"], a_n=e["a_n"], a_hits=e["a_hits"], b_n=e["b_n"], b_hits=e["b_hits"]))
-    for ph in house_rules.DEFAULT_BANNED:
-        s.add(HouseRule(kind="phrase", value=ph, note="Built in: a generic phrase that sounds machine written.", builtin=True))
-    for pat, why in house_rules.DEFAULT_PATTERNS:
-        s.add(HouseRule(kind="pattern", value=pat, note=why, builtin=True))
-    s.flush()
+    service.ensure_builtin_rules(s)
     n_ideas = service.load_ideas(s, notes, ctx)
     for a in authors.values():
         pr = service.build_profile(s, a.id, "system", ctx)
@@ -76,6 +73,6 @@ def load_world(s: Session, ctx) -> dict:
     # the draft waiting for a second person is finished writing, with no brackets, so approving it in the demo is a real decision
     drafts[0].text = SEED_WAITING_TEXT
     drafts[0].status = "pending_approval"
-    drafts[0].approval_id = request_approval(s, "draft.approve", f"Approve draft: {drafts[0].title}", {"draft_id": drafts[0].id}, "medium", DEMO_DEFAULT_REQUESTER).id
+    drafts[0].approval_id = request_approval(s, "draft.approve", f"Approve draft: {drafts[0].title}", {"draft_id": drafts[0].id, "text_sha256": service.text_digest(SEED_WAITING_TEXT)}, "medium", DEMO_DEFAULT_REQUESTER).id
     s.flush()
     return {"authors": len(authors), "notes": len(notes), "ideas": n_ideas, "posts": 60, "drafts": len(drafts)}

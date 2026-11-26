@@ -1,7 +1,7 @@
 """Tracked links and lead attribution.
 
 The redirect is the one public route, so it is the one place an attacker could aim an open redirect. A link can only point at a URL whose host is on the allow list
-(set by the owner), the scheme is https (http only for local development), and the target is stored when the link is made, never taken from the click request.
+(set by the owner; a plain entry means exactly that host, `*.example.com` means its subdomains), the scheme is https (http only for local development), and the target is stored when the link is made, never taken from the click request.
 """
 
 from __future__ import annotations
@@ -19,12 +19,48 @@ class LinkError(ValueError):
     pass
 
 
-def host_allowed(url: str, allow: list[str], allow_http_local: bool = False) -> bool:
-    u = urlparse(url)
-    if u.scheme not in ({"https", "http"} if allow_http_local else {"https"}) or not u.hostname or u.username or u.password:
+_HOST = re.compile(r"[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?")
+
+
+def host_matches(host: str, allow: list[str]) -> bool:
+    """True when `host` is on the allow list: a plain entry means exactly that host, `*.example.com` means any subdomain of it (not example.com itself).
+    A host with a backslash, a space, a percent sign or any other character a host name cannot hold never matches: a browser can read `evil.com\\.example.com` as `evil.com`."""
+    host = host.lower().rstrip(".")
+    if not _HOST.fullmatch(host):
         return False
-    host = u.hostname.lower().rstrip(".")
-    return any(host == a.lower() or host.endswith("." + a.lower()) for a in allow if a)
+    for entry in allow:
+        a = entry.strip().lower().rstrip(".")
+        if not a:
+            continue
+        if a.startswith("*."):
+            if len(a) > 2 and host.endswith(a[1:]) and host != a[2:]:
+                return True
+        elif host == a:  # a subdomain someone else controls is not covered by a plain entry
+            return True
+    return False
+
+
+def parse_address(url: str):
+    """The parsed address, or None when it cannot be parsed at all (`https://[abc`, a host that changes when it is normalised, a bracket that is not an address). Never raises."""
+    try:
+        return urlparse(url)
+    except ValueError:
+        return None
+
+
+def host_allowed(url: str, allow: list[str], allow_http_local: bool = False) -> bool:
+    if "\\" in url or any(ord(ch) <= 32 or ord(ch) == 127 for ch in url):  # a backslash or a space or control character: browsers and parsers read such an address differently
+        return False
+    u = parse_address(url)
+    if u is None:
+        return False
+    try:
+        host, user, password = u.hostname, u.username, u.password
+    except ValueError:
+        return False
+    if u.scheme not in ({"https", "http"} if allow_http_local else {"https"}) or not host or user or password:
+        return False
+    return host_matches(host, allow)
 
 
 def slug(s: str) -> str:
@@ -58,7 +94,10 @@ def sign(secret: str, body: bytes) -> str:
 def verify_signature(secret: str, body: bytes, header: str | None) -> bool:
     if not secret or not header:
         return False
-    return hmac.compare_digest(sign(secret, body), header.removeprefix("sha256=").strip())
+    try:
+        return hmac.compare_digest(sign(secret, body).encode(), header.removeprefix("sha256=").strip().encode("ascii"))
+    except UnicodeEncodeError:  # a header with a character outside ASCII is a wrong signature, not a crash
+        return False
 
 
 def funnel(links: list[dict], clicks: list[dict], conversions: list[dict]) -> dict:

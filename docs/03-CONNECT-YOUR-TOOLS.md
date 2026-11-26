@@ -4,7 +4,7 @@ Penlark works with no connection at all (file export). Everything below is optio
 
 ## Postiz (open source scheduler)
 1. Run Postiz yourself or use its cloud, connect your networks inside Postiz, and create an API key in its settings.
-2. Set `SCHEDULER_ADAPTER=postiz`, `POSTIZ_API_KEY` and, for a self hosted one, `POSTIZ_BASE_URL` (the public API path ends in `/public/v1`).
+2. Set `SCHEDULER_ADAPTER=postiz`, `POSTIZ_API_KEY` and, for a self hosted one, `POSTIZ_BASE_URL` (the public API path ends in `/public/v1`). The address must be https and public: a plain http address, `localhost` or a private network address is refused unless you also set `ALLOW_PRIVATE_SCHEDULER=true` (off by default, listed in the settings problems while on, for a Postiz you run yourself on your own network). The host is looked up each time Penlark calls it, not at start, so a name server hiccup while the app restarts does not stop it.
 3. The key goes in the `Authorization` header with no Bearer prefix (read from the Postiz docs on 2026-11-23). The default limit is 90 create requests an hour.
 4. Find your channel id inside Postiz. Penlark needs it for every send.
 

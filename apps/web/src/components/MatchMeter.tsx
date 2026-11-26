@@ -36,9 +36,10 @@ export function MatchMeter({ ev, busy, threshold }: { ev: Evaluation | null; bus
       ) : null}
       <div className="vp-stack">
         <h3 className="vp-h3">House rules</h3>
-        {ev.rules.style.length === 0 && ev.rules.unsupported_claims.length === 0 && ev.placeholders.length === 0 ? <Badge tone="success">No rule broken</Badge> : null}
+        {ev.rules.style.length === 0 && ev.rules.unsupported_claims.length === 0 && ev.placeholders.length === 0 && ev.links.length === 0 ? <Badge tone="success">No rule broken</Badge> : null}
         {ev.rules.style.slice(0, 5).map((f, i) => <p key={i} className="vp-flag vp-flag--rule">{f.message}</p>)}
         {ev.rules.unsupported_claims.slice(0, 4).map((c, i) => <p key={i} className="vp-flag vp-flag--claim"><strong>Needs a source or a founder fact:</strong> {c.text.slice(0, 90)}</p>)}
+        {ev.links.length ? <p className="vp-flag vp-flag--claim">A link or address here is not yours: {ev.links.slice(0, 3).join(", ")}. Take it out, or add its host to the allow list if it is yours.</p> : null}
         {ev.placeholders.length ? <p className="vp-flag vp-flag--claim">Fill in {ev.placeholders.length} bracket{ev.placeholders.length > 1 ? "s" : ""} with your own words: {ev.placeholders.slice(0, 3).join(", ")}</p> : null}
         <span className="vp-mini">Reading level grade {ev.rules.grade}. Profile version {ev.profile_version ?? "none"}{ev.profile_locked ? ", locked" : ", not locked yet"}.</span>
       </div>

@@ -1,16 +1,14 @@
 [project]
 name = "penlark"
-version = "1.0.0"
-description = "Penlark: support and success desk with cited answers"
+version = "1.0.1"
+description = "Penlark: drafts in a person's own voice, checked against house rules and approved by a second person before anything leaves"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 dependencies = [
   "sendora-core",
   "alembic>=1.14",
-  "cryptography>=43",
   "uvicorn>=0.30",
-  "pypdf>=7",
-  "reportlab>=5.1",
+  "pypdf[crypto]>=7",  # [crypto] pulls cryptography, which pypdf needs to read an AES encrypted PDF
 ]
 
 [project.optional-dependencies]

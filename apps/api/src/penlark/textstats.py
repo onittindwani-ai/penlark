@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from collections import Counter
 from dataclasses import dataclass
 
 WORD = re.compile(r"[A-Za-z]+(?:['’][A-Za-z]+)*|\d[\d,.]*%?")
@@ -145,5 +146,6 @@ def measure(text: str) -> Measured:
     }
     kinds = [opener_kind(s) for s, _ in sents]
     openers = {k: kinds.count(k) / ns for k in OPENER_KINDS}
-    habits = {w: ws.count(w) / n for w in FUNCTION_WORDS}
+    counts = Counter(ws)  # one pass over the words, not one pass for each of the hundred function words
+    habits = {w: counts[w] / n for w in FUNCTION_WORDS}
     return Measured(len(ws), len(sents), v, openers, habits)

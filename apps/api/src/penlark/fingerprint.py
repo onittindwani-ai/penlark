@@ -6,7 +6,7 @@ import re
 from collections import Counter
 
 from penlark import dimensions as D
-from penlark.textstats import FUNCTION_WORDS, OPENER_KINDS, measure, split_sentences, words
+from penlark.textstats import FORMAL, FUNCTION_WORDS, OPENER_KINDS, measure, split_sentences, words
 
 STOP = set(FUNCTION_WORDS) | {"is", "i'm", "it's", "don't", "that's", "we're", "i've", "you're", "can't", "let's"}
 
@@ -52,9 +52,13 @@ def build_profile(samples: list[str]) -> dict:
     hab, opn = _centroid(ms)
     loo_h, loo_o = [], []
     if len(ms) >= 3:
-        for i, m in enumerate(ms):
-            rest = ms[:i] + ms[i + 1:]
-            h, o = _centroid(rest)
+        # leave one out: the centre of the other samples is the running total minus this sample, so the work grows with the number of samples, not with its square
+        n = len(ms)
+        tot_h = {k: hab[k] * n for k in FUNCTION_WORDS}
+        tot_o = {k: opn[k] * n for k in OPENER_KINDS}
+        for m in ms:
+            h = {k: (tot_h[k] - m.habits[k]) / (n - 1) for k in FUNCTION_WORDS}
+            o = {k: (tot_o[k] - m.openers[k]) / (n - 1) for k in OPENER_KINDS}
             loo_h.append(_vec_dist(m.habits, h))
             loo_o.append(_tv(m.openers, o))
     else:
@@ -88,18 +92,26 @@ def radar(profile: dict, values: dict[str, float] | None = None) -> list[dict]:
 
 def examples(samples: list[str], per: int = 2) -> dict[str, list[str]]:
     """Real sentences from the samples that show each dimension, so a person can see what the number means."""
-    sents = [s for t in samples for s, _ in split_sentences(t) if 3 <= len(words(s)) <= 45]
+    lens: dict[str, int] = {}
+    sents = []
+    for t in samples:
+        for s, _ in split_sentences(t):
+            n = len(words(s))
+            if 3 <= n <= 45:
+                sents.append(s)
+                lens[s] = n
     if not sents:
         return {}
+    mean_len = _mean([lens[x] for x in sents])  # once: it is the same for every sentence
     pick = {
-        "sentence_length": lambda s: -abs(len(words(s)) - _mean([len(words(x)) for x in sents])),
+        "sentence_length": lambda s: -abs(lens[s] - mean_len),
         "contractions": lambda s: len(re.findall(r"\w['’]\w", s)),
         "questions": lambda s: 1 if s.rstrip().endswith("?") else 0,
         "exclamations": lambda s: s.count("!"),
         "commas": lambda s: s.count(","),
         "heavy_punctuation": lambda s: len(re.findall(r"[;:()]|\.\.\.", s)),
         "numbers": lambda s: len(re.findall(r"\d", s)),
-        "formality": lambda s: sum(1 for w in words(s) if w in __import__("penlark.textstats", fromlist=["FORMAL"]).FORMAL),
+        "formality": lambda s: sum(1 for w in words(s) if w in FORMAL),
         "you_address": lambda s: sum(1 for w in words(s) if w in {"you", "your", "we", "our", "let's"}),
         "i_voice": lambda s: sum(1 for w in words(s) if w in {"i", "my", "me"}),
     }

@@ -14,9 +14,41 @@ from pathlib import Path
 
 import httpx
 
-from penlark.adapters.base import safe_base_url
+from penlark.adapters.base import guarded_client
 from sendora_core.adapters import AdapterError
 from sendora_core.safety import guard_write
+
+
+class UnclearAnswer(ValueError):
+    """The tool answered with a success status but not with the id of a post. The post may or may not exist, so a person decides (the draft is held as "send_unknown")."""
+
+
+def _post_id(value) -> str:
+    """The id of a post as the tool gave it: a text or a number, never empty, never longer than the column that keeps it."""
+    if isinstance(value, bool) or not isinstance(value, (str, int)):
+        return ""
+    return str(value).strip()[:120]
+
+
+def _said(body) -> str:
+    """What a tool said instead of an id, short and with no control characters, for the record and for the person who checks the tool."""
+    found = ""
+    if isinstance(body, dict):
+        for key in ("message", "error", "errors", "detail"):
+            v = body.get(key)
+            if isinstance(v, list) and v:
+                v = v[0].get("message") if isinstance(v[0], dict) else v[0]
+            if isinstance(v, dict):
+                v = v.get("message")
+            if isinstance(v, str) and v.strip():
+                found = v
+                break
+    return "".join(ch for ch in found if ch.isprintable())[:160]
+
+
+def _no_id(tool: str, status: int, body) -> UnclearAnswer:
+    said = _said(body)
+    return UnclearAnswer(f"{tool} answered {status} but did not give the id of a post" + (f" and said: {said}" if said else "") + ".")
 
 
 def _check(settings, approved: bool, confirm: bool, action: str) -> None:
@@ -67,7 +99,7 @@ class Postiz:
         if not settings.postiz_api_key:
             raise AdapterError("POSTIZ_API_KEY is empty.")
         self.s = settings
-        self.client = client or httpx.Client(base_url=safe_base_url(settings.postiz_base_url), timeout=30)
+        self.client = client or guarded_client(settings.postiz_base_url, allow_private=getattr(settings, "allow_private_scheduler", False))
 
     def _h(self):
         return {"Authorization": self.s.postiz_api_key, "Content-Type": "application/json"}  # the key goes in the header with no Bearer prefix
@@ -87,14 +119,17 @@ class Postiz:
         r.raise_for_status()
         data = r.json()
         first = data[0] if isinstance(data, list) and data else data
-        return {"external_id": str(first.get("postId", first.get("id", ""))), "detail": "Scheduled in Postiz."}
+        pid = _post_id(first.get("postId") or first.get("id")) if isinstance(first, dict) else ""
+        if not pid:  # a 200 with an error body or an empty list is not a post: a person looks in Postiz and says what happened
+            raise _no_id("Postiz", r.status_code, first if isinstance(first, dict) else data)
+        return {"external_id": pid, "detail": "Scheduled in Postiz."}
 
     def healthcheck(self):
         try:
             r = self.client.get("/integrations", headers=self._h())
             return (True, "Connected.") if r.status_code == 200 else (False, "Postiz refused the key." if r.status_code in (401, 403) else f"Postiz answered {r.status_code}.")
-        except httpx.HTTPError:
-            return False, "Could not reach Postiz."
+        except (httpx.HTTPError, AdapterError) as exc:
+            return False, str(exc) if isinstance(exc, AdapterError) else "Could not reach Postiz."
 
 
 class Buffer:
@@ -105,7 +140,7 @@ class Buffer:
         if not settings.buffer_token:
             raise AdapterError("BUFFER_TOKEN is empty.")
         self.s = settings
-        self.client = client or httpx.Client(base_url=safe_base_url(settings.buffer_base_url), timeout=30)
+        self.client = client or guarded_client(settings.buffer_base_url, allow_private=getattr(settings, "allow_private_scheduler", False))
 
     def _h(self):
         return {"Authorization": f"Bearer {self.s.buffer_token}", "Content-Type": "application/json"}
@@ -120,17 +155,23 @@ class Buffer:
         if r.status_code in (401, 403):
             raise AdapterError("Buffer refused the token.")
         r.raise_for_status()
-        res = (r.json().get("data") or {}).get("createPost") or {}
-        if "message" in res:
+        body = r.json()
+        data = body.get("data") if isinstance(body, dict) else None
+        res = (data.get("createPost") if isinstance(data, dict) else None) or {}
+        if isinstance(res, dict) and "message" in res:
             raise AdapterError("Buffer said: " + str(res["message"])[:200])
-        return {"external_id": str((res.get("post") or {}).get("id", "")), "detail": "Saved as a draft in Buffer." if as_draft else "Added to the Buffer queue."}
+        post = res.get("post") if isinstance(res, dict) else None
+        pid = _post_id(post.get("id")) if isinstance(post, dict) else ""
+        if not pid:  # GraphQL answers 200 even with an `errors` list and no post
+            raise _no_id("Buffer", r.status_code, body)
+        return {"external_id": pid, "detail": "Saved as a draft in Buffer." if as_draft else "Added to the Buffer queue."}
 
     def healthcheck(self):
         try:
             r = self.client.post("/", json={"query": "{ __typename }"}, headers=self._h())
             return (True, "Connected.") if r.status_code == 200 else (False, "Buffer refused the token." if r.status_code in (401, 403) else f"Buffer answered {r.status_code}.")
-        except httpx.HTTPError:
-            return False, "Could not reach Buffer."
+        except (httpx.HTTPError, AdapterError) as exc:
+            return False, str(exc) if isinstance(exc, AdapterError) else "Could not reach Buffer."
 
 
 class Metricool:
@@ -140,7 +181,7 @@ class Metricool:
         if not (settings.metricool_token and settings.metricool_user_id and settings.metricool_blog_id):
             raise AdapterError("METRICOOL_TOKEN, METRICOOL_USER_ID and METRICOOL_BLOG_ID must all be set.")
         self.s = settings
-        self.client = client or httpx.Client(base_url=safe_base_url(settings.metricool_base_url), timeout=30)
+        self.client = client or guarded_client(settings.metricool_base_url, allow_private=getattr(settings, "allow_private_scheduler", False))
 
     def _p(self):
         return {"userId": self.s.metricool_user_id, "blogId": self.s.metricool_blog_id}
@@ -156,11 +197,15 @@ class Metricool:
             raise AdapterError("Metricool refused the token.")
         r.raise_for_status()
         d = r.json()
-        return {"external_id": str((d.get("data") or d).get("id", "")), "detail": "Scheduled in Metricool."}
+        inner = (d.get("data") or d) if isinstance(d, dict) else {}
+        pid = _post_id(inner.get("id")) if isinstance(inner, dict) else ""
+        if not pid:
+            raise _no_id("Metricool", r.status_code, d)
+        return {"external_id": pid, "detail": "Scheduled in Metricool."}
 
     def healthcheck(self):
         try:
             r = self.client.get("/admin/simpleProfiles", params=self._p(), headers={"X-Mc-Auth": self.s.metricool_token})
             return (True, "Connected.") if r.status_code == 200 else (False, "Metricool refused the token." if r.status_code in (401, 403) else f"Metricool answered {r.status_code}.")
-        except httpx.HTTPError:
-            return False, "Could not reach Metricool."
+        except (httpx.HTTPError, AdapterError) as exc:
+            return False, str(exc) if isinstance(exc, AdapterError) else "Could not reach Metricool."

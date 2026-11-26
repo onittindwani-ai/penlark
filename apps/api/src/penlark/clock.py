@@ -6,6 +6,7 @@ Outside demo mode the offset is ignored and the real time is used.
 from __future__ import annotations
 
 from datetime import UTC, date, datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from sqlalchemy.orm import Session
 
@@ -21,8 +22,9 @@ def now(session: Session, demo_mode: bool) -> datetime:
     return DEMO_START + timedelta(hours=float(row.value) if row and row.value else 0.0)
 
 
-def today(session: Session, demo_mode: bool) -> date:
-    return now(session, demo_mode).date()
+def today(session: Session, demo_mode: bool, tz_name: str = "UTC") -> date:
+    moment = now(session, demo_mode)
+    return moment.date() if demo_mode else moment.astimezone(ZoneInfo(tz_name)).date()
 
 
 def set_offset(session: Session, hours: float) -> None:

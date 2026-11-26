@@ -11,3 +11,11 @@ test("a change without the required header is refused and the login route is not
   const ok = await page.request.post("/api/demo/tick", { headers: { "x-penlark": "1", "content-type": "application/json" }, data: {} });
   expect(ok.ok()).toBeTruthy();
 });
+
+test("every page carries a content security policy that allows nothing from another site", async ({ page }) => {
+  const r = await page.request.get("/login");
+  const csp = r.headers()["content-security-policy"] ?? "";
+  expect(csp).toContain("default-src 'self'");
+  expect(csp).toContain("frame-ancestors 'none'");
+  expect(csp).not.toMatch(/https?:\/\//);
+});

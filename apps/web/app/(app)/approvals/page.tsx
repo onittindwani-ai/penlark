@@ -13,7 +13,8 @@ export default function ApprovalsPage() {
   const NO = "Viewers cannot decide";
   const q = useQuery({ queryKey: ["approvals"], queryFn: () => get<ApprovalRow[]>("/approvals") });
   const decide = useMutation({
-    mutationFn: (v: { id: number; approve: boolean }) => post(`/approvals/${v.id}/decide`, { approve: v.approve, note: "" }),
+    // The fingerprint of the text that was on screen goes with the decision: if the draft changed since this page loaded, the server refuses and nothing is approved by mistake.
+    mutationFn: (v: { id: number; approve: boolean; sha?: string }) => post(`/approvals/${v.id}/decide`, { approve: v.approve, note: "", text_sha256: v.sha }),
     onSuccess: (_r, v) => { notify.success(v.approve ? "Approved." : "Rejected."); qc.invalidateQueries(); },
     onError: (e: Error) => { notify.error("Could not decide", e.message); qc.invalidateQueries({ queryKey: ["approvals"] }); },
   });
@@ -27,8 +28,8 @@ export default function ApprovalsPage() {
       <Card title={`Waiting (${pending.length})`}>{pending.length === 0 ? <EmptyState title="Nothing waiting" body="Risky actions such as sending a reminder show up here." /> : (
         <div className="vp-stack">{pending.map((a) => (
           <div key={a.id} className="vp-field" style={{ gridTemplateColumns: "1fr auto" }}>
-            <span><strong>{a.summary}</strong> <Badge tone={a.risk === "high" ? "danger" : "warning"}>{a.risk} risk</Badge><br /><span className="vp-mini" style={{ fontSize: "var(--sx-text-caption)", color: "var(--sx-ink-2)" }}>Asked by {a.requested_by} on {a.created_at.slice(0, 10)}</span>{a.preview ? <><blockquote className="vp-quote vp-approval-text">{a.preview.text}</blockquote><Link href="/" className="vp-mini vp-approval-link">Open the Studio</Link></> : null}</span>
-            <span className="sx-row"><Button size="sm" variant="primary" disabled={!canWrite} disabledReason={NO} onClick={async () => { await decide.mutateAsync({ id: a.id, approve: true }).catch(() => null); }}>Approve</Button><Button size="sm" disabled={!canWrite} disabledReason={NO} onClick={async () => { await decide.mutateAsync({ id: a.id, approve: false }).catch(() => null); }}>Reject</Button></span>
+            <span><strong>{a.summary}</strong> <Badge tone={a.risk === "high" ? "danger" : "warning"}>{a.risk} risk</Badge><br /><span className="vp-mini" style={{ fontSize: "var(--sx-text-caption)", color: "var(--sx-ink-2)" }}>Asked by {a.requested_by} on {a.created_at.slice(0, 10)}</span>{a.preview ? <><blockquote className="vp-quote vp-approval-text" tabIndex={0} aria-label={`The whole draft, ${a.preview.text.length} characters`}>{a.preview.text}</blockquote><span className="vp-mini">{a.preview.text.length} characters, shown in full. Scroll the box to read all of it.</span><br /><Link href="/" className="vp-mini vp-approval-link">Open the Studio</Link></> : null}</span>
+            <span className="sx-row"><Button size="sm" variant="primary" disabled={!canWrite} disabledReason={NO} onClick={async () => { await decide.mutateAsync({ id: a.id, approve: true, sha: a.preview?.text_sha256 }).catch(() => null); }}>Approve</Button><Button size="sm" disabled={!canWrite} disabledReason={NO} onClick={async () => { await decide.mutateAsync({ id: a.id, approve: false, sha: a.preview?.text_sha256 }).catch(() => null); }}>Reject</Button></span>
           </div>))}</div>)}</Card>
       <Card title="Decided">{past.length === 0 ? <EmptyState title="No history yet" body="Decisions appear here." /> : <div className="vp-stack">{past.map((a) => <div key={a.id} className="vp-field" style={{ gridTemplateColumns: "1fr auto" }}><span>{a.summary}{a.note ? <><br /><span className="vp-mini">{a.note}</span></> : null}</span><Badge tone={a.status === "approved" ? "success" : "neutral"}>{a.status === "approved" ? "approved" : "rejected"} by {a.decided_by}</Badge></div>)}</div>}</Card>
     </div>

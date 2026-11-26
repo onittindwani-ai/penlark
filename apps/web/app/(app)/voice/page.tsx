@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Badge, Button, Card, EmptyState, notify } from "@sendora/ui-kit";
 import { ListSkeleton, LoadError, PageHead, Textarea } from "@/components/Parts";
+import { AddVoice, NoVoices } from "@/components/AddVoice";
 import { Radar } from "@/components/Radar";
 import { get, post, put } from "@/lib/api";
 import { useRole } from "@/lib/hooks";
@@ -34,7 +35,9 @@ export default function VoicePage() {
   const saveGuide = useMutation({ mutationFn: () => put(`/profile/${p?.id}/guide`, { guide }), onSuccess: () => { notify.success("Guide saved."); refresh(); }, onError: (e: Error) => notify.error("Could not save", e.message) });
   const lock = useMutation({ mutationFn: () => post(`/profile/${p?.id}/lock`), onSuccess: () => { notify.success("Locked. Scores now use this voice."); refresh(); }, onError: (e: Error) => notify.error("Could not lock", e.message) });
   if (authors.isError || prof.isError) return <div className="vp-page"><PageHead title="Voice profile" /><LoadError error={authors.error ?? prof.error} onRetry={() => { authors.refetch(); prof.refetch(); }} what="the voice profile" /></div>;
-  if (!authors.data || !prof.data) return <div className="vp-page"><PageHead title="Voice profile" /><ListSkeleton /></div>;
+  if (!authors.data) return <div className="vp-page"><PageHead title="Voice profile" /><ListSkeleton /></div>;
+  if (authors.data.length === 0) return <NoVoices title="Voice profile" />;
+  if (!prof.data) return <div className="vp-page"><PageHead title="Voice profile" /><ListSkeleton /></div>;
   const rows = radar ?? p?.radar ?? [];
   const meaning = sel && p ? p.dimension_meanings[sel] : null;
   const ex = (sel && p?.examples[sel]) || [];
@@ -85,6 +88,7 @@ export default function VoicePage() {
             </Card>
           </div>
         </>)}
+      <AddVoice />
     </div>
   );
 }

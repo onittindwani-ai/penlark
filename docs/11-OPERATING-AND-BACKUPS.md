@@ -3,7 +3,7 @@
 ## Backups
 
 - **Database.** Postgres: `deploy/hetzner/backup.sh` or your host's managed backups. SQLite: copy the `.sqlite3` file while the API is stopped, or use `sqlite3 penlark.sqlite3 ".backup backup.sqlite3"`.
-- **Exports.** The exports volume holds saved drafts. Your writing samples, notes and profiles live in the database, so the database backup covers them.
+- **Exports.** The exports volume holds saved drafts, and `deploy/hetzner/backup.sh` copies it too. Your writing samples, notes and profiles live in the database, so the database backup covers them. Backup files hold your clients' writing: keep them readable by their owner only.
 - **Settings.** Keep the `.env` file in a password manager, never in Git.
 
 ## Test a restore
@@ -15,7 +15,7 @@
 
 ## Daily checks
 
-- The worker is running (the learning loop on the Performance page refreshes every hour).
+- The worker is running (the learning loop on the Performance page refreshes every hour, and the Find ideas button on a real install waits for it).
 - The kill switch is off, and the banner shows the mode you expect.
 - `python3 tools/doctor.py` prints no FAIL.
 
